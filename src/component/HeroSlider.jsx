@@ -14,6 +14,8 @@ function HeroSlider() {
   const handleShopNowClick = () => {
     navigate("/shop");
   };
+  // force redeploy
+
   return (
     <div className="heroSlider">
       <div className="container">
