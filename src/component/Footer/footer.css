@@ -1,0 +1,113 @@
+.footer {
+  background-color: var(--bg-color);
+  color: var(--p-color);
+  padding: 60px 20px 20px;
+  font-family: system-ui, sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+
+/* ===== Brand ===== */
+.footer-logo {
+  color: var(--heading-color);
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+/* ===== Headings ===== */
+.footer-column h3 {
+  color: var(--heading-color);
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+/* ===== Text ===== */
+.footer-column p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--p-color);
+}
+
+/* ===== Links ===== */
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--p-color);
+  transition: color 0.25s ease;
+}
+
+.footer-column ul li:hover {
+  color: var(--main-color);
+}
+
+/* ===== Social ===== */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-links a {
+  color: var(--p-color);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.25s ease;
+}
+
+.social-links a:hover {
+  color: var(--secondary-color);
+}
+
+/* ===== Newsletter ===== */
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  color: var(--heading-color);
+  outline: none;
+}
+
+.newsletter-form input::placeholder {
+  color: var(--p-color);
+}
+
+.newsletter-form button {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.newsletter-form button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* ===== Payments ===== */
+.payment-methods {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 14px;
+  color: v

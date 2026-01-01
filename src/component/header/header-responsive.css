@@ -1,0 +1,331 @@
+/* ================= NIKE TOP HEADER ================= */
+
+.top-header {
+  background: var(--nike-white);
+  border-bottom: 1px solid #e5e7eb;
+  background: #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  height: 80px;
+  padding-top: 0 !important;
+}
+
+.top-header .container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.2rem;
+}
+
+/* Logo */
+.top-header .logo img {
+  width: 130px;
+}
+
+/* ================= SEARCH ================= */
+
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  height: 46px;
+  background: #fff;
+  border-radius: 999px;
+  border: 2px solid #111;
+  overflow: hidden;
+}
+
+.search-box input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.search-box button {
+  width: 48px;
+  height: 100% !important;
+  border: none;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-box button svg {
+  font-size: 1.2rem;
+}
+
+/* ================= SEARCH SUGGESTIONS ================= */
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.suggestion-item:hover {
+  background: #f5f5f5;
+}
+
+.suggestion-item img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.suggestion-item span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================= HEADER ICONS ================= */
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-icons .icon {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background:rgb(128, 0, 255);
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.header-icons .icon svg {
+  font-size: 1.25rem;
+}
+
+.header-icons .icon:hover {
+  background: #111;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.header-icons .icon-text {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.header-icons .icon.fav .icon-text {
+  background: #ec4899;
+}
+
+.header-icons .icon.cart .icon-text {
+  background: #22c55e;
+}
+
+.header-icons .icon.notify .icon-text {
+  background: #f59e0b;
+}
+
+/* ================= NIKE BOTTOM HEADER ================= */
+
+.btm-header {
+  background: var(--nike-black);
+  height: 54px;
+}
+
+.btm-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding-inline: 1.5rem;
+  overflow: visible;
+}
+
+/* Categories */
+.categories {
+  position: relative;
+  z-index: 2000;
+
+}
+
+.categories-btn {
+  background: transparent;
+  border: none;
+  color: var(--nike-white);
+  font-weight: 700;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.categories-list {
+
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 240px;
+  height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+}
+
+.categories-list a {
+  padding: 0.75rem 1rem;
+  color: #111;
+  font-weight: 500;
+  text-decoration: none;
+  /* border-bottom: 1px solid #eee; */
+}
+
+.categories-list a:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* .categories-list a:last-child {
+  border-bottom: none;
+} */
+
+/* ================= NAV LINKS ================= */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--nike-white);
+  font-weight: 700;
+  padding: 0 1.1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* .nav-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 6px;
+  height: 3px;
+  background: var(--nike-white);
+} */
+
+/* ================= MOBILE ================= */
+
+.mobile-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--nike-white);
+  font-size: 1.6rem;
+}
+
+@media (max-width: 1023px) {
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  /* container */
+  .top-header .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /* صف اللوجو + البحث */
+  .top-header .header-top-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* اللوجو */
+  .top-header .logo img {
+    width: 105px;
+    flex-shrink: 0;
+  }
+
+  /* البحث جنب اللوجو */
+  .header-center {
+    flex: 1;
+  }
+
+  .search-container,
+  .search-box {
+    width: 100%;
+    max-width: 100%;
+    height: 40px;
+  }
+}
+@media (max-width: 480px) {
+  .search-box button {
+    width: 40px;
+  }
+}

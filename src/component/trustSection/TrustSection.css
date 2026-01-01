@@ -1,0 +1,240 @@
+/* ===== Trust Section Container - Mobile First ===== */
+.best-sellers {
+  background: linear-gradient(135deg, #f5fcf8 0%, #f0fdf4 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: clamp(1.5rem, 6vw, 2.5rem);
+  border-radius: clamp(12px, 3vw, 20px);
+  margin: clamp(2rem, 6vw, 4rem) auto;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .best-sellers {
+    max-width: 95%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .best-sellers {
+    max-width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ===== Header - Flexbox Responsive ===== */
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  flex-wrap: wrap;
+}
+
+@media (min-width: 640px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.header > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.header h2 {
+  color: #064e3b;
+  font-size: clamp(1.5rem, 5vw, 1.75rem);
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.view-btn {
+  background: #064e3b;
+  color: #fff;
+  border: none;
+  padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 2.5vw, 1.25rem);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.view-btn:hover {
+  background: #064e3b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2);
+}
+
+.view-btn:active {
+  transform: translateY(0);
+}
+
+@media (min-width: 640px) {
+  .view-btn {
+    align-self: center;
+  }
+}
+
+/* ===== Tabs - Responsive Flexbox ===== */
+.tabs {
+  display: flex;
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  flex-wrap: wrap;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar but keep functionality */
+.tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tabs::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 2px;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.tabs button {
+  padding: clamp(0.5rem, 1.5vw, 0.7rem) clamp(0.9rem, 2vw, 1.2rem);
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tabs button:hover {
+  border-color: #064e3b;
+  background: #f0fdf4;
+}
+
+.tabs .active {
+  background: #064e3b;
+  color: #fff;
+  border-color: #064e3b;
+}
+
+.tabs .active:hover {
+  background: #053a2f;
+}
+
+/* ===== Products Grid - Responsive ===== */
+.products {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  height: auto;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Small Tablet: 2 columns */
+@media (min-width: 640px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2.5vw, 1.25rem);
+  }
+}
+
+/* Tablet: 3 columns */
+@media (min-width: 768px) {
+  .products {
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 2vw, 1.25rem);
+  }
+}
+
+/* Desktop: 4 columns */
+@media (min-width: 1024px) {
+  .products {
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 1.5vw, 1.25rem);
+  }
+}
+
+/* Large Desktop: 5 columns (optional) */
+@media (min-width: 1400px) {
+  .products {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Product Item - Responsive */
+.products > div {
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Enhanced Mobile Styles ===== */
+@media (max-width: 639px) {
+  .best-sellers {
+    border-radius: clamp(8px, 2vw, 12px);
+  }
+
+  .header {
+    width: 100%;
+  }
+
+  .header > div:first-child {
+    width: 100%;
+  }
+
+  .header h2 {
+    font-size: clamp(1.25rem, 6vw, 1.5rem);
+  }
+
+  .tabs {
+    max-width: 100%;
+  }
+
+  .tabs button {
+    font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.7rem, 1.5vw, 0.9rem);
+  }
+}
+
+/* ===== Large Desktop Optimization ===== */
+@media (min-width: 1920px) {
+  .best-sellers {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .view-btn {
+    font-size: 0.95rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
