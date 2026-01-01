@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../../React Ecommerce Reda Tech/img/ChatGPT Image Dec 26, 2025, 10_49_46 AM.png";
+import logo from "../../../public/images/img/ChatGPT Image Dec 26, 2025, 10_49_46 AM.png";
 import SearchBox from "./searchBox";
 import "./header-responsive.css";
 function TopHeader() {

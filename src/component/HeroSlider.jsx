@@ -34,10 +34,7 @@ function HeroSlider() {
                 Shop Now
               </Link>
             </div>
-            <img
-              src="/src/React Ecommerce Reda Tech/img/banner_Hero1.jpg"
-              alt="hero1"
-            />
+            <img src="/public/images/img/banner_Hero1.jpg" alt="hero1" />
           </SwiperSlide>
           <SwiperSlide>
             <div className="content">
@@ -50,10 +47,7 @@ function HeroSlider() {
                 Shop Now
               </Link>
             </div>
-            <img
-              src="/src/React Ecommerce Reda Tech/img/banner_Hero2.jpg"
-              alt="hero1"
-            />
+            <img src="/public/images/img/banner_Hero2.jpg" alt="hero1" />
           </SwiperSlide>
           <SwiperSlide>
             <div className="content">
@@ -66,10 +60,7 @@ function HeroSlider() {
                 Shop Now
               </Link>
             </div>
-            <img
-              src="/src/React Ecommerce Reda Tech/img/banner_Hero3.jpg"
-              alt="hero1"
-            />
+            <img src="/public/images/img/banner_Hero3.jpg" alt="hero3" />
           </SwiperSlide>
         </Swiper>
       </div>
