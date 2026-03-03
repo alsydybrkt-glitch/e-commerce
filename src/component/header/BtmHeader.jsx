@@ -7,6 +7,7 @@ import useHeaderLogic from "./useHeaderLogic";
 import "./header-responsive.css";
 import { useEffect } from "react";
 
+<<<<<<< HEAD
 // ⭐ Icons (JavaScript Import)
 import {
   Home,
@@ -24,6 +25,14 @@ const navLinks = [
   { name: "Contact", path: "/contact", icon: <Phone size={18} /> },
 ];
 
+=======
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Shop", path: "/shop" },
+  { name: "Blog", path: "/blog" },
+  { name: "Contact", path: "/contact" },
+];
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 function BottomHeader() {
   const location = useLocation();
   const categories = useSelector((state) => state.products?.categories || []);
@@ -34,17 +43,25 @@ function BottomHeader() {
     openMobile,
     setOpenMobile,
     closeAll,
+<<<<<<< HEAD
     openMobileCategories,
     setOpenMobileCategories,
   } = useHeaderLogic();
 
   // Close dropdown when clicking outside (Desktop Only)
+=======
+  } = useHeaderLogic();
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
   useEffect(() => {
     const handler = (e) => {
       if (!e.target.closest(".categories")) {
         setOpenDesktopCategories(false);
       }
     };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);
   }, [setOpenDesktopCategories]);
@@ -57,7 +74,13 @@ function BottomHeader() {
           {/* ===== Desktop Categories ===== */}
           <div
             className="categories"
+<<<<<<< HEAD
             onClick={() => setOpenDesktopCategories(!openDesktopCategories)}
+=======
+            onClick={() => {
+              setOpenDesktopCategories(!openDesktopCategories);
+            }}
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
           >
             <button className="categories-btn">
               <TiThMenu />
@@ -72,7 +95,11 @@ function BottomHeader() {
                     <Link
                       key={category.slug}
                       to={`/category/${category.slug}`}
+<<<<<<< HEAD
                       className="category-item"
+=======
+                      className="mobile-category-item"
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
                       onClick={closeAll}
                     >
                       {category.name}
@@ -94,8 +121,12 @@ function BottomHeader() {
                 className={location.pathname === link.path ? "active" : ""}
                 onClick={closeAll}
               >
+<<<<<<< HEAD
                 {link.icon}
                 <span style={{ marginLeft: "8px" }}>{link.name}</span>
+=======
+                {link.name}
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
               </Link>
             ))}
           </div>
@@ -114,12 +145,15 @@ function BottomHeader() {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* ================= MOBILE OVERLAY ================= */}
       <div
         className={`mobile-overlay ${openMobile ? "active" : ""}`}
         onClick={closeAll}
       ></div>
 
+=======
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
       {/* ================= MOBILE MENU ================= */}
       <div className={`mobile-menu ${openMobile ? "active" : ""}`}>
         <div className="mobile-menu-content">
@@ -134,6 +168,7 @@ function BottomHeader() {
                 }`}
                 onClick={closeAll}
               >
+<<<<<<< HEAD
                 {link.icon}
                 <span>{link.name}</span>
               </Link>
@@ -181,10 +216,20 @@ function BottomHeader() {
               <div className="empty">Loading...</div>
             )}
           </div>
+=======
+                {link.name}
+              </Link>
+            ))}
+          </div>
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
         </div>
       </div>
     </div>
   );
 }
 
+<<<<<<< HEAD
 export default BottomHeader;
+=======
+export default BottomHeader;
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957

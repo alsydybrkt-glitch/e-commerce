@@ -5,7 +5,10 @@
   font-family: system-ui, sans-serif;
 }
 
+<<<<<<< HEAD
 /* Container */
+=======
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .footer-container {
   max-width: 1200px;
   margin: auto;
@@ -14,6 +17,7 @@
   gap: 40px;
 }
 
+<<<<<<< HEAD
 /* Brand */
 .footer-logo {
   color: var(--main-color);
@@ -23,21 +27,41 @@
 }
 
 /* Headings */
+=======
+/* ===== Brand ===== */
+.footer-logo {
+  color: var(--heading-color);
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+/* ===== Headings ===== */
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .footer-column h3 {
   color: var(--heading-color);
   margin-bottom: 15px;
   font-size: 18px;
+<<<<<<< HEAD
   font-weight: 600;
 }
 
 /* Text */
+=======
+}
+
+/* ===== Text ===== */
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .footer-column p {
   font-size: 14px;
   line-height: 1.7;
   color: var(--p-color);
 }
 
+<<<<<<< HEAD
 /* Links */
+=======
+/* ===== Links ===== */
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .footer-column ul {
   list-style: none;
   padding: 0;
@@ -48,14 +72,22 @@
   font-size: 14px;
   cursor: pointer;
   color: var(--p-color);
+<<<<<<< HEAD
   transition: 0.25s ease;
+=======
+  transition: color 0.25s ease;
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 }
 
 .footer-column ul li:hover {
   color: var(--main-color);
 }
 
+<<<<<<< HEAD
 /* Social Links */
+=======
+/* ===== Social ===== */
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .social-links {
   display: flex;
   flex-direction: column;
@@ -73,7 +105,11 @@
   color: var(--secondary-color);
 }
 
+<<<<<<< HEAD
 /* Newsletter */
+=======
+/* ===== Newsletter ===== */
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .newsletter-form {
   display: flex;
   gap: 10px;
@@ -91,11 +127,19 @@
 }
 
 .newsletter-form input::placeholder {
+<<<<<<< HEAD
   color: #9ca3af;
 }
 
 .newsletter-form button {
   background-color: var(--main-color);
+=======
+  color: var(--p-color);
+}
+
+.newsletter-form button {
+  background-color: var(--primary-color);
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
   color: var(--white-color);
   border: none;
   padding: 10px 16px;
@@ -108,11 +152,16 @@
   background-color: var(--secondary-color);
 }
 
+<<<<<<< HEAD
 /* Payments */
+=======
+/* ===== Payments ===== */
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 .payment-methods {
   text-align: center;
   margin-top: 40px;
   font-size: 14px;
+<<<<<<< HEAD
   color: var(--p-color);
 }
 
@@ -138,3 +187,6 @@
     width: 100%;
   }
 }
+=======
+}
+>>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
