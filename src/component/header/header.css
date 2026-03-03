@@ -1,0 +1,440 @@
+/* =========================================================
+   GLOBAL HELPERS
+========================================================= */
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+.top-header {
+  background: var(--white-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ---------- Mobile First Layout ---------- */
+.top-header .container {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    "left right"
+    "center center";
+  align-items: center;
+  gap: clamp(0.4rem, 2vw, 0.8rem);
+  padding: clamp(0.5rem, 2vw, 0.9rem);
+}
+
+/* Logo */
+.top-header .header-left {
+  grid-area: left;
+}
+.top-header .logo img {
+  width: clamp(70px, 22vw, 150px);
+  height: auto;
+}
+
+/* Search */
+.top-header .header-center {
+  grid-area: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.top-header .search-box {
+  width: 100%;
+  max-width: 680px;
+  height: clamp(40px, 8vw, 52px);
+  display: flex;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 2px solid var(--main-color);
+  background: #fff;
+}
+
+.top-header .search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 clamp(0.75rem, 2vw, 1.25rem);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.top-header .search-box button {
+  all: unset;
+  width: clamp(45px, 10vw, 70px);
+  background: var(--main-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Icons */
+.top-header .header-right {
+  grid-area: right;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.4rem, 1.5vw, 0.8rem);
+}
+
+.top-header .header-icons {
+  display: flex;
+  gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+.top-header .header-icons .icon {
+  position: relative;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  color: rgb(70, 70, 70);
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.top-header .header-icons .icon:hover {
+  transform: translateY(-2px);
+  color: var(--main-color);
+}
+
+.top-header .icon-text {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  background: var(--main-color);
+  color: #fff;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Tablet & Desktop ---------- */
+@media (min-width: 640px) {
+  .top-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .top-header .header-center {
+    flex: 1;
+    padding: 0 1rem;
+  }
+}
+
+/* =========================================================
+   BOTTOM HEADER
+========================================================= */
+.btm-header {
+  background: rgb(28, 30, 40) !important;
+  height: clamp(45px, 10vw, 55px);
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.btm-header .container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 clamp(0.5rem, 2vw, 1rem);
+}
+
+/* Navigation */
+.btm-header .nav {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+/* =========================================================
+   CATEGORIES BUTTON (LEFT)
+========================================================= */
+.categories-nav {
+  position: relative;
+}
+
+.categories-btn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1rem;
+  background: transparent;
+  border: none;
+  color: var(--white-color);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.categories-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Dropdown panel */
+.categories-nav-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: min(260px, 90vw);
+  background: var(--surface-color);
+  display: none;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  z-index: 999;
+}
+
+.categories-nav-list.show {
+  display: flex;
+}
+
+.categories-nav-list a {
+  padding: 0.9rem 1rem;
+  color: var(--p-color);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: 0.25s ease;
+}
+
+.categories-nav-list a:hover {
+  background: var(--main-color);
+  color: #fff;
+}
+
+/* =========================================================
+   NAV LINKS (CENTER)
+========================================================= */
+.nav-links {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  color: var(--white-color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.nav-links a.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================================
+   RIGHT ICONS
+========================================================= */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.header-icons .icon {
+  font-size: 1.4rem;
+  color: var(--white-color);
+}
+/* ====================== OVERLAY ====================== */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  z-index: 998;
+  backdrop-filter: blur(2px);
+}
+
+.mobile-overlay.active {
+  display: block;
+}
+
+/* ====================== OVERLAY ====================== */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  z-index: 998;
+  backdrop-filter: blur(6px);
+}
+.mobile-overlay.active {
+  display: block;
+}
+/* ====================== OVERLAY ====================== */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  z-index: 998;
+  backdrop-filter: blur(2px);
+}
+.mobile-overlay.active {
+  display: block;
+}
+
+/* ====================== MOBILE MENU (IMPROVED UI) ====================== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 265px;
+  height: 100vh;
+  background: var(--surface-color);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  transition: left 0.35s ease;
+  z-index: 9999;
+  
+  padding: 1.4rem 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+
+  /* تحسين الشكل */
+  border-radius: 0 14px 14px 0;
+  box-shadow: 4px 0 28px rgba(0, 0, 0, 0.18);
+}
+
+.mobile-menu.active {
+  left: 0;
+}
+
+/* ====================== MENU CONTENT ====================== */
+.mobile-menu-content {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* SECTION TITLE (Categories Toggle) */
+.mobile-section-title {
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white-color);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: 0.25s ease;
+}
+
+.mobile-section-title:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-section-title .rotate {
+  transform: rotate(180deg);
+}
+
+/* ====================== LINKS ====================== */
+.mobile-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+
+  padding: 0.75rem 0.95rem;
+  text-decoration: none;
+  border-radius: 10px;
+
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 500;
+
+  /* تحسين الشكل */
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: 0.25s ease;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.mobile-nav-link.active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* ====================== CATEGORY ITEMS ====================== */
+.mobile-categories-list {
+  display: none;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  margin-left: 0.7rem;
+  padding-left: 0.6rem;
+  border-left: 2px solid var(--main-color);
+}
+
+.mobile-categories-list.show {
+  display: flex;
+}
+
+.mobile-category-item {
+  padding: 0.6rem 1rem;
+  border-radius: 9px;
+
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: 0.25s ease;
+}
+
+.mobile-category-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* ====================== MOBILE TOGGLE BUTTON ====================== */
+.mobile-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--white-color);
+  font-size: 1.8rem;
+}
+
+@media (max-width: 1023px) {
+  .mobile-toggle {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+  }
+}

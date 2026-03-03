@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: 'Inter', sans-serif; */
+  user-select: none;
+  -webkit-user-select: none;
+}
+:root {
+  /* ===== Brand / Primary ===== */
+  --main-color: #6366f1; /* Indigo 500 – CTA */
+  --primary-color: #9812f1; /* Indigo 600 */
+  --secondary-color: #8640f7; /* Indigo 400 */
+  --accent-color: #f97316; /* Orange 500 – Offers / Sale */
+
+  /* ===== Backgrounds ===== */
+  --bg-color: #0b1120; /* Deep Navy */
+  --surface-color: #111827; /* Cards / Sections */
+  --white-color: #ffffff;
+
+  /* ===== Text ===== */
+  --heading-color: #f9fafb; /* Headings */
+  --text-color: #404142; /* Main text */
+  --p-color: #434344; /* Muted text */
+
+  /* ===== Borders & UI ===== */
+  --border-color: #e3e1e1;
+  --nike-black: #111111;
+  --nike-white: #ffffff;
+  --nike-gray: #f5f5f5;
+  --nike-accent: #ef4444; /* red */
+}
+
+body {
+  background-color: white;
+  font-family: "Inter", sans-serif;
+  color: var(--text-color) !important;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Elms Sans", sans-serif;
+  color: var(--heading-color);
+}
+span {
+  color: var(--main-color);
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul {
+  list-style: none;
+}
+p {
+  color: var(--p-color);
+  line-height: 1.6;
+}
+input,
+button,
+textarea,
+select {
+  border: none;
+  outline: none;
+}
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background: var(--main-color); /* ✅ */
+  color: var(--white-color);
+  border-radius: 10px;
+  font-weight: bold;
+  width: max-content;
+  transition: all 0.3s ease;
+}
+
+.btn span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover {
+  transition: all 0.3s ease;
+  scale: 1.05;
+  cursor: pointer;
+}
+
+.details:hover .product-icon {
+  right: 25px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* ================= SEARCH BOX ================= */

@@ -1,0 +1,20 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../../React Ecommerce Reda Tech/img/ChatGPT Image Dec 26, 2025, 10_49_46 AM.png";
+import SearchBox from "./SearchBox";
+import "./header-responsive.css";
+function TopHeader() {
+  return (
+    <div className="top-header">
+      <div className="container">
+        <Link to="/" className="logo">
+          <img src={logo} alt="logo" />
+        </Link>
+
+        <SearchBox />
+      </div>
+    </div>
+  );
+}
+
+export default TopHeader;

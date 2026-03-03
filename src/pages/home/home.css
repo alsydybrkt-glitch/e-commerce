@@ -1,0 +1,125 @@
+/* ===== Hero Slider - Mobile First ===== */
+.heroSlider {
+  width: 100%;
+  max-width: 100%;
+  height: clamp(200px, 50vw, 500px);
+  position: relative;
+  margin: 1rem auto 2rem;
+  padding: 0 0.5rem;
+  overflow: hidden;
+  border-radius: clamp(8px, 2vw, 12px);
+  box-shadow: 0 2px 8px rgba(83, 80, 80, 0.08);
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .heroSlider {
+    width: 90%;
+    margin: 1.5rem auto 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroSlider {
+    width: 85%;
+    margin: 2rem auto 4rem;
+    box-shadow: 4px 4px 30px rgba(83, 80, 80, 0.1);
+  }
+}
+
+.heroSlider::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ===== Container ===== */
+.heroSlider .container {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.heroSlider .container .mySwiper {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== Slide ===== */
+.heroSlider .swiper-slide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* ===== Image ===== */
+.heroSlider .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 0;
+}
+
+/* ===== Content ===== */
+.heroSlider .swiper-slide .content {
+  position: absolute;
+  top: 50%;
+  left: clamp(1rem, 5%, 3rem);
+  transform: translateY(-50%);
+  z-index: 2;
+  max-width: 90%;
+  width: 100%;
+  animation: slideFade 0.8s ease;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .heroSlider .swiper-slide .content {
+    max-width: 500px;
+    width: auto;
+  }
+}
+
+/* ===== Titles ===== */
+.heroSlider .swiper-slide .content h2 {
+  font-size: clamp(1.5rem, 6vw, 4rem);
+  margin-bottom: 0.5rem;
+  color: var(--main-color);
+  line-height: 1.2;
+}
+
+.heroSlider .swiper-slide .content h3 {
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  margin-bottom: 0.5rem;
+  color: var(--main-color);
+}
+
+.heroSlider .swiper-slide .content h4 {
+  color: rgb(69, 68, 68);
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+/* ===== Paragraph ===== */
+.heroSlider .swiper-slide .content p {
+  font-size: clamp(0.875rem, 2.5vw, 1.2rem);
+  margin-bottom: 1rem;
+  color: var(--surface-color);
+  line-height: 1.5;
+}
+
+/* ===== Animation ===== */
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translate(-20px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
