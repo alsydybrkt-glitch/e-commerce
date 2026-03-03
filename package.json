@@ -18,10 +18,7 @@
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
-<<<<<<< HEAD
     "lucide-react": "^0.576.0",
-=======
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",
