@@ -1,6 +1,3 @@
-
-import TopHeader from "./component/header/topHeader";
-import BtmHeader from "./component/header/btmHeader";
 import Home from "./pages/home/home";
 import Header from "./component/header/header";
 
@@ -29,7 +26,6 @@ function App() {
     <>
       <header>
         <Header />
-
       </header>
       <Toaster
         position="bottom-right"
