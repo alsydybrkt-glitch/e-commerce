@@ -7,8 +7,6 @@ import useHeaderLogic from "./useHeaderLogic";
 import "./header-responsive.css";
 import { useEffect } from "react";
 
-<<<<<<< HEAD
-// ⭐ Icons (JavaScript Import)
 import {
   Home,
   ShoppingBag,
@@ -25,14 +23,6 @@ const navLinks = [
   { name: "Contact", path: "/contact", icon: <Phone size={18} /> },
 ];
 
-=======
-const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "Shop", path: "/shop" },
-  { name: "Blog", path: "/blog" },
-  { name: "Contact", path: "/contact" },
-];
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 function BottomHeader() {
   const location = useLocation();
   const categories = useSelector((state) => state.products?.categories || []);
@@ -43,25 +33,17 @@ function BottomHeader() {
     openMobile,
     setOpenMobile,
     closeAll,
-<<<<<<< HEAD
     openMobileCategories,
     setOpenMobileCategories,
   } = useHeaderLogic();
 
-  // Close dropdown when clicking outside (Desktop Only)
-=======
-  } = useHeaderLogic();
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
   useEffect(() => {
     const handler = (e) => {
       if (!e.target.closest(".categories")) {
         setOpenDesktopCategories(false);
       }
     };
-<<<<<<< HEAD
-=======
 
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);
   }, [setOpenDesktopCategories]);
@@ -69,18 +51,11 @@ function BottomHeader() {
   return (
     <div className="btm-header">
       <div className="container">
-        {/* ================= LEFT ================= */}
+        {/* LEFT */}
         <nav className="nav">
-          {/* ===== Desktop Categories ===== */}
           <div
             className="categories"
-<<<<<<< HEAD
             onClick={() => setOpenDesktopCategories(!openDesktopCategories)}
-=======
-            onClick={() => {
-              setOpenDesktopCategories(!openDesktopCategories);
-            }}
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
           >
             <button className="categories-btn">
               <TiThMenu />
@@ -91,15 +66,11 @@ function BottomHeader() {
             {openDesktopCategories && (
               <div className="categories-list">
                 {categories.length > 0 ? (
-                  categories.map((category) => (
+                  categories.map((category, index) => (
                     <Link
-                      key={category.slug}
+                      key={`${category.slug}-${index}`}
                       to={`/category/${category.slug}`}
-<<<<<<< HEAD
                       className="category-item"
-=======
-                      className="mobile-category-item"
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
                       onClick={closeAll}
                     >
                       {category.name}
@@ -112,29 +83,26 @@ function BottomHeader() {
             )}
           </div>
 
-          {/* ===== Desktop Nav Links ===== */}
+          {/* Desktop Nav */}
           <div className="nav-links">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <Link
-                key={link.path}
+                key={`${link.path}-${index}`}
                 to={link.path}
                 className={location.pathname === link.path ? "active" : ""}
                 onClick={closeAll}
               >
-<<<<<<< HEAD
                 {link.icon}
-                <span style={{ marginLeft: "8px" }}>{link.name}</span>
-=======
-                {link.name}
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+                <span className="link-text">{link.name}</span>
               </Link>
             ))}
           </div>
         </nav>
 
-        {/* ================= RIGHT ================= */}
+        {/* RIGHT */}
         <div className="header-right">
           <HeaderIcons />
+
           <button
             className="mobile-toggle"
             onClick={() => setOpenMobile(!openMobile)}
@@ -145,51 +113,50 @@ function BottomHeader() {
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* ================= MOBILE OVERLAY ================= */}
+      {/* OVERLAY */}
       <div
         className={`mobile-overlay ${openMobile ? "active" : ""}`}
         onClick={closeAll}
       ></div>
 
-=======
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
-      {/* ================= MOBILE MENU ================= */}
+      {/* MOBILE MENU */}
       <div className={`mobile-menu ${openMobile ? "active" : ""}`}>
+        {/* menu header */}
+        <div className="mobile-menu-header">
+          <span className="mobile-title">Menu</span>
+          <button className="mobile-close" onClick={closeAll}>
+            <MdClose size={22} />
+          </button>
+        </div>
+
         <div className="mobile-menu-content">
-          {/* ===== Mobile Nav Links ===== */}
+          {/* links */}
           <div className="mobile-nav-section">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <Link
-                key={link.path}
+                key={`${link.path}-${index}`}
                 to={link.path}
                 className={`mobile-nav-link ${
                   location.pathname === link.path ? "active" : ""
                 }`}
                 onClick={closeAll}
               >
-<<<<<<< HEAD
                 {link.icon}
                 <span>{link.name}</span>
               </Link>
             ))}
           </div>
 
-          {/* ===== Mobile Categories Dropdown ===== */}
+          {/* categories */}
           <button
             className="mobile-section-title"
             onClick={() => setOpenMobileCategories(!openMobileCategories)}
           >
-            <span
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.6rem",
-              }}
-            >
+            <span className="cat-title">
               <Grid size={18} />
               Categories
             </span>
+
             <ChevronDown
               size={18}
               className={openMobileCategories ? "rotate" : ""}
@@ -202,9 +169,9 @@ function BottomHeader() {
             }`}
           >
             {categories.length > 0 ? (
-              categories.map((cat) => (
+              categories.map((cat, index) => (
                 <Link
-                  key={cat.slug}
+                  key={`${cat.slug}-${index}`}
                   to={`/category/${cat.slug}`}
                   className="mobile-category-item"
                   onClick={closeAll}
@@ -216,20 +183,10 @@ function BottomHeader() {
               <div className="empty">Loading...</div>
             )}
           </div>
-=======
-                {link.name}
-              </Link>
-            ))}
-          </div>
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
         </div>
       </div>
     </div>
   );
 }
 
-<<<<<<< HEAD
 export default BottomHeader;
-=======
-export default BottomHeader;
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957

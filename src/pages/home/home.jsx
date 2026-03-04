@@ -1,10 +1,6 @@
 import HeroSlider from "../../component/HeroSlider";
 import SlideProduct from "../../component/slideProduct/slideProduct";
 import PageTransitions from "../../component/pageTransition";
-<<<<<<< HEAD
-=======
-import CategoriesGrid from "../../component/CategoriesGrid/CategoriesGrid";
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
 
 import { useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,26 +64,10 @@ function Home() {
     });
   }, [Dispatch, categories]);
 
-  const categoriesData = categoryInf.map((cat) => {
-    const product = products?.[cat.apiName]?.[3];
-
-    return {
-      subtitle: cat.subtitle,
-      title: cat.apiName.replace("-", " "),
-      buttonText: "Browse",
-      img: product?.images?.[0] ?? "/images/default.png",
-      className: cat.className,
-    };
-  });
-
   return (
     <PageTransitions>
       <>
         <HeroSlider />
-<<<<<<< HEAD
-=======
-        <CategoriesGrid banner={bannerData} categories={categoriesData} />;
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
         {categories.map((category) => {
           return (
             <SlideProduct
@@ -98,7 +78,6 @@ function Home() {
             />
           );
         })}
-        <TrustSection />
       </>
     </PageTransitions>
   );

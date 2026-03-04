@@ -1,11 +1,9 @@
-<<<<<<< HEAD
+
 import TopHeader from "./component/header/topHeader";
 import BtmHeader from "./component/header/btmHeader";
 import Home from "./pages/home/home";
-=======
-import Home from "./pages/home/home";
 import Header from "./component/header/header";
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+
 import { Route, Routes } from "react-router-dom";
 import ProductDetails from "./pages/products/productDetails";
 import Cart from "./pages/Card/Cart";
@@ -30,12 +28,8 @@ function App() {
   return (
     <>
       <header>
-<<<<<<< HEAD
-        <TopHeader />
-        <BtmHeader />
-=======
         <Header />
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+
       </header>
       <Toaster
         position="bottom-right"

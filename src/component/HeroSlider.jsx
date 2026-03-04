@@ -14,11 +14,10 @@ function HeroSlider() {
   const handleShopNowClick = () => {
     navigate("/shop");
   };
-<<<<<<< HEAD
-=======
+
   // force redeploy
 
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+
   return (
     <div className="heroSlider">
       <div className="container">
@@ -39,14 +38,14 @@ function HeroSlider() {
                 Shop Now
               </Link>
             </div>
-<<<<<<< HEAD
+
             <img
               src="/src/React Ecommerce Reda Tech/img/banner_Hero1.jpg"
               alt="hero1"
             />
-=======
+
             <img src="/images/img/banner_Hero1.jpg" alt="hero1" />
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+
           </SwiperSlide>
           <SwiperSlide>
             <div className="content">
@@ -59,14 +58,14 @@ function HeroSlider() {
                 Shop Now
               </Link>
             </div>
-<<<<<<< HEAD
+
             <img
               src="/src/React Ecommerce Reda Tech/img/banner_Hero2.jpg"
               alt="hero1"
             />
-=======
+
             <img src="/images/img/banner_Hero2.jpg" alt="hero2" />
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+
           </SwiperSlide>
           <SwiperSlide>
             <div className="content">
@@ -79,14 +78,14 @@ function HeroSlider() {
                 Shop Now
               </Link>
             </div>
-<<<<<<< HEAD
+
             <img
               src="/src/React Ecommerce Reda Tech/img/banner_Hero3.jpg"
               alt="hero1"
             />
-=======
+
             <img src="/images/img/banner_Hero3.jpg" alt="hero3" />
->>>>>>> 6936e6050fb1b2fab8f38947fbada9d016b81957
+
           </SwiperSlide>
         </Swiper>
       </div>

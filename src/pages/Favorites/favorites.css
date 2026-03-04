@@ -9,8 +9,8 @@
 }
 
 .favorites-grid {
-    width: 90%;
-    margin: 0 auto;
+  width: 90%;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 30px;
@@ -21,7 +21,7 @@
   background: #fff;
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
 }
 
@@ -67,12 +67,12 @@
 .favorites-empty {
   text-align: center;
   padding: 80px 20px;
-    color: #888;
+  color: #888;
 }
 .favorites-empty h2 {
   font-size: 2rem;
   margin-bottom: 15px;
-  color: rgb(32, 32, 32)  ;
+  color: rgb(32, 32, 32);
 }
 .favorites-header {
   display: flex;
@@ -82,22 +82,21 @@
 }
 
 .reset-btn {
-  background: transparent;
-  border: 1px solid #ff4d4f;
-  color: #ff4d4f;
-  padding: 8px 14px;
+  margin-top: 35px;
+  background-color: var(--main-color);
+  color: var(--white-color);
+  font-weight: bold;
+  padding: 13px 14px;
   border-radius: 6px;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .reset-btn:hover {
-  background: #ff4d4f;
-  color: #fff;
+  opacity: 0.9;
 }
-.resetItem{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.resetItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
