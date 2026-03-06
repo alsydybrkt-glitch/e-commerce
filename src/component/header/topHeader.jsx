@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../public/images/img/ChatGPT Image Dec 26, 2025, 10_49_46 AM.png";
-import SearchBox from "./SearchBox";
+import SearchBox from "./searchBox";
 
 import "./header-responsive.css";
 function TopHeader() {
