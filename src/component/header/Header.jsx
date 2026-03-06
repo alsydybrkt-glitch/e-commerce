@@ -1,4 +1,4 @@
-import TopHeader from "./topHeader";
+import TopHeader from "./TopHeader";
 import BottomHeader from "./BtmHeader";
 
 function Header() {
