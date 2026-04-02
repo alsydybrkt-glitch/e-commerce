@@ -30,7 +30,7 @@ import {
   shareProduct,
 } from "../../shared/lib/product-tools";
 import PageTransitions from "../../shared/ui/PageTransition";
-import ProductDetailsLoading from "./ProductDetailsLoading";
+import ProductDetailsLoading from "./ProductDetailsLoading2.jsx";
 import { useTranslation } from "../../shared/i18n/useTranslation";
 
 function ProductDetailsPage() {
