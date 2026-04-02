@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    @apply box-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-slate-50 font-sans text-slate-700 antialiased;
+    font-family: "Amazon Ember", Arial, Helvetica, sans-serif;
+    line-height: 1.75;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+
+    background-image:
+      radial-gradient(
+        circle at top left,
+        rgba(111, 143, 129, 0.06),
+        transparent 30%
+      ),
+      linear-gradient(180deg, #fafaf8 0%, #f3f5f2 52%, #fbfbfa 100%);
+
+    transition:
+      background-color 220ms ease,
+      color 220ms ease,
+      background-image 220ms ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.28;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    line-height: 1.9;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    margin-bottom: 0.6rem;
+  }
+
+  .section-copy {
+    line-height: 1.85;
+    margin-bottom: 1.2rem;
+  }
+
+  .surface-card > * {
+    margin-bottom: 0.9rem;
+  }
+
+  .surface-card > *:last-child {
+    margin-bottom: 0;
+  }
+
+  input,
+  select,
+  textarea {
+    line-height: 1.7;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    line-height: 1.65;
+  }
+
+  img {
+    @apply block max-w-full;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    @apply outline-none;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-700;
+  }
+}
+
+/* DARK MODE */
+
+body.theme-dark {
+  background-color: rgb(15 20 26);
+  color: rgb(210 220 230);
+
+  background-image:
+    radial-gradient(
+      circle at top left,
+      rgba(111, 143, 129, 0.05),
+      transparent 28%
+    ),
+    linear-gradient(180deg, #0f1419 0%, #1a222c 52%, #11181f 100%);
+}
+
+body.theme-dark .surface-card {
+  border-color: rgb(45 60 75);
+  background-color: rgb(22 28 36 / 0.96);
+  color: rgb(210 220 230);
+  box-shadow: 0 14px 34px rgba(111, 143, 129, 0.06);
+}
+
+body.theme-dark .deferred-section > .surface-card {
+  border-color: rgb(45 60 75);
+  background-color: rgb(22 28 36 / 0.96);
+}
+
+body.theme-dark .section-kicker {
+  border-color: rgb(70 90 110) !important;
+  background-color: rgb(25 32 42) !important;
+  color: rgb(180 195 210) !important;
+}
+
+body.theme-dark .section-title {
+  color: rgb(220 230 240) !important;
+}
+
+body.theme-dark .section-copy {
+  color: rgb(160 175 190) !important;
+}
+
+body.theme-dark .primary-btn {
+  background-color: rgb(111 143 129) !important;
+  color: rgb(220 230 240) !important;
+}
+
+body.theme-dark .primary-btn:hover {
+  background-color: rgb(130 160 145) !important;
+}
+
+body.theme-dark .secondary-btn {
+  border-color: rgb(70 90 110) !important;
+  background-color: rgb(25 32 42) !important;
+  color: rgb(210 220 230) !important;
+}
+
+body.theme-dark .secondary-btn:hover {
+  border-color: rgb(100 120 140) !important;
+  color: rgb(200 210 220) !important;
+}
+
+/* HERO FIX */
+
+.home-hero .hero-image-card {
+  background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-light);
+}
+
+body.theme-dark .home-hero .hero-image-card {
+  background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-light);
+}
+
+.home-hero .hero-image-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0)
+  );
+}
+
+body.theme-dark .home-hero .hero-image-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.45),
+    rgba(0,0,0,0)
+  );
+}
+
+/* COMPONENTS */
+
+@layer components {
+
+  .shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-gap {
+    @apply py-14 sm:py-16 lg:py-20;
+  }
+
+  .surface-card {
+    @apply rounded-[28px] border border-slate-200/70 bg-white shadow-card;
+  }
+
+  .deferred-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+
+  .deferred-section > .surface-card {
+    @apply mx-auto w-full max-w-7xl rounded-[28px] border border-slate-200/70 bg-white shadow-card;
+  }
+
+  .section-kicker {
+    @apply mb-3 inline-flex items-center rounded-full border border-brand-100 bg-brand-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-brand-700;
+  }
+
+  .section-title {
+    @apply font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl;
+  }
+
+  .section-copy {
+    @apply text-sm leading-7 text-slate-500 sm:text-base;
+  }
+
+  .primary-btn {
+    @apply inline-flex items-center justify-center rounded-full bg-slate-800 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-brand-600;
+  }
+
+  .secondary-btn {
+    @apply inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700;
+  }
+
+}

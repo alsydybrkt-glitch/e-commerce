@@ -1,29 +1,24 @@
-import "./productDetails.css";
 function ProductDetailsLoading() {
   return (
-    <div className="productDetails-loading">
-      <div className="loading-left">
-
-        {/* الصورة الكبيرة */}
-        <div className="loading-big-image skeleton"></div>
-
-        {/* الصور الصغيرة */}
-        <div className="loading-small-images">
-          <div className="small skeleton"></div>
-          <div className="small skeleton"></div>
-          <div className="small skeleton"></div>
+    <div className="shell section-gap">
+      <div className="surface-card grid animate-pulse gap-8 p-6 lg:grid-cols-[0.95fr_1.05fr] lg:p-8">
+        <div className="space-y-4">
+          <div className="h-[420px] rounded-[32px] bg-slate-200" />
+          <div className="grid grid-cols-3 gap-3">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="h-24 rounded-2xl bg-slate-200" />
+            ))}
+          </div>
         </div>
-      </div>
-
-      {/* تفاصيل المنتج */}
-      <div className="loading-right">
-        <div className="line title skeleton"></div>
-        <div className="line skeleton"></div>
-        <div className="line skeleton"></div>
-        <div className="line skeleton"></div>
-        <div className="line skeleton"></div>
-
-        <div className="loading-button skeleton"></div>
+        <div className="space-y-4">
+          <div className="h-8 w-4/5 rounded-full bg-slate-200" />
+          <div className="h-5 w-1/4 rounded-full bg-slate-200" />
+          <div className="h-6 w-1/3 rounded-full bg-slate-200" />
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="h-4 rounded-full bg-slate-200" />
+          ))}
+          <div className="h-12 w-48 rounded-2xl bg-slate-200" />
+        </div>
       </div>
     </div>
   );
