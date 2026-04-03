@@ -38,7 +38,7 @@ function SlideProduct({ category, description, products }) {
             <button
               ref={prevBtnRef}
               type="button"
-              className="secondary-btn border-slate-300 bg-white px-3 py-2 text-xs font-semibold dark:border-slate-600 dark:bg-slate-800"
+              className="secondary-btn px-3 py-2 text-xs font-semibold"
               onClick={() => swiper?.slidePrev()}
             >
               {t("home.sliderPrev")}
@@ -46,7 +46,7 @@ function SlideProduct({ category, description, products }) {
             <button
               ref={nextBtnRef}
               type="button"
-              className="secondary-btn border-slate-300 bg-white px-3 py-2 text-xs font-semibold dark:border-slate-600 dark:bg-slate-800"
+              className="secondary-btn px-3 py-2 text-xs font-semibold"
               onClick={() => swiper?.slideNext()}
             >
               {t("home.sliderNext")}

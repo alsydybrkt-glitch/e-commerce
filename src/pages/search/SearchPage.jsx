@@ -41,10 +41,12 @@ function SearchPage() {
           </div>
         ) : (
           <div className="surface-card p-10 text-center">
-            <h2 className="font-display text-3xl font-bold text-slate-900">
+            <h2 className="font-display text-3xl font-bold text-slate-900 dark:text-slate-100">
               {t("search.emptyTitle")}
             </h2>
-            <p className="mt-3 text-sm text-slate-500">{t("search.emptyCopy")}</p>
+            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+              {t("search.emptyCopy")}
+            </p>
           </div>
         )}
       </section>

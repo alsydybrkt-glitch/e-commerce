@@ -43,14 +43,14 @@ function SearchBox() {
         className="surface-card flex items-center gap-3 rounded-full px-4 py-3"
         onSubmit={handleSubmit}
       >
-        <FaSearch className="text-slate-400" />
+        <FaSearch className="shrink-0 text-slate-400 dark:text-slate-500" />
         <input
           autoComplete="off"
           type="text"
           placeholder={t("header.searchPlaceholder")}
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
-          className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400"
+          className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500"
         />
         <button type="submit" className="primary-btn !px-4 !py-2 text-xs">
           {t("common.search")}
@@ -63,7 +63,7 @@ function SearchBox() {
             <button
               key={product.id}
               type="button"
-              className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition hover:bg-slate-50"
+              className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-start transition hover:bg-slate-50 dark:hover:bg-slate-800/80"
               onClick={() => {
                 navigate(`/product/${product.id}`);
                 setInputValue("");
@@ -74,13 +74,13 @@ function SearchBox() {
                 alt={product.title}
                 loading="lazy"
                 decoding="async"
-                className="h-14 w-14 rounded-2xl bg-slate-100 object-cover"
+                className="h-14 w-14 rounded-2xl bg-slate-100 object-cover dark:bg-slate-700"
               />
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-slate-900">
+                <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
                   {product.title}
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   ${product.price} · {tCategoryName(product.category)}
                 </p>
               </div>

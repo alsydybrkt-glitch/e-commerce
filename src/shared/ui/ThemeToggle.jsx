@@ -18,7 +18,7 @@ function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand-200 hover:text-brand-700"
+      className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-light)] bg-[var(--color-surface-primary)] px-4 py-2 text-xs font-semibold text-[var(--color-text-secondary)] shadow-sm transition hover:-translate-y-px hover:border-[var(--color-brand-600)] hover:text-[var(--color-brand-600)] hover:shadow-md"
       aria-label={label}
       title={label}
     >

@@ -60,10 +60,10 @@ function BlogHero({ featuredGuide, t, tCategoryName }) {
       <aside className="surface-card flex flex-col justify-between p-6 sm:p-8">
         <div>
           <span className="section-kicker">{t("blog.topicsKicker")}</span>
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">
             {t("blog.topicsTitle")}
           </h2>
-          <p className="mt-4 text-sm leading-7 text-slate-500">
+          <p className="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400">
             {t("blog.topicsCopy")}
           </p>
         </div>
@@ -72,10 +72,10 @@ function BlogHero({ featuredGuide, t, tCategoryName }) {
           {featuredGuide.searchTerms.map((term) => (
             <div
               key={term}
-              className="flex items-center justify-between rounded-[22px] bg-slate-100 px-4 py-3 text-sm font-medium text-slate-700"
+              className="flex items-center justify-between rounded-[22px] bg-slate-100 px-4 py-3 text-sm font-medium text-slate-700 dark:bg-slate-800/60 dark:text-slate-200"
             >
               <span>{term}</span>
-              <FiArrowRight className="text-slate-400" aria-hidden="true" />
+              <FiArrowRight className="text-slate-400 dark:text-slate-500" aria-hidden="true" />
             </div>
           ))}
         </div>
@@ -87,7 +87,7 @@ function BlogHero({ featuredGuide, t, tCategoryName }) {
 function GuideCard({ guide, t, tCategoryName }) {
   return (
     <article className="group surface-card overflow-hidden transition duration-300 hover:-translate-y-1">
-      <div className="overflow-hidden bg-slate-100">
+      <div className="overflow-hidden bg-slate-100 dark:bg-slate-800/50">
         <img
           src={guide.image}
           alt={guide.title}
@@ -97,22 +97,24 @@ function GuideCard({ guide, t, tCategoryName }) {
       </div>
 
       <div className="p-6">
-        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
           <span>{guide.eyebrow}</span>
           <span>{guide.readTime}</span>
         </div>
 
-        <h2 className="mt-4 text-2xl font-bold leading-tight text-slate-900">
+        <h2 className="mt-4 text-2xl font-bold leading-tight text-slate-900 dark:text-slate-50">
           {guide.title}
         </h2>
 
-        <p className="mt-3 text-sm leading-7 text-slate-500">{guide.description}</p>
+        <p className="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+          {guide.description}
+        </p>
 
         <div className="mt-5 flex flex-wrap gap-2">
           {guide.searchTerms.map((term) => (
             <span
               key={term}
-              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600"
+              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
             >
               {term}
             </span>
@@ -129,7 +131,7 @@ function GuideCard({ guide, t, tCategoryName }) {
           </Link>
           <Link
             to={`/category/${guide.categorySlug}`}
-            className="text-sm font-semibold text-brand-600"
+            className="text-sm font-semibold text-brand-600 dark:text-brand-400"
           >
             {t("blog.browseCategory", {
               category: tCategoryName(guide.categorySlug),
@@ -197,7 +199,7 @@ export default function BlogPage() {
       <section className="blog-page shell section-gap">
         <div className="mb-10">
           <span className="section-kicker">{t("blog.kicker")}</span>
-          <h1 className="mt-4 max-w-4xl text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+          <h1 className="mt-4 max-w-4xl text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
             {t("blog.title")}
           </h1>
         </div>
@@ -239,7 +241,10 @@ export default function BlogPage() {
               <span className="section-kicker">{t("blog.linkedProductsKicker")}</span>
               <h2 className="section-title">{t("blog.linkedProductsTitle")}</h2>
             </div>
-            <Link to="/shop" className="text-sm font-semibold text-brand-600">
+            <Link
+              to="/shop"
+              className="text-sm font-semibold text-brand-600 dark:text-brand-400"
+            >
               {t("blog.moreProducts")}
             </Link>
           </div>

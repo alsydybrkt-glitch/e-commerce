@@ -83,11 +83,13 @@ function CategoryPage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-[28px] border border-dashed border-slate-200 bg-slate-50 px-6 py-12 text-center">
-              <h2 className="text-2xl font-bold text-slate-900">
+            <div className="rounded-[28px] border border-dashed border-slate-200 bg-slate-50 px-6 py-12 text-center dark:border-slate-600 dark:bg-slate-800/40">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {isRTL ? "لا توجد منتجات في هذا القسم" : "No products in this category"}
               </h2>
-              <p className="mt-3 text-sm text-slate-500">{categoryDescription}</p>
+              <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                {categoryDescription}
+              </p>
             </div>
           )}
         </div>

@@ -31,6 +31,8 @@ export function ThemeProvider({ children }) {
       document.body.classList.toggle("theme-dark", theme === "dark");
       document.body.classList.toggle("theme-light", theme === "light");
       document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme =
+        theme === "dark" ? "dark" : "light";
     }
   }, [theme]);
 

@@ -6,19 +6,31 @@ export default function CategoriesGrid({ categories }) {
 
   return (
     <section className="shell section-gap">
-      <div className="mb-8 overflow-hidden rounded-[32px] bg-gradient-to-br from-white via-slate-50 to-brand-50/40 p-6 sm:p-8">
+      <div
+        className="
+        mb-8 overflow-hidden rounded-[32px]
+        border border-slate-200/60
+        bg-gradient-to-br from-white via-slate-50 to-brand-50/40
+        p-6 shadow-sm sm:p-8
+        dark:border-slate-700/80
+        dark:from-slate-900
+        dark:via-slate-900/95
+        dark:to-emerald-950/50
+        dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.55)]
+        "
+      >
         <div
           className={`flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between ${
             isRTL ? "text-right" : "text-left"
           }`}
         >
           <div className="max-w-3xl">
-          <span className="section-kicker">{t("home.categoriesKicker")}</span>
-            <h2 className="mt-4 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">
+            <span className="section-kicker">{t("home.categoriesKicker")}</span>
+            <h2 className="mt-4 text-3xl font-bold leading-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
               {t("home.categoriesTitle")}
             </h2>
           </div>
-          <p className="max-w-2xl text-sm leading-7 text-slate-500 sm:text-base">
+          <p className="max-w-2xl text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
             {t("home.categoriesCopy")}
           </p>
         </div>

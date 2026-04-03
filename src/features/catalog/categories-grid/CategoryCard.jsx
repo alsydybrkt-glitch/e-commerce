@@ -11,27 +11,27 @@ function CategoryCard({ subtitle, title, slug, img }) {
   return (
     <Link
       to={`/category/${categorySlug}`}
-      className="group surface-card relative overflow-hidden p-6 transition duration-300 hover:-translate-y-1 sm:p-7"
+      className="group surface-card relative overflow-hidden p-6 transition duration-300 hover:-translate-y-1 sm:p-7 dark:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.45)]"
     >
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-brand-50/70 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-brand-50/70 to-transparent dark:from-brand-950/50 dark:via-brand-900/15 dark:to-transparent" />
       <div
-        className={`absolute top-0 h-36 w-36 rounded-full bg-brand-100/70 blur-3xl transition duration-500 group-hover:scale-125 ${
+        className={`absolute top-0 h-36 w-36 rounded-full bg-brand-100/70 blur-3xl transition duration-500 group-hover:scale-125 dark:bg-brand-700/20 ${
           isRTL ? "left-0" : "right-0"
         }`}
       />
       <div className="relative flex h-full min-h-[24rem] flex-col justify-between gap-6">
         <div className="space-y-3">
           <p
-            className={`text-xs font-semibold text-slate-400 ${
+            className={`text-xs font-semibold text-slate-400 dark:text-slate-500 ${
               isRTL ? "tracking-[0.12em]" : "tracking-[0.28em]"
             }`}
           >
             {subtitle}
           </p>
-          <h3 className="min-h-[4rem] text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">
+          <h3 className="min-h-[4rem] text-2xl font-bold leading-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
             {title}
           </h3>
-          <div className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600">
+          <div className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 dark:text-brand-400">
             {t("common.browseNow")}
             <FiArrowUpRight
               className={`transition ${
@@ -43,7 +43,7 @@ function CategoryCard({ subtitle, title, slug, img }) {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-[24px] border border-slate-100 bg-slate-50 p-4">
+        <div className="overflow-hidden rounded-[24px] border border-slate-100 bg-slate-50 p-4 dark:border-slate-600/70 dark:bg-slate-800/40 dark:ring-1 dark:ring-inset dark:ring-white/5">
           {hasImage ? (
             <img
               src={img}
@@ -54,7 +54,7 @@ function CategoryCard({ subtitle, title, slug, img }) {
               className="mx-auto h-52 w-full object-contain transition duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-52 items-center justify-center text-sm font-medium text-slate-400">
+            <div className="flex h-52 items-center justify-center text-sm font-medium text-slate-400 dark:text-slate-500">
               {t("common.imageLoading")}
             </div>
           )}

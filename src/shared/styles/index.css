@@ -1,3 +1,5 @@
+@import "./design-tokens.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,24 +16,46 @@
   }
 
   body {
-    @apply min-h-screen bg-slate-50 font-sans text-slate-700 antialiased;
+    @apply min-h-screen font-sans antialiased;
     font-family: "Amazon Ember", Arial, Helvetica, sans-serif;
     line-height: 1.75;
     letter-spacing: 0.5px;
     font-weight: 500;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-secondary);
 
     background-image:
       radial-gradient(
-        circle at top left,
-        rgba(111, 143, 129, 0.06),
-        transparent 30%
+        circle at 12% 0%,
+        rgba(111, 143, 129, 0.08),
+        transparent 34%
       ),
-      linear-gradient(180deg, #fafaf8 0%, #f3f5f2 52%, #fbfbfa 100%);
+      linear-gradient(
+        180deg,
+        var(--color-bg-primary) 0%,
+        var(--color-bg-secondary) 52%,
+        var(--color-bg-tertiary) 100%
+      );
 
     transition:
       background-color 220ms ease,
       color 220ms ease,
       background-image 220ms ease;
+  }
+
+  body.theme-dark {
+    background-image:
+      radial-gradient(
+        circle at 14% 0%,
+        rgba(95, 143, 118, 0.14),
+        transparent 40%
+      ),
+      linear-gradient(
+        180deg,
+        var(--color-bg-primary) 0%,
+        var(--color-bg-secondary) 55%,
+        var(--color-bg-tertiary) 100%
+      );
   }
 
   h1,
@@ -94,69 +118,23 @@
   }
 
   ::selection {
-    @apply bg-brand-100 text-brand-700;
+    background-color: var(--color-brand-100);
+    color: var(--color-brand-700);
   }
 }
 
-/* DARK MODE */
-
-body.theme-dark {
-  background-color: rgb(15 20 26);
-  color: rgb(210 220 230);
-
-  background-image:
-    radial-gradient(
-      circle at top left,
-      rgba(111, 143, 129, 0.05),
-      transparent 28%
-    ),
-    linear-gradient(180deg, #0f1419 0%, #1a222c 52%, #11181f 100%);
-}
+/* DARK MODE — align with design tokens (single palette) */
 
 body.theme-dark .surface-card {
-  border-color: rgb(45 60 75);
-  background-color: rgb(22 28 36 / 0.96);
-  color: rgb(210 220 230);
-  box-shadow: 0 14px 34px rgba(111, 143, 129, 0.06);
+  border-color: var(--color-border-light);
+  background-color: var(--color-surface-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-card);
 }
 
 body.theme-dark .deferred-section > .surface-card {
-  border-color: rgb(45 60 75);
-  background-color: rgb(22 28 36 / 0.96);
-}
-
-body.theme-dark .section-kicker {
-  border-color: rgb(70 90 110) !important;
-  background-color: rgb(25 32 42) !important;
-  color: rgb(180 195 210) !important;
-}
-
-body.theme-dark .section-title {
-  color: rgb(220 230 240) !important;
-}
-
-body.theme-dark .section-copy {
-  color: rgb(160 175 190) !important;
-}
-
-body.theme-dark .primary-btn {
-  background-color: rgb(111 143 129) !important;
-  color: rgb(220 230 240) !important;
-}
-
-body.theme-dark .primary-btn:hover {
-  background-color: rgb(130 160 145) !important;
-}
-
-body.theme-dark .secondary-btn {
-  border-color: rgb(70 90 110) !important;
-  background-color: rgb(25 32 42) !important;
-  color: rgb(210 220 230) !important;
-}
-
-body.theme-dark .secondary-btn:hover {
-  border-color: rgb(100 120 140) !important;
-  color: rgb(200 210 220) !important;
+  border-color: var(--color-border-light);
+  background-color: var(--color-surface-primary);
 }
 
 /* HERO FIX */
@@ -200,7 +178,9 @@ body.theme-dark .home-hero .hero-image-overlay {
   }
 
   .surface-card {
-    @apply rounded-[28px] border border-slate-200/70 bg-white shadow-card;
+    @apply rounded-[28px] border shadow-card;
+    background-color: var(--color-surface-primary);
+    border-color: color-mix(in srgb, var(--color-border-light) 70%, transparent);
   }
 
   .deferred-section {
@@ -209,27 +189,48 @@ body.theme-dark .home-hero .hero-image-overlay {
   }
 
   .deferred-section > .surface-card {
-    @apply mx-auto w-full max-w-7xl rounded-[28px] border border-slate-200/70 bg-white shadow-card;
+    @apply mx-auto w-full max-w-7xl rounded-[28px] border shadow-card;
+    background-color: var(--color-surface-primary);
+    border-color: color-mix(in srgb, var(--color-border-light) 70%, transparent);
   }
 
   .section-kicker {
-    @apply mb-3 inline-flex items-center rounded-full border border-brand-100 bg-brand-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-brand-700;
+    @apply mb-3 inline-flex items-center rounded-full border px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em];
+    border-color: var(--color-brand-100);
+    background-color: var(--color-brand-50);
+    color: var(--color-brand-700);
   }
 
   .section-title {
-    @apply font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl;
+    @apply font-display text-3xl font-bold tracking-tight sm:text-4xl;
+    color: var(--color-text-primary);
   }
 
   .section-copy {
-    @apply text-sm leading-7 text-slate-500 sm:text-base;
+    @apply text-sm leading-7 sm:text-base;
+    color: var(--color-text-secondary);
   }
 
   .primary-btn {
-    @apply inline-flex items-center justify-center rounded-full bg-slate-800 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-brand-600;
+    @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition duration-300 hover:-translate-y-0.5;
+    background-color: var(--color-button-primary-bg);
+    color: var(--color-button-primary-fg);
+  }
+
+  .primary-btn:hover {
+    background-color: var(--color-button-primary-bg-hover);
   }
 
   .secondary-btn {
-    @apply inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700;
+    @apply inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold transition duration-300 hover:-translate-y-0.5;
+    border-color: var(--color-button-secondary-border);
+    background-color: var(--color-button-secondary-bg);
+    color: var(--color-button-secondary-fg);
+  }
+
+  .secondary-btn:hover {
+    border-color: var(--color-brand-600);
+    color: var(--color-text-primary);
   }
 
 }

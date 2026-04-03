@@ -192,7 +192,7 @@ function CheckoutPage() {
                       value={option.value}
                       checked={paymentMethod === option.value}
                       onChange={() => setPaymentMethod(option.value)}
-                      className="mr-2"
+                      className="me-2"
                     />
                     {option.label}
                   </label>

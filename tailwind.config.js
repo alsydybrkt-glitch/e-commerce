@@ -3,7 +3,7 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
 
-  darkMode: ["class", '[class~="theme-dark"]'],
+  darkMode: ["selector", '[data-theme="dark"]'],
 
   theme: {
     extend: {
@@ -63,8 +63,8 @@ export default {
       /* SHADOWS */
 
       boxShadow: {
-        glow: "0 20px 60px rgba(95, 123, 111, 0.14)",
-        card: "0 16px 38px rgba(15, 23, 42, 0.06)",
+        glow: "var(--shadow-glow)",
+        card: "var(--shadow-card)",
       },
 
       /* BACKGROUNDS */
@@ -72,6 +72,8 @@ export default {
       backgroundImage: {
         "hero-grid":
           "radial-gradient(circle at top left, rgba(111,143,129,0.12), transparent 35%), radial-gradient(circle at bottom right, rgba(176,155,134,0.10), transparent 30%)",
+        "hero-grid-dark":
+          "radial-gradient(circle at 15% 0%, rgba(111,143,129,0.18), transparent 40%), radial-gradient(circle at 85% 30%, rgba(95,123,111,0.08), transparent 42%)",
       },
 
       /* TYPOGRAPHY */

@@ -48,6 +48,8 @@ function HeroSlider() {
         className="
         [&_.swiper-pagination-bullet]:!bg-slate-300
         [&_.swiper-pagination-bullet-active]:!bg-brand-600
+        dark:[&_.swiper-pagination-bullet]:!bg-slate-600
+        dark:[&_.swiper-pagination-bullet-active]:!bg-brand-400
         "
       >
         {slides.map((slide, index) => (
@@ -59,6 +61,8 @@ function HeroSlider() {
               from-surface
               via-brand-50/30
               to-background
+              dark:via-brand-950/35
+              dark:shadow-[0_24px_80px_-12px_rgba(0,0,0,0.55)]
               "
             >
               <div className="grid items-center gap-10 px-6 py-8 md:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-14 lg:py-14">
@@ -124,13 +128,16 @@ function HeroSlider() {
                         border border-border
                         bg-surface
                         p-4
+                        dark:border-slate-600/80
+                        dark:bg-slate-800/60
+                        dark:shadow-inner dark:shadow-black/20
                         "
                       >
                         <p className="text-2xl font-bold text-text-primary">
                           {value}
                         </p>
 
-                        <p className="text-xs uppercase tracking-[0.22em] text-text-secondary">
+                        <p className="text-xs uppercase tracking-[0.22em] text-text-secondary dark:text-slate-400">
                           {label}
                         </p>
                       </div>
@@ -162,6 +169,9 @@ function HeroSlider() {
                   via-surface
                   to-accent-400/20
                   blur-2xl
+                  dark:from-brand-600/15
+                  dark:via-surface
+                  dark:to-accent-500/10
                   "
                 />
 
@@ -185,6 +195,9 @@ function HeroSlider() {
                         sm:h-[380px]
                         lg:h-[440px]
                         shadow-xl
+                        ring-1 ring-black/5
+                        dark:ring-slate-700/80
+                        dark:shadow-[0_20px_50px_rgba(0,0,0,0.45)]
                         "
                       >
 
@@ -211,6 +224,7 @@ function HeroSlider() {
                           from-black/30
                           via-transparent
                           to-transparent
+                          dark:from-black/55
                           "
                         />
 
@@ -218,14 +232,20 @@ function HeroSlider() {
 
                         <div
                           className="
-                          absolute left-6 top-6
+                          absolute start-6 top-6
                           rounded-full
-                          bg-white
+                          border border-slate-200/80
+                          bg-white/95
                           px-4 py-2
                           text-xs font-semibold
                           tracking-wide
                           text-slate-700
                           shadow-md
+                          backdrop-blur-sm
+                          dark:border-slate-600/60
+                          dark:bg-slate-900/90
+                          dark:text-slate-100
+                          dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)]
                           "
                         >
                           {t("home.heroBadges.premiumDrop")}
@@ -235,18 +255,23 @@ function HeroSlider() {
 
                         <div
                           className="
-                          absolute bottom-6 right-6
+                          absolute bottom-6 end-6
                           rounded-xl
-                          bg-white
+                          border border-slate-200/80
+                          bg-white/95
                           px-5 py-3
                           shadow-lg
+                          backdrop-blur-sm
+                          dark:border-slate-600/60
+                          dark:bg-slate-900/90
+                          dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)]
                           "
                         >
-                          <p className="text-xs uppercase tracking-widest text-slate-400">
+                          <p className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500">
                             {t("home.heroBadges.weeklyPicks")}
                           </p>
 
-                          <p className="text-2xl font-bold text-brand-600">
+                          <p className="text-2xl font-bold text-brand-600 dark:text-brand-400">
                             {t("home.heroBadges.upTo")}
                           </p>
                         </div>

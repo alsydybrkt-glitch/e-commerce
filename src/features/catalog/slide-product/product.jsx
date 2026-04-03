@@ -149,7 +149,7 @@ function Product({ item, hideImage = false }) {
             <FaStar />
             <FaStar />
             <IoStarHalf />
-            <span className="ml-2 text-xs font-semibold text-slate-400 dark:text-slate-400">
+            <span className="ms-2 text-xs font-semibold text-slate-400 dark:text-slate-400">
               {item.rating || 4.8}
             </span>
           </div>

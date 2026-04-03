@@ -39,14 +39,18 @@ export default function Contact() {
             {info.map((item) => (
               <div
                 key={item.title}
-                className="flex items-center gap-4 rounded-[24px] bg-slate-50 p-4"
+                className="flex items-center gap-4 rounded-[24px] bg-slate-50 p-4 dark:bg-slate-800/50 dark:ring-1 dark:ring-slate-700/60"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-brand-600 shadow-card">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-brand-600 shadow-card dark:bg-slate-800 dark:text-brand-400">
                   {React.createElement(item.icon)}
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900">{item.title}</h4>
-                  <span className="text-sm text-slate-500">{item.value}</span>
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-100">
+                    {item.title}
+                  </h4>
+                  <span className="text-sm text-slate-500 dark:text-slate-400">
+                    {item.value}
+                  </span>
                 </div>
               </div>
             ))}
@@ -54,7 +58,7 @@ export default function Contact() {
         </div>
 
         <form className="surface-card p-8" onSubmit={handleSubmit}>
-          <h2 className="font-display text-3xl font-bold text-slate-900">
+          <h2 className="font-display text-3xl font-bold text-slate-900 dark:text-slate-100">
             {t("contact.sendMessage")}
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -65,7 +69,7 @@ export default function Contact() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, name: event.target.value }))
               }
-              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
+              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-100 dark:placeholder:text-slate-500"
             />
             <input
               type="email"
@@ -74,7 +78,7 @@ export default function Contact() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, email: event.target.value }))
               }
-              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
+              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-100 dark:placeholder:text-slate-500"
             />
             <textarea
               placeholder={t("contact.yourMessage")}
@@ -82,7 +86,7 @@ export default function Contact() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, message: event.target.value }))
               }
-              className="min-h-48 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm sm:col-span-2"
+              className="min-h-48 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-100 dark:placeholder:text-slate-500 sm:col-span-2"
             />
           </div>
           <button type="submit" className="primary-btn mt-6">
