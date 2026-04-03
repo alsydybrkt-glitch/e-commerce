@@ -13,6 +13,12 @@ import {
   filterAndSortProducts,
 } from "../../shared/lib/product-helpers";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import { useRef } from "react";
+
 const VISIBLE_CATEGORIES = 6;
 
 const ShopPage = () => {
@@ -45,7 +51,7 @@ const ShopPage = () => {
   const hidden = categories.slice(VISIBLE_CATEGORIES);
   const activeCategoryData = useMemo(
     () => categories.find((category) => category.slug === activeCategory),
-    [activeCategory, categories]
+    [activeCategory, categories],
   );
 
   const filteredProducts = useMemo(
@@ -55,7 +61,7 @@ const ShopPage = () => {
         inStockOnly,
         sortBy,
       }),
-    [deferredSearchTerm, inStockOnly, singleCategory, sortBy]
+    [deferredSearchTerm, inStockOnly, singleCategory, sortBy],
   );
 
   const featuredMetrics = useMemo(
@@ -68,7 +74,9 @@ const ShopPage = () => {
       },
       {
         label: t("shop.metricProductsFound"),
-        value: loadingCategory ? t("shop.loadingValue") : filteredProducts.length,
+        value: loadingCategory
+          ? t("shop.loadingValue")
+          : filteredProducts.length,
       },
       {
         label: t("shop.metricBestFor"),
@@ -86,7 +94,7 @@ const ShopPage = () => {
       t,
       tCategoryDescription,
       tCategoryName,
-    ]
+    ],
   );
 
   const sortOptions = useMemo(
@@ -97,7 +105,7 @@ const ShopPage = () => {
       { value: "rating", label: t("shop.sortOptions.rating") },
       { value: "discount", label: t("shop.sortOptions.discount") },
     ],
-    [t]
+    [t],
   );
 
   const selectedSortLabel =
@@ -114,6 +122,10 @@ const ShopPage = () => {
     setSortBy("featured");
     setInStockOnly(false);
   };
+
+  const prevBtnRef = useRef(null);
+  const nextBtnRef = useRef(null);
+  const [swiper, setSwiper] = useState(null);
 
   return (
     <PageTransition>
@@ -353,11 +365,47 @@ const ShopPage = () => {
               )}
             </div>
           ) : (
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {filteredProducts.map((item) => (
-                <Product item={item} key={item.id} />
-              ))}
-            </div>
+            <>
+              <div className="hidden lg:flex justify-end gap-2 mb-4">
+                <button
+                  ref={prevBtnRef}
+                  className="secondary-btn px-3 py-2 text-xs font-semibold"
+                >
+                  Prev
+                </button>
+
+                <button
+                  ref={nextBtnRef}
+                  className="secondary-btn px-3 py-2 text-xs font-semibold"
+                >
+                  Next
+                </button>
+              </div>
+              <Swiper
+                modules={[Navigation]}
+                spaceBetween={24}
+                navigation={{
+                  prevEl: prevBtnRef.current,
+                  nextEl: nextBtnRef.current,
+                }}
+                onBeforeInit={(swiper) => {
+                  swiper.params.navigation.prevEl = prevBtnRef.current;
+                  swiper.params.navigation.nextEl = nextBtnRef.current;
+                }}
+                breakpoints={{
+                  320: { slidesPerView: 1.2 },
+                  640: { slidesPerView: 2 },
+                  992: { slidesPerView: 3 },
+                  1280: { slidesPerView: 4 },
+                }}
+              >
+                {filteredProducts.map((item) => (
+                  <SwiperSlide key={item.id}>
+                    <Product item={item} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </>
           )}
         </div>
       </section>

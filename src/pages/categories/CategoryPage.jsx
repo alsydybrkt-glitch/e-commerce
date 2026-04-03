@@ -6,6 +6,11 @@ import Product from "../../features/catalog/slide-product/product";
 import LoadingOfSlideProduct from "../../features/catalog/slide-product/loadingOfSlideProduct";
 import PageTransitions from "../../shared/ui/PageTransition";
 import { useTranslation } from "../../shared/i18n/useTranslation";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import { useRef, useState } from "react";
 
 function CategoryPage() {
   const { t, tCategoryName, tCategoryDescription, isRTL } = useTranslation();
@@ -13,15 +18,21 @@ function CategoryPage() {
   const { category } = useParams();
   const products = useSelector((state) => state.products.singleCategory);
   const loadingProduct = useSelector((state) => state.products.loadingProduct);
-  const loadingCategory = useSelector((state) => state.products.loadingCategory);
+  const loadingCategory = useSelector(
+    (state) => state.products.loadingCategory,
+  );
+  const prevBtnRef = useRef(null);
+  const nextBtnRef = useRef(null);
+  const [swiper, setSwiper] = useState(null);
   const categoryTitle = tCategoryName(category);
-  const categoryDescription = tCategoryDescription(category) || t("category.copy");
+  const categoryDescription =
+    tCategoryDescription(category) || t("category.copy");
   const stats = useMemo(
     () => [
       { value: products?.length ?? 0, label: isRTL ? "منتج" : "Products" },
       { value: categoryTitle, label: isRTL ? "القسم" : "Category" },
     ],
-    [categoryTitle, isRTL, products?.length]
+    [categoryTitle, isRTL, products?.length],
   );
 
   useEffect(() => {
@@ -75,17 +86,53 @@ function CategoryPage() {
               </div>
             </div>
           </div>
+          <div className="hidden lg:flex justify-end gap-2 mb-4">
+            <button
+              ref={prevBtnRef}
+              className="secondary-btn px-3 py-2 text-xs font-semibold"
+            >
+              Prev
+            </button>
 
+            <button
+              ref={nextBtnRef}
+              className="secondary-btn px-3 py-2 text-xs font-semibold"
+            >
+              Next
+            </button>
+          </div>
           {products?.length ? (
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={24}
+              navigation={{
+                prevEl: prevBtnRef.current,
+                nextEl: nextBtnRef.current,
+              }}
+              onBeforeInit={(swiperInstance) => {
+                swiperInstance.params.navigation.prevEl = prevBtnRef.current;
+                swiperInstance.params.navigation.nextEl = nextBtnRef.current;
+              }}
+              onSwiper={setSwiper}
+              breakpoints={{
+                320: { slidesPerView: 1.2 },
+                640: { slidesPerView: 2 },
+                992: { slidesPerView: 3 },
+                1280: { slidesPerView: 4 },
+              }}
+            >
               {products.map((product) => (
-                <Product key={product.id} item={product} />
+                <SwiperSlide key={product.id}>
+                  <Product item={product} />
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
           ) : (
             <div className="rounded-[28px] border border-dashed border-slate-200 bg-slate-50 px-6 py-12 text-center dark:border-slate-600 dark:bg-slate-800/40">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                {isRTL ? "لا توجد منتجات في هذا القسم" : "No products in this category"}
+                {isRTL
+                  ? "لا توجد منتجات في هذا القسم"
+                  : "No products in this category"}
               </h2>
               <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
                 {categoryDescription}

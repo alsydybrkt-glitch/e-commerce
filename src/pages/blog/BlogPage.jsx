@@ -9,6 +9,12 @@ import { getProductImage } from "../../shared/lib/product-helpers";
 import PageTransitions from "../../shared/ui/PageTransition";
 import { useTranslation } from "../../shared/i18n/useTranslation";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
+
 const blogGuideSlugs = ["smartphones", "laptops", "fragrances"];
 
 function BlogHero({ featuredGuide, t, tCategoryName }) {
@@ -75,7 +81,10 @@ function BlogHero({ featuredGuide, t, tCategoryName }) {
               className="flex items-center justify-between rounded-[22px] bg-slate-100 px-4 py-3 text-sm font-medium text-slate-700 dark:bg-slate-800/60 dark:text-slate-200"
             >
               <span>{term}</span>
-              <FiArrowRight className="text-slate-400 dark:text-slate-500" aria-hidden="true" />
+              <FiArrowRight
+                className="text-slate-400 dark:text-slate-500"
+                aria-hidden="true"
+              />
             </div>
           ))}
         </div>
@@ -182,7 +191,7 @@ export default function BlogPage() {
           products,
         };
       }),
-    [productsByCategory, t]
+    [productsByCategory, t],
   );
 
   const featuredGuide = guidesWithProducts[0];
@@ -191,7 +200,7 @@ export default function BlogPage() {
       guidesWithProducts
         .flatMap((guide) => guide.products.slice(0, 1))
         .filter(Boolean),
-    [guidesWithProducts]
+    [guidesWithProducts],
   );
 
   return (
@@ -238,7 +247,9 @@ export default function BlogPage() {
         <section className="mt-14">
           <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <span className="section-kicker">{t("blog.linkedProductsKicker")}</span>
+              <span className="section-kicker">
+                {t("blog.linkedProductsKicker")}
+              </span>
               <h2 className="section-title">{t("blog.linkedProductsTitle")}</h2>
             </div>
             <Link
@@ -249,7 +260,24 @@ export default function BlogPage() {
             </Link>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="lg:hidden">
+            <Swiper
+              spaceBetween={16}
+              breakpoints={{
+                320: { slidesPerView: 1.2 },
+                480: { slidesPerView: 1.5 },
+                640: { slidesPerView: 2 },
+              }}
+            >
+              {recommendedProducts.map((product) => (
+                <SwiperSlide key={product.id}>
+                  <Product item={product} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
+          <div className="hidden lg:grid grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
             {recommendedProducts.map((product) => (
               <Product key={product.id} item={product} />
             ))}
