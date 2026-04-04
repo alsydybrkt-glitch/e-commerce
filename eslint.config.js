@@ -14,7 +14,10 @@ export default defineConfig([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
+      // FIX: was 2020 here but 'latest' in parserOptions below — conflicting.
+      // In flat config, languageOptions.ecmaVersion is the authoritative setting.
+      // Use 'latest' consistently so modern syntax (e.g. top-level await) is valid.
+      ecmaVersion: 'latest',
       globals: globals.browser,
       parserOptions: {
         ecmaVersion: 'latest',
@@ -23,6 +26,7 @@ export default defineConfig([
       },
     },
     rules: {
+      // Ignores ALL_CAPS constants and _prefixed vars (e.g. unused React imports)
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },

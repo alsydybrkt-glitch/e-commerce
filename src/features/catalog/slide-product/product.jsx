@@ -92,7 +92,7 @@ function Product({ item, hideImage = false }) {
   };
 
   return (
-    <div className="group surface-card h-full overflow-hidden p-4 transition duration-300 hover:-translate-y-1">
+    <div className="group surface-card h-full min-h-[420px] overflow-hidden p-4 transition duration-300 hover:-translate-y-1 flex flex-col justify-between">
       <div className="mb-4 flex items-start justify-between gap-3">
         {isInCart ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
@@ -128,7 +128,7 @@ function Product({ item, hideImage = false }) {
       </div>
 
       <Link to={`/product/${item.id}`} className="block">
-        <div className="mb-5 overflow-hidden rounded-[24px] bg-slate-100 p-6 dark:bg-slate-700/25">
+        <div className="mb-4 overflow-hidden rounded-[24px] bg-slate-100 p-2 dark:bg-slate-700/25">
           <img
             src={image}
             alt={item.title}
@@ -139,8 +139,8 @@ function Product({ item, hideImage = false }) {
           />
         </div>
 
-        <div className="space-y-3">
-          <h3 className="line-clamp-2 min-h-[3.5rem] text-base font-semibold text-slate-900 dark:text-slate-100">
+        <div className="space-y-2">
+          <h3 className="line-clamp-2 min-h-[3.5rem] text-sm font-semibold text-slate-900 dark:text-slate-100">
             {item.title}
           </h3>
           <div className="flex items-center gap-1 text-amber-400">
@@ -158,13 +158,6 @@ function Product({ item, hideImage = false }) {
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 ${item.price}
               </p>
-              {item.discountPercentage && (
-                <p className="text-xs font-medium text-emerald-600">
-                  {t("product.save", {
-                    percent: Math.round(item.discountPercentage),
-                  })}
-                </p>
-              )}
             </div>
           </div>
         </div>
@@ -173,7 +166,7 @@ function Product({ item, hideImage = false }) {
       <button
         type="button"
         onClick={handleAddToCart}
-        className={`mt-5 flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+        className={`mt-2 flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
           isInCart
             ? "bg-brand-50 text-brand-700 hover:bg-brand-100 dark:bg-brand-700/30 dark:text-brand-300 dark:hover:bg-brand-700/50"
             : "bg-slate-900 text-white hover:bg-brand-600 dark:bg-slate-700/50 dark:text-slate-100 dark:hover:bg-slate-700/70"

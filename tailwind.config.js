@@ -3,7 +3,9 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
 
-  darkMode: ["selector", '[data-theme="dark"]'],
+  // FIX: was ["selector", '[data-theme="dark"]'] but ThemeProvider adds
+  // class="dark" to <html> — so Tailwind's dark: utilities were never firing.
+  darkMode: "class",
 
   theme: {
     extend: {
@@ -12,7 +14,7 @@ export default {
         display: ["Amazon Ember", "Arial", "Helvetica", "sans-serif"],
       },
 
-      /* DESIGN TOKENS */
+      /* DESIGN TOKENS — map Tailwind utilities to CSS variables */
 
       colors: {
         background: "var(--color-bg-primary)",
@@ -31,7 +33,6 @@ export default {
         },
 
         /* BRAND */
-
         brand: {
           50: "#f2f5f4",
           100: "#e2e9e6",
@@ -43,14 +44,12 @@ export default {
         },
 
         /* ACCENT */
-
         accent: {
           400: "#c9b8a6",
           500: "#b09b86",
         },
 
         /* SEMANTIC COLORS */
-
         success: "#10b981",
         warning: "#f59e0b",
         error: "#ef4444",
@@ -61,14 +60,12 @@ export default {
       },
 
       /* SHADOWS */
-
       boxShadow: {
         glow: "var(--shadow-glow)",
         card: "var(--shadow-card)",
       },
 
       /* BACKGROUNDS */
-
       backgroundImage: {
         "hero-grid":
           "radial-gradient(circle at top left, rgba(111,143,129,0.12), transparent 35%), radial-gradient(circle at bottom right, rgba(176,155,134,0.10), transparent 30%)",
@@ -77,7 +74,6 @@ export default {
       },
 
       /* TYPOGRAPHY */
-
       lineHeight: {
         tight: "1.3",
         normal: "1.6",
@@ -93,17 +89,8 @@ export default {
         wider: "1.5px",
       },
 
-      fontWeight: {
-        thin: "100",
-        extralight: "200",
-        light: "300",
-        normal: "400",
-        medium: "500",
-        semibold: "600",
-        bold: "700",
-        extrabold: "800",
-        black: "900",
-      },
+      // NOTE: fontWeight removed — Tailwind ships thin→black by default.
+      // Re-adding them in extend is a no-op and just adds noise.
 
       borderRadius: {
         xl: "1rem",
