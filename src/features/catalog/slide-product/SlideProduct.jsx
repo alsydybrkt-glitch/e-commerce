@@ -34,7 +34,7 @@ function SlideProduct({ category, description, products }) {
         </div>
       ) : (
         <>
-          <div className="mb-4 flex justify-end gap-2">
+          <div className="hidden mb-4 lg:flex justify-end gap-2">
             <button
               ref={prevBtnRef}
               type="button"

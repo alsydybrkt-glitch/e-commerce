@@ -4,7 +4,6 @@ import { MdArrowDropDown, MdClose } from "react-icons/md";
 import { useSelector } from "react-redux";
 import HeaderIcons from "./HeaderIcons";
 import useHeaderLogic from "./useHeaderLogic";
-import "./header-responsive.css";
 import { useEffect } from "react";
 
 import {
@@ -115,12 +114,17 @@ function BottomHeader() {
 
       {/* OVERLAY */}
       <div
-        className={`mobile-overlay ${openMobile ? "active" : ""}`}
+        className={`fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300
+  ${openMobile ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={closeAll}
       ></div>
 
       {/* MOBILE MENU */}
-      <div className={`mobile-menu ${openMobile ? "active" : ""}`}>
+      <div
+        className={`fixed inset-y-0 right-0 w-[300px] bg-white shadow-xl z-50
+  transition-transform duration-300 ease-in-out
+  ${openMobile ? "translate-x-0" : "translate-x-[100%]"}`}
+      >
         {/* menu header */}
         <div className="mobile-menu-header">
           <span className="mobile-title">Menu</span>
