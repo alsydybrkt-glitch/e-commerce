@@ -4,15 +4,10 @@ import { ThemeContext } from "./ThemeContext";
 const THEME_STORAGE_KEY = "theme";
 
 function getPreferredTheme() {
-  if (typeof window === "undefined") {
-    return "light";
-  }
+  if (typeof window === "undefined") return "light";
 
   const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-
-  if (storedTheme === "dark" || storedTheme === "light") {
-    return storedTheme;
-  }
+  if (storedTheme === "dark" || storedTheme === "light") return storedTheme;
 
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
@@ -28,11 +23,22 @@ export function ThemeProvider({ children }) {
     }
 
     if (typeof document !== "undefined") {
-      document.body.classList.toggle("theme-dark", theme === "dark");
-      document.body.classList.toggle("theme-light", theme === "light");
-      document.documentElement.dataset.theme = theme;
-      document.documentElement.style.colorScheme =
-        theme === "dark" ? "dark" : "light";
+      const html = document.documentElement;
+      const body = document.body;
+      const isDark = theme === "dark";
+
+      // ✅ For Tailwind darkMode: ["selector", '[data-theme="dark"]']
+      html.dataset.theme = theme;
+
+      // ✅ For Tailwind darkMode: "class" (if any utility uses dark:)
+      html.classList.toggle("dark", isDark);
+
+      // ✅ For legacy custom CSS that uses body.theme-dark
+      body.classList.toggle("theme-dark", isDark);
+      body.classList.toggle("theme-light", !isDark);
+
+      // ✅ For native browser color scheme
+      html.style.colorScheme = isDark ? "dark" : "light";
     }
   }, [theme]);
 
@@ -42,10 +48,12 @@ export function ThemeProvider({ children }) {
       isDark: theme === "dark",
       setTheme,
       toggleTheme: () =>
-        setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark")),
+        setTheme((current) => (current === "dark" ? "light" : "dark")),
     }),
     [theme]
   );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 }

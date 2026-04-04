@@ -3,102 +3,135 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
 
-  // FIX: was ["selector", '[data-theme="dark"]'] but ThemeProvider adds
-  // class="dark" to <html> — so Tailwind's dark: utilities were never firing.
   darkMode: "class",
 
   theme: {
     extend: {
+      /* ========== Fonts ========== */
+
       fontFamily: {
         sans: ["Amazon Ember", "Arial", "Helvetica", "sans-serif"],
         display: ["Amazon Ember", "Arial", "Helvetica", "sans-serif"],
       },
 
-      /* DESIGN TOKENS — map Tailwind utilities to CSS variables */
+      /* ========== Colors (Design Tokens) ========== */
 
       colors: {
-        background: "var(--color-bg-primary)",
-        surface: "var(--color-surface-primary)",
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        accent: "var(--color-accent)",
+
+        bg: {
+          primary: "var(--color-bg-primary)",
+          secondary: "var(--color-bg-secondary)",
+          tertiary: "var(--color-bg-tertiary)",
+        },
 
         text: {
           primary: "var(--color-text-primary)",
           secondary: "var(--color-text-secondary)",
-          muted: "var(--color-text-tertiary)",
+          muted: "var(--color-text-muted)",
         },
 
-        border: {
-          DEFAULT: "var(--color-border-light)",
-          strong: "var(--color-border-medium)",
-          focus: "var(--color-border-focus)",
-        },
-
-        /* BRAND */
-        brand: {
-          50: "#f2f5f4",
-          100: "#e2e9e6",
-          200: "#cad8d2",
-          400: "#8aa79a",
-          500: "#6f8f81",
-          600: "#5f7b6f",
-          700: "#4f665d",
-        },
-
-        /* ACCENT */
-        accent: {
-          400: "#c9b8a6",
-          500: "#b09b86",
-        },
-
-        /* SEMANTIC COLORS */
-        success: "#10b981",
-        warning: "#f59e0b",
-        error: "#ef4444",
-        info: "#3b82f6",
-
-        ink: "#09111f",
-        mist: "#f4f5f3",
+        border: "var(--color-border)",
       },
 
-      /* SHADOWS */
+      /* ========== Spacing ========== */
+
+      spacing: {
+        xs: "var(--space-xs)",
+        sm: "var(--space-sm)",
+        md: "var(--space-md)",
+        lg: "var(--space-lg)",
+        xl: "var(--space-xl)",
+        "2xl": "var(--space-2xl)",
+        "3xl": "var(--space-3xl)",
+      },
+
+      /* ========== Radius ========== */
+
+      borderRadius: {
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+        "2xl": "var(--radius-2xl)",
+        full: "var(--radius-full)",
+      },
+
+      /* ========== Shadows ========== */
+
       boxShadow: {
-        glow: "var(--shadow-glow)",
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+        xl: "var(--shadow-xl)",
         card: "var(--shadow-card)",
+        glow: "var(--shadow-glow)",
       },
 
-      /* BACKGROUNDS */
-      backgroundImage: {
-        "hero-grid":
-          "radial-gradient(circle at top left, rgba(111,143,129,0.12), transparent 35%), radial-gradient(circle at bottom right, rgba(176,155,134,0.10), transparent 30%)",
-        "hero-grid-dark":
-          "radial-gradient(circle at 15% 0%, rgba(111,143,129,0.18), transparent 40%), radial-gradient(circle at 85% 30%, rgba(95,123,111,0.08), transparent 42%)",
+      /* ========== Animation Speed ========== */
+
+      transitionDuration: {
+        fast: "var(--transition-fast)",
+        base: "var(--transition-base)",
+        slow: "var(--transition-slow)",
       },
 
-      /* TYPOGRAPHY */
+      /* ========== Typography ========== */
+
       lineHeight: {
-        tight: "1.3",
-        normal: "1.6",
-        relaxed: "1.8",
-        loose: "2",
+        tight: "var(--line-height-tight)",
+        normal: "var(--line-height-normal)",
+        relaxed: "var(--line-height-relaxed)",
+        loose: "var(--line-height-loose)",
       },
 
       letterSpacing: {
-        tighter: "-0.5px",
-        tight: "0px",
-        normal: "0.5px",
-        wide: "1px",
-        wider: "1.5px",
+        tighter: "var(--letter-spacing-tighter)",
+        tight: "var(--letter-spacing-tight)",
+        normal: "var(--letter-spacing-normal)",
+        wide: "var(--letter-spacing-wide)",
+        wider: "var(--letter-spacing-wider)",
       },
 
-      // NOTE: fontWeight removed — Tailwind ships thin→black by default.
-      // Re-adding them in extend is a no-op and just adds noise.
+      /* ========== Z Index System ========== */
 
-      borderRadius: {
-        xl: "1rem",
-        "2xl": "1.5rem",
-        "3xl": "2rem",
+      zIndex: {
+        dropdown: "var(--z-dropdown)",
+        popover: "var(--z-popover)",
+        tooltip: "var(--z-tooltip)",
+        modal: "var(--z-modal)",
+      },
+
+      /* ========== Background Effects ========== */
+
+      backgroundImage: {
+        "hero-grid":
+          "radial-gradient(circle at top left, rgba(111,143,129,0.12), transparent 35%), radial-gradient(circle at bottom right, rgba(176,155,134,0.10), transparent 30%)",
       },
     },
   },
 
-  plugins: [],
+  plugins: [
+    /* Custom Utility Plugin */
+
+    function ({ addUtilities }) {
+      const utilities = {
+        ".dark-mode-support": {
+          "@supports (color-scheme: dark)": {
+            colorScheme: "light dark",
+          },
+        },
+
+        ".glass": {
+          backdropFilter: "blur(10px)",
+          background: "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.1)",
+        },
+      };
+
+      addUtilities(utilities);
+    },
+  ],
 };
