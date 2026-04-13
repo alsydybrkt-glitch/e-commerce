@@ -1,0 +1,93 @@
+import dynamic from "next/dynamic";
+import HeroSlider from "@/shared/ui/hero-slider/HeroSlider";
+import { getProductImage } from "@/features/products/utils/product-helpers";
+import { Product as ProductType, Category } from "@/features/products/services/productsApi";
+import { getTranslations } from "@/shared/i18n/get-translations";
+
+// UI Components
+import { TrustBar } from "@/shared/ui/TrustBar";
+import { Newsletter } from "@/shared/ui/Newsletter";
+import { RecentlyViewedSection, CategorySlidesSection } from "./HomeClientSections";
+
+// Lazy load non-critical sections
+const CategoriesGrid = dynamic(
+  () => import("@/features/products/categories-grid/CategoriesGrid"),
+  {
+    loading: () => (
+      <section className="shell section-gap">
+        <div className="mb-8 h-16 animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800/50" />
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="h-64 animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/50"
+            />
+          ))}
+        </div>
+      </section>
+    ),
+  }
+);
+
+const TrustSection = dynamic(() => import("@/shared/ui/trust-section/TrustSection"), {
+  loading: () => <div className="h-96 animate-pulse bg-slate-100 dark:bg-slate-800/50" />,
+});
+
+const categoryInf = [
+  { subtitleKey: "categories.smartphones.name", apiName: "smartphones" },
+  { subtitleKey: "categories.laptops.name", apiName: "laptops" },
+  {
+    subtitleKey: "categories.mobile-accessories.name",
+    apiName: "mobile-accessories",
+  },
+];
+
+interface HomePageProps {
+  initialCategories: Category[];
+  initialProducts: Record<string, ProductType[]>;
+  locale: string;
+}
+
+export default function HomePage({ initialCategories, initialProducts, locale }: HomePageProps) {
+  const { t, tCategoryName } = getTranslations(locale as any);
+
+  const categoriesData = categoryInf.map((categoryItem) => {
+    const product = initialProducts?.[categoryItem.apiName]?.[0];
+
+    return {
+      subtitle: t(categoryItem.subtitleKey),
+      title: tCategoryName(categoryItem.apiName),
+      slug: categoryItem.apiName,
+      img: getProductImage(product),
+    };
+  });
+
+  return (
+    <div className="flex flex-col overflow-x-hidden">
+      <HeroSlider />
+      
+      {/* Strategic Trust Bar */}
+      <TrustBar />
+
+      <CategoriesGrid categories={categoriesData} />
+
+      {/* Featured / Recently Viewed */}
+      <RecentlyViewedSection locale={locale} />
+
+      {/* Category Sections with Integrated Mid-page Banner */}
+      <CategorySlidesSection 
+        initialCategories={initialCategories} 
+        initialProducts={initialProducts} 
+        locale={locale} 
+      />
+
+      {/* Benefits Content / Social Trust */}
+      <div className="deferred-section min-h-[500px]">
+        <TrustSection />
+      </div>
+
+      {/* Retention Layer */}
+      <Newsletter />
+    </div>
+  );
+}

@@ -1,0 +1,193 @@
+/**
+ * Design Tokens System
+ * Comprehensive color palette and spacing tokens for light and dark modes
+ * WCAG AA compliant contrast ratios (minimum 4.5:1 for text)
+ */
+
+:root {
+  /* ==================== LIGHT MODE TOKENS ==================== */
+
+  /* Background Layers — Clean, soft, neutral (Inter-style) */
+  --color-bg-primary: #fcfcfd;
+  --color-bg-secondary: #f9fafb;
+  --color-bg-tertiary: #f2f4f7;
+  --color-bg-overlay: rgba(255, 255, 255, 0.85);
+
+  /* Surface Layers (Cards, Components) — High-quality lift */
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #fcfcfd;
+  --color-surface-tertiary: #f9fafb;
+  --color-surface-interactive: #f2f4f7;
+  --color-surface-image: #f9fafb;
+
+  /* Text Colors — Premium SaaS hierarchy */
+  --color-text-primary: #101828;     /* Slate Dark (Deep contrast) */
+  --color-text-secondary: #475467;   /* Neutral Gray (Balanced) */
+  --color-text-tertiary: #667085;    /* Muted Gray (Secondary details) */
+  --color-text-disabled: #98a2b3;
+  --color-text-inverse: #ffffff;
+
+  /* Borders — Minimalist, clean lines */
+  --color-border: #eaecf0;           /* Default UI Border */
+  --color-border-light: #f2f4f7;
+  --color-border-medium: #eaecf0;
+  --color-border-dark: #98a2b3;
+  --color-border-focus: #111827;
+
+  /* Brand Colors — Refined palette */
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #0ea5e9;
+
+  /* Interactive Elements */
+  --color-button-primary-bg: #111827;
+  --color-button-primary-fg: #ffffff;
+  --color-button-primary-bg-hover: #1f2937;
+  --color-button-secondary-bg: #ffffff;
+  --color-button-secondary-fg: #111827;
+  --color-button-secondary-border: #e2e8f0;
+
+  /* Focus & Active States */
+  --color-focus-ring: rgba(17, 24, 39, 0.1);
+  --color-active-bg: #f1f5f9;
+
+  /* Shadows — Extremely subtle, layered (Stripe/Vercel style) */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.08);
+}
+
+/* ==================== DARK MODE TOKENS ==================== */
+
+body.theme-dark {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #121212;
+  --color-bg-tertiary: #1a1a1a;
+  --color-bg-overlay: rgba(10, 10, 10, 0.9);
+
+  /* Surfaces */
+  --color-surface-primary: #121212;
+  --color-surface-secondary: #1a1a1a;
+  --color-surface-tertiary: #262626;
+  --color-surface-interactive: #2a2a2a;
+  --color-surface-image: #171717;
+
+  /* Text */
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
+  --color-text-disabled: #52525b;
+  --color-text-inverse: #0a0a0a;
+
+  /* Borders */
+  --color-border-light: #262626;
+  --color-border-medium: #404040;
+  --color-border-dark: #52525b;
+  --color-border-focus: #fafafa;
+
+  /* Brand */
+  --color-brand-50: #064e3b;
+  --color-brand-100: #065f46;
+  --color-brand-500: #34d399;
+  --color-brand-600: #6ee7b7;
+  --color-brand-700: #a7f3d0;
+
+  /* Status */
+  --color-success: #34d399;
+  --color-error: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #38bdf8;
+
+  /* Interactive */
+  --color-button-primary-bg: #fafafa;
+  --color-button-primary-fg: #0a0a0a;
+  --color-button-primary-bg-hover: #f5f5f5;
+  --color-button-secondary-bg: #1a1a1a;
+  --color-button-secondary-fg: #fafafa;
+  --color-button-secondary-border: #404040;
+
+  --color-focus-ring: rgba(250, 250, 250, 0.1);
+  --color-active-bg: #262626;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.8);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(52, 211, 153, 0.05);
+}
+
+/* ==================== SEMANTIC TOKENS ==================== */
+
+:root {
+  /* Typography — Using system-ui stack for premium feel */
+  --font-family-base: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-display: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  --letter-spacing-tighter: -0.02em;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+
+  /* Spacing — Consistent 4px scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border Radius — Modern small radius (6px-10px) */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 220ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Z-Index */
+  --z-dropdown: 1000;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}
+
+/* ==================== UTILITY FUNCTIONS ==================== */
+
+@supports (backdrop-filter: blur(10px)) {
+  :root {
+    --backdrop-blur: backdrop-filter: blur(10px);
+  }
+}
+
+/* Color with opacity helper */
+
+@property --opacity-value {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: false;
+}
