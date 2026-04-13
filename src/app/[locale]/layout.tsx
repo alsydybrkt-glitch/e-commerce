@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: '%s | Aura-Market'
   },
   description: 'Discover the future of shopping with Aura-Market. Premium products, seamless experience, and lightning-fast delivery.',
-  metadataBase: new URL('https://aura-market.example.com'), // Placeholder for future deployment
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aura-market.vercel.app'),
   keywords: ['e-commerce', 'premium products', 'modern shop', 'aura-market'],
   authors: [{ name: 'Aura-Market Team' }],
   creator: 'Aura-Market',
