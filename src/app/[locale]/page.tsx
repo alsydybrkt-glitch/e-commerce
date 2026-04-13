@@ -8,21 +8,44 @@ export const metadata: Metadata = {
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  // Only block for the categories list (highly cached)
+  // Fetch all categories (highly cached)
   const allCategories = await fetchAllProductCategories();
-  const categories = allCategories.slice(0, 3);
   
-  // We'll only fetch the first category's products on the server to speed up initial paint
-  // The rest will be loaded on the client or streamed if we had more advanced patterns
+  // We want to fetch products for the main curated categories specifically
+  const curatedSlugs = ["smartphones", "laptops", "mobile-accessories"];
   const initialProducts: Record<string, any[]> = {};
   
   try {
-    if (categories[0]) {
-      initialProducts[categories[0].slug] = await fetchCategoryProducts(categories[0].slug);
-    }
+    // Fetch products for curated categories in parallel
+    const results = await Promise.all(
+      curatedSlugs.map(slug => fetchCategoryProducts(slug, { limit: 1 }))
+    );
+    
+    curatedSlugs.forEach((slug, index) => {
+      initialProducts[slug] = results[index];
+    });
+
+    // Also fetch the first few categories from ALL categories for the sliders if needed
+    const sliderCategories = allCategories.slice(0, 5);
+    const sliderResults = await Promise.all(
+      sliderCategories.map(cat => fetchCategoryProducts(cat.slug, { limit: 12 }))
+    );
+
+    sliderCategories.forEach((cat, index) => {
+      if (!initialProducts[cat.slug]) {
+        initialProducts[cat.slug] = sliderResults[index];
+      }
+    });
+
   } catch (error) {
-    console.error("Failed to fetch initial products:", error);
+    console.error("Failed to fetch initial page products:", error);
   }
 
-  return <Home initialCategories={categories} initialProducts={initialProducts} locale={locale} />;
+  return (
+    <Home 
+      initialCategories={allCategories.slice(0, 10)} 
+      initialProducts={initialProducts} 
+      locale={locale} 
+    />
+  );
 }

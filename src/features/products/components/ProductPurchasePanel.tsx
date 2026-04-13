@@ -7,6 +7,7 @@ import { MdOutlineAddShoppingCart } from "react-icons/md";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { useTranslation } from "@/shared/i18n/useTranslation";
 import { QuantitySelector } from "@/shared/ui/QuantitySelector";
@@ -58,30 +59,24 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
     setIsAdding(true);
     dispatch(add({ ...product, quantity: selectedQuantity }));
     
-    toast((tInstance) => (
+   toast.success(
       <div className="flex items-center gap-3">
-        <Image
-          src={getProductImage(product)}
-          alt={product.title}
-          width={48}
-          height={48}
-          className="rounded-xl object-cover"
-          loading="lazy"
-        />
-        <div className="flex-1">
-          <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{product.title}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {t("product.details.addedSuccess", { count: selectedQuantity })}
+        <div className="space-y-1">
+          <p className="font-semibold text-text-primary">{product.title}</p>
+          <p className="text-xs text-text-secondary">
+            {cartQuantity > 0 ? t("notifications.addedToCart") : t("notifications.addedToCart")}
           </p>
+          <Link
+            href="/carts"
+            className="btn btn-primary !py-1 !px-3 !text-[10px] uppercase tracking-wider"
+            onClick={() => toast.dismiss()}
+          >
+            {t("product.viewCart")}
+          </Link>
         </div>
-        <button 
-          className="rounded-full bg-slate-900 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-brand-600 dark:bg-brand-600"
-          onClick={() => { toast.dismiss(tInstance.id); router.push("/carts"); }}
-        >
-          {t("product.viewCart")}
-        </button>
-      </div>
-    ), { duration: 4000 });
+      </div>,
+      { duration: 3000 },
+    );
 
     setTimeout(() => setIsAdding(false), 800);
     setSelectedQuantity(1);
@@ -90,19 +85,19 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const toggleFavorite = useCallback(() => {
     if (isFavorite) {
       dispatch(removeFavorite(product.id));
-      toast.success(t("product.details.removedFromFavorites"));
+      toast.success(t("notifications.removedFromFavorites"));
     } else {
       dispatch(addFavorite(product));
-      toast.success(t("product.details.addedToFavorites"));
+      toast.success(t("notifications.addedToFavorites"));
     }
   }, [dispatch, isFavorite, product, t]);
 
   const handleShare = useCallback(async () => {
     try {
       const result = await shareProduct(buildProductSharePayload(product, window.location.href));
-      toast.success(result === "shared" ? t("product.sharedSuccess") : t("product.linkCopied"));
+      toast.success(result === "shared" ? t("notifications.shareSuccess") : t("notifications.linkCopied"));
     } catch {
-      toast.error(t("product.shareError"));
+      toast.error(t("notifications.error"));
     }
   }, [product, t]);
 
@@ -128,7 +123,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
               `}
             >
               <MdOutlineAddShoppingCart className={`text-xl ${isAdding ? "animate-bounce" : ""}`} />
-              {isAdding ? t("product.details.addedSuccess", { count: selectedQuantity }) : t("product.addToCart")}
+              {isAdding ? t("notifications.addedToCart") : t("product.addToCart")}
             </button>
           </Interactive>
 

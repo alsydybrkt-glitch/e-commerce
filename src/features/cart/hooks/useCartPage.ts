@@ -30,12 +30,12 @@ export function useCartPage() {
     const promoDiscount = getPromoDiscount(normalizedCode);
 
     if (!promoDiscount) {
-      toast.error(t("cart.invalidPromo"));
+      toast.error(t("notifications.promoInvalid"));
       return;
     }
 
     dispatch(applyDiscount(promoDiscount));
-    toast.success(t("cart.promoApplied", { code: normalizedCode }));
+    toast.success(t("notifications.promoSuccess", { code: normalizedCode }));
     setPromoCode("");
   }, [dispatch, promoCode, t]);
 

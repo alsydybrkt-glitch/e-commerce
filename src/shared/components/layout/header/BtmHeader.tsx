@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -42,14 +42,17 @@ function BottomHeader() {
     [isRTL],
   );
 
-  const navLinks = [
-    { name: t("nav.home"), path: "/", icon: <FiHome size={16} /> },
-    { name: t("nav.shop"), path: "/shop", icon: <FiShoppingBag size={16} /> },
-    { name: t("nav.blog"), path: "/blog", icon: <FiBookOpen size={16} /> },
-    { name: t("nav.contact"), path: "/contact", icon: <FiPhoneIncoming size={16} /> },
-    { name: t("nav.checkout"), path: "/checkout", icon: <FiCreditCard size={16} /> },
-    { name: t("nav.orderTracking"), path: "/order-tracking", icon: <FiTruck size={16} /> },
-  ];
+  const navLinks = useMemo(
+    () => [
+      { name: t("nav.home"), path: "/", icon: <FiHome size={16} /> },
+      { name: t("nav.shop"), path: "/shop", icon: <FiShoppingBag size={16} /> },
+      { name: t("nav.blog"), path: "/blog", icon: <FiBookOpen size={16} /> },
+      { name: t("nav.contact"), path: "/contact", icon: <FiPhoneIncoming size={16} /> },
+      { name: t("nav.checkout"), path: "/checkout", icon: <FiCreditCard size={16} /> },
+      { name: t("nav.orderTracking"), path: "/order-tracking", icon: <FiTruck size={16} /> },
+    ],
+    [t],
+  );
 
   const {
     openDesktopCategories,
@@ -62,20 +65,23 @@ function BottomHeader() {
   const [mobileSearchQuery, setMobileSearchQuery] = useState("");
   const router = useRouter();
 
-  const handleMobileSearch = () => {
+  const handleMobileSearch = useCallback(() => {
     const query = mobileSearchQuery.trim();
     if (!query) return;
     router.push(`/search?query=${encodeURIComponent(query)}`);
     setMobileSearchQuery("");
     closeAll();
-  };
+  }, [mobileSearchQuery, router, closeAll]);
 
-  const handleMobileSearchKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleMobileSearch();
-    }
-  };
+  const handleMobileSearchKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleMobileSearch();
+      }
+    },
+    [handleMobileSearch],
+  );
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -179,8 +185,6 @@ function BottomHeader() {
         setMobileSearchQuery={setMobileSearchQuery}
         handleMobileSearch={handleMobileSearch}
         handleMobileSearchKeyDown={handleMobileSearchKeyDown}
-        dealsOfDay={[]} 
-        topSellers={[]}
       />
     </div>
   );

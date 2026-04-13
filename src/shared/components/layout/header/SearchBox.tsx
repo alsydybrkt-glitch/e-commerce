@@ -1,9 +1,8 @@
 "use client";
+
 import Image from "next/image";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,163 +12,235 @@ import { getProductImage } from "@/features/products/utils/product-helpers";
 import { AppDispatch, RootState } from "@/store";
 import { Product } from "@/features/products/services/productsApi";
 
+function highlight(text: string, query: string) {
+  const regex = new RegExp(`(${query})`, "gi");
+  const parts = text.split(regex);
+
+  return parts.map((part, i) =>
+    part.toLowerCase() === query.toLowerCase() ? (
+      <span key={i} className="text-brand-600 font-semibold">
+        {part}
+      </span>
+    ) : (
+      part
+    )
+  );
+}
+
 function SearchBox() {
   const { t, tCategoryName } = useTranslation();
-  const [inputValue, setInputValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const products = useSelector((state: RootState) => state.products.searchResults);
-  const deferredInput = useDeferredValue(inputValue);
-  const normalizedInput = deferredInput.trim().toLowerCase();
-  const suggestions = useMemo(() => products.slice(0, 4), [products]);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!inputValue.trim()) {
-      return;
-    }
+  const products = useSelector(
+    (state: RootState) => state.products.searchResults
+  );
 
-    router.push(`/search?query=${encodeURIComponent(inputValue.trim())}`);
-    setInputValue("");
-  };
+  const [query, setQuery] = useState("");
+  const [focused, setFocused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const suggestions = useMemo(() => {
+    return products?.slice(0, 4) || [];
+  }, [products]);
+
+  // debounce search
   useEffect(() => {
-    if (normalizedInput.length < 2) {
-      return;
-    }
+    if (normalizedQuery.length < 2) return;
+
+    setLoading(true);
 
     const timer = setTimeout(() => {
-      dispatch(fetchProductsBySearch(normalizedInput));
+      dispatch(fetchProductsBySearch(normalizedQuery)).finally(() =>
+        setLoading(false)
+      );
     }, 350);
 
     return () => clearTimeout(timer);
-  }, [dispatch, normalizedInput]);
+  }, [normalizedQuery, dispatch]);
 
+  // click outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsFocused(false);
+    const handleClick = (event: PointerEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setFocused(false);
+        setActiveIndex(-1);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    document.addEventListener("pointerdown", handleClick);
+
+    return () => document.removeEventListener("pointerdown", handleClick);
   }, []);
 
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [query]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!query.trim()) return;
+
+    router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+
+    setQuery("");
+    setFocused(false);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!suggestions.length) return;
+
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
-    } else if (e.key === "ArrowUp") {
+      setActiveIndex((prev) =>
+        prev < suggestions.length - 1 ? prev + 1 : prev
+      );
+    }
+
+    if (e.key === "ArrowUp") {
       e.preventDefault();
-      setActiveIndex((prev) => (prev > -1 ? prev - 1 : prev));
-    } else if (e.key === "Enter") {
-      if (activeIndex >= 0 && suggestions[activeIndex]) {
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    }
+
+    if (e.key === "Enter") {
+      if (activeIndex >= 0) {
         e.preventDefault();
-        router.push(`/product/${suggestions[activeIndex].id}`);
-        setInputValue("");
-        setIsFocused(false);
+
+        const product = suggestions[activeIndex];
+
+        router.push(`/product/${product.id}`);
+
+        setQuery("");
+        setFocused(false);
       }
-    } else if (e.key === "Escape") {
-      setIsFocused(false);
+    }
+
+    if (e.key === "Escape") {
+      setFocused(false);
       setActiveIndex(-1);
     }
   };
 
-  useEffect(() => {
-    setActiveIndex(-1);
-  }, [inputValue]);
-
-  const isExpanded = isFocused && suggestions.length > 0;
+  const expanded = focused && normalizedQuery.length >= 2;
 
   return (
-    <div className="relative w-full max-w-2xl" ref={containerRef}>
-      <form
-        className="surface-card flex items-center gap-3 rounded-full px-4 py-3"
-        onSubmit={handleSubmit}
-        role="search"
+    <div ref={containerRef} className="relative w-full max-w-2xl">
+      <div
+        role="combobox"
+        aria-expanded={expanded ? "true" : "false"}
+        aria-haspopup="listbox"
+        aria-controls="search-suggestions"
       >
-        <FaSearch className="shrink-0 text-slate-400 dark:text-slate-500" />
-        <input
-          autoComplete="off"
-          type="text"
-          role="combobox"
-          aria-expanded={isExpanded ? "true" : "false"}
-          aria-controls="search-suggestions"
-          aria-autocomplete="list"
-          placeholder={t("header.searchPlaceholder")}
-          value={inputValue}
-
-          onChange={(event) => setInputValue(event.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onKeyDown={handleKeyDown}
-          className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500"
-        />
-        <button type="submit" className="primary-btn !px-4 !py-2 text-xs">
-          {t("common.search")}
-        </button>
-      </form>
-
-      {isFocused && normalizedInput.length >= 2 && suggestions.length > 0 && (
-        <ul 
-          id="search-suggestions"
-          role="listbox"
-          className="surface-card absolute inset-x-0 top-[calc(100%+12px)] z-20 overflow-hidden p-2"
+        <form
+          role="search"
+          onSubmit={handleSubmit}
+          className="surface-card flex items-center gap-3 rounded-full px-4 py-3"
         >
-          {suggestions.map((product: Product, index: number) => {
-            const isSelected = activeIndex === index;
-            return (
-              <li 
-                key={product.id} 
-                role="option" 
-                aria-selected={isSelected ? "true" : "false"}
-                className={`rounded-2xl transition ${
-                  isSelected 
-                    ? "bg-slate-100 dark:bg-slate-800 ring-1 ring-brand-500/20" 
-                    : "hover:bg-slate-50 dark:hover:bg-slate-800/80"
-                }`}
-              >
-                <Link
-                  href={`/product/${product.id}`}
-                  className="flex w-full items-center gap-3 px-3 py-3 text-start"
-                  onClick={() => {
-                    setInputValue("");
-                    setIsFocused(false);
-                  }}
-                >
-                  <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-700">
-                    <Image
-                      src={getProductImage(product)}
-                      alt={product.title}
-                      width={56}
-                      height={56}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
-                      {product.title}
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      ${product.price} - {tCategoryName(product.category)}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
+          <FaSearch className="shrink-0 text-slate-400 dark:text-slate-500" />
 
-        </ul>
+          <input
+            type="text"
+            autoComplete="off"
+            value={query}
+            placeholder={t("header.searchPlaceholder")}
+            aria-autocomplete="list"
+            aria-controls="search-suggestions"
+            aria-activedescendant={
+              activeIndex >= 0 ? `search-option-${activeIndex}` : undefined
+            }
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onKeyDown={handleKeyDown}
+            className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500"
+          />
+
+          <button
+            type="submit"
+            className="primary-btn !px-4 !py-2 text-xs"
+          >
+            {t("common.search")}
+          </button>
+        </form>
+      </div>
+
+      {expanded && (
+        <div className="surface-card absolute inset-x-0 top-[calc(100%+10px)] z-20 overflow-hidden p-2">
+          {loading && (
+            <div className="p-4 text-sm text-slate-500 animate-pulse">
+              Searching...
+            </div>
+          )}
+
+          {!loading && suggestions.length === 0 && (
+            <div className="p-4 text-sm text-slate-500">
+              No products found
+            </div>
+          )}
+
+          {!loading && suggestions.length > 0 && (
+            <ul id="search-suggestions" role="listbox">
+              {suggestions.map((product: Product, index: number) => {
+                const selected = activeIndex === index;
+
+                return (
+                  <li
+                    key={product.id}
+                    id={`search-option-${index}`}
+                    role="option"
+                    aria-selected={selected ? "true" : "false"}
+                    className={`rounded-2xl transition ${
+                      selected
+                        ? "bg-slate-100 dark:bg-slate-800 ring-1 ring-brand-500/20"
+                        : "hover:bg-slate-50 dark:hover:bg-slate-800/80"
+                    }`}
+                  >
+                    <Link
+                      href={`/product/${product.id}`}
+                      className="flex items-center gap-3 px-3 py-3"
+                      onClick={() => {
+                        setQuery("");
+                        setFocused(false);
+                      }}
+                    >
+                      <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-700">
+                        <Image
+                          src={getProductImage(product)}
+                          alt={product.title}
+                          width={56}
+                          height={56}
+                          sizes="56px"
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+                          {highlight(product.title, query)}
+                        </p>
+
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          ${product.price} — {tCategoryName(product.category)}
+                        </p>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
       )}
-
-
     </div>
   );
 }
 
-
 export default SearchBox;
-
-

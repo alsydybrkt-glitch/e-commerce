@@ -1,8 +1,10 @@
 "use client";
-import React, { memo } from "react";
+
+import Image from "next/image";
+import React, { memo, useEffect, useMemo, useRef, useCallback } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { motion, AnimatePresence } from "framer-motion";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdArrowForward } from "react-icons/md";
 import { useTranslation } from "@/shared/i18n/useTranslation";
 import { Category, Product } from "@/features/products/services/productsApi";
 import { NavLink } from "@/shared/types";
@@ -18,8 +20,37 @@ interface MobileDrawerProps {
   setMobileSearchQuery: (val: string) => void;
   handleMobileSearch: () => void;
   handleMobileSearchKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  dealsOfDay: Product[];
-  topSellers: Product[];
+  dealsOfDay?: Product[];
+}
+
+/* Section Divider */
+
+function MenuSection({
+  title,
+  children,
+}: {
+  title?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="mt-8">
+
+      {title && (
+        <div className="mb-4 flex items-center gap-3">
+
+          <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            {title}
+          </span>
+
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+
+        </div>
+      )}
+
+      {children}
+
+    </section>
+  );
 }
 
 export const MobileDrawer = memo(({
@@ -33,143 +64,294 @@ export const MobileDrawer = memo(({
   setMobileSearchQuery,
   handleMobileSearch,
   handleMobileSearchKeyDown,
-  dealsOfDay,
-  topSellers,
+  dealsOfDay = []
 }: MobileDrawerProps) => {
+
   const { t, tCategoryName } = useTranslation();
 
-  const drawerVariants = {
-    hidden: { x: isRTL ? "100%" : "-100%" },
-    visible: { 
-      x: 0,
-      transition: { 
-        type: "spring", 
-        damping: 25, 
-        stiffness: 200,
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    },
-    exit: { 
-      x: isRTL ? "100%" : "-100%",
-      transition: { type: "tween", duration: 0.3, ease: "easeInOut" }
-    }
-  };
+  const drawerRef = useRef<HTMLDivElement>(null);
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: isRTL ? 20 : -20 },
-    visible: { opacity: 1, x: 0 },
-  };
+  /* prevent body scroll */
+
+  useEffect(() => {
+
+    if (!isOpen) return;
+
+    const original = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = original;
+    };
+
+  }, [isOpen]);
+
+  /* ESC close */
+
+  const escHandler = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+
+    if (!isOpen) return;
+
+    document.addEventListener("keydown", escHandler);
+
+    return () => document.removeEventListener("keydown", escHandler);
+
+  }, [isOpen, escHandler]);
+
+  /* animation */
+
+  const drawerVariants = useMemo(() => ({
+    hidden: { x: isRTL ? "100%" : "-100%" },
+    visible: { x: 0 },
+    exit: { x: isRTL ? "100%" : "-100%" }
+  }), [isRTL]);
+
+  const deals = useMemo(() => dealsOfDay.slice(0, 4), [dealsOfDay]);
 
   return (
+
     <AnimatePresence>
+
       {isOpen && (
+
         <>
-          {/* Animated Backdrop */}
+
+          {/* backdrop */}
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-md"
-            aria-hidden="true"
+            className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
           />
 
-          {/* Animated Drawer */}
+          {/* drawer */}
+
           <motion.aside
-            dir={isRTL ? "rtl" : "ltr"}
+            role="dialog"
+            aria-modal="true"
             variants={drawerVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`fixed ${
-              isRTL ? "right-0 rounded-l-[32px]" : "left-0 rounded-r-[32px]"
-            } top-0 bottom-0 h-screen z-[70] w-[88vw] max-w-xs overflow-y-auto bg-white p-6 shadow-2xl ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700 lg:hidden`}
+            dir={isRTL ? "rtl" : "ltr"}
+            className={`fixed top-0 bottom-0 z-[70] h-[100dvh] w-[85vw] max-w-[380px] flex flex-col overflow-hidden bg-white/95 dark:bg-slate-900/95 shadow-xl`}
           >
-            {/* Header */}
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-                {t("common.menu")}
-              </h2>
-              <button
-                type="button"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 transition-transform active:scale-95 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200"
-                onClick={onClose}
-                aria-label="Close menu"
-              >
-                <MdClose size={24} />
-              </button>
+
+            <div
+              ref={drawerRef}
+              className="flex flex-col h-full overflow-y-auto px-6 py-8 custom-scrollbar"
+            >
+
+              {/* Header */}
+
+              <div className="flex items-center justify-between mb-2">
+
+                <h2 className="text-lg font-bold">
+                  Menu
+                </h2>
+
+                <button
+                  onClick={onClose}
+                  aria-label="Close menu"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800"
+                >
+                  <MdClose size={20}/>
+                </button>
+
+              </div>
+
+              {/* User */}
+
+              <MenuSection>
+
+                <div className="flex items-center gap-3 rounded-2xl bg-slate-100 p-3 dark:bg-slate-800">
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white font-bold">
+                    U
+                  </div>
+
+                  <div className="flex flex-col">
+
+                    <span className="text-sm font-bold">
+                      Welcome back
+                    </span>
+
+                    <span className="text-xs text-slate-500">
+                      Sign in to your account
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </MenuSection>
+
+              {/* Search */}
+
+              <MenuSection title="Search">
+
+                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-800">
+
+                  🔍
+
+                  <input
+                    value={mobileSearchQuery}
+                    onChange={(e)=>setMobileSearchQuery(e.target.value)}
+                    onKeyDown={handleMobileSearchKeyDown}
+                    placeholder={t("common.search")}
+                    className="w-full bg-transparent text-sm font-semibold outline-none"
+                  />
+
+                  <button
+                    onClick={handleMobileSearch}
+                    aria-label="search"
+                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white"
+                  >
+                    <MdArrowForward className={isRTL ? "rotate-180" : ""}/>
+                  </button>
+
+                </div>
+
+              </MenuSection>
+
+              {/* Quick actions */}
+
+              <MenuSection title="Quick Actions">
+
+                <div className="grid grid-cols-4 gap-3">
+
+                  <Link onClick={onClose} href="/carts" className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 p-3 text-xs font-semibold dark:bg-slate-800">
+                    🛒
+                    Cart
+                  </Link>
+
+                  <Link onClick={onClose} href="/favorites" className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 p-3 text-xs font-semibold dark:bg-slate-800">
+                    ❤️
+                    Wishlist
+                  </Link>
+
+                  <button className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 p-3 text-xs font-semibold dark:bg-slate-800">
+                    📦
+                    Orders
+                  </button>
+
+                  <button className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 p-3 text-xs font-semibold dark:bg-slate-800">
+                    🎁
+                    Deals
+                  </button>
+
+                </div>
+
+              </MenuSection>
+
+              {/* Navigation */}
+
+              <MenuSection title="Navigation">
+
+                <nav className="space-y-2">
+
+                  {navLinks.map((link)=>(
+                    <Link
+                      key={link.path}
+                      href={link.path}
+                      onClick={onClose}
+                      className={`flex items-center gap-4 rounded-2xl px-5 py-3 font-bold transition ${
+                        pathname === link.path
+                        ? "bg-gradient-to-r from-brand-600 to-brand-500 text-white"
+                        : "text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800"
+                      }`}
+                    >
+
+                      <span className="text-xl">
+                        {link.icon}
+                      </span>
+
+                      {link.name}
+
+                    </Link>
+                  ))}
+
+                </nav>
+
+              </MenuSection>
+
+              {/* Deals */}
+
+              {deals.length > 0 && (
+
+                <MenuSection title="Deals">
+
+                  <div className="flex gap-3 overflow-x-auto pb-2">
+
+                    {deals.map((product)=>(
+                      <div
+                        key={product.id}
+                        className="min-w-[110px] rounded-xl border border-slate-200 p-2 text-xs dark:border-slate-700"
+                      >
+
+                        <Image
+                          src={product.thumbnail}
+                          alt={product.title}
+                          width={110}
+                          height={64}
+                          className="rounded-lg object-cover"
+                        />
+
+                        <p className="mt-1 line-clamp-1 font-semibold">
+                          {product.title}
+                        </p>
+
+                      </div>
+                    ))}
+
+                  </div>
+
+                </MenuSection>
+
+              )}
+
+              {/* Categories */}
+
+              <MenuSection title={t("common.categories")}>
+
+                <div className="grid grid-cols-2 gap-2">
+
+                  {categories.map((category)=>(
+                    <Link
+                      key={category.slug}
+                      href={`/category/${category.slug}`}
+                      onClick={onClose}
+                      className="flex items-center gap-2 rounded-xl border border-slate-200 p-3 text-xs font-semibold hover:border-brand-500 dark:border-slate-700"
+                    >
+
+                      📦 {tCategoryName(category.slug || category.name)}
+
+                    </Link>
+                  ))}
+
+                </div>
+
+              </MenuSection>
+
             </div>
 
-            {/* Premium Search Section */}
-            <motion.div variants={itemVariants} className="mb-8 overflow-hidden rounded-2xl bg-slate-50 p-1 dark:bg-slate-800/50">
-              <div className="flex items-center gap-2 rounded-[14px] bg-white px-3 py-2.5 shadow-sm dark:bg-slate-900">
-                <span className="text-lg opacity-60">🔍</span>
-                <input
-                  value={mobileSearchQuery}
-                  onChange={(e) => setMobileSearchQuery(e.target.value)}
-                  onKeyDown={handleMobileSearchKeyDown}
-                  type="search"
-                  placeholder={t("common.search")}
-                  className="w-full border-none bg-transparent text-sm font-bold text-slate-800 outline-none placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500"
-                />
-                <button
-                  onClick={handleMobileSearch}
-                  type="button"
-                  className="rounded-[10px] bg-brand-600 px-4 py-1.5 text-xs font-black uppercase text-white shadow-lg shadow-brand-600/20 active:scale-95 transition-transform"
-                >
-                  {t("common.search")}
-                </button>
-              </div>
-            </motion.div>
-
-            {/* Navigation Links */}
-            <nav className="space-y-3">
-              {navLinks.map((link) => (
-                <motion.div key={link.path} variants={itemVariants}>
-                  <Link
-                    href={link.path}
-                    className={`flex items-center gap-4 rounded-2xl px-5 py-4 text-sm font-bold transition-all duration-300 ${
-                      pathname === link.path
-                        ? "bg-brand-600 text-white shadow-lg shadow-brand-600/30"
-                        : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800/50"
-                    }`}
-                    onClick={onClose}
-                  >
-                    <span className={`text-xl ${pathname === link.path ? "text-white" : "text-brand-500"}`}>
-                      {link.icon}
-                    </span>
-                    <span>{link.name}</span>
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
-
-            {/* Categories Section */}
-            <motion.div variants={itemVariants} className="mt-10">
-              <p className="mb-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                <span className="h-px w-4 bg-slate-200 dark:bg-slate-700" />
-                {t("common.categories")}
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {categories.map((category) => (
-                  <Link
-                    key={category.slug}
-                    href={`/category/${category.slug}`}
-                    className="flex items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 px-3 py-3 text-[11px] font-bold text-slate-600 transition-all hover:border-brand-500 hover:bg-white dark:border-slate-800 dark:bg-slate-800/30 dark:text-slate-300 dark:hover:bg-slate-800"
-                    onClick={onClose}
-                  >
-                    {tCategoryName(category.slug || category.name)}
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
           </motion.aside>
+
         </>
+
       )}
+
     </AnimatePresence>
+
   );
+
 });
 
 MobileDrawer.displayName = "MobileDrawer";
-

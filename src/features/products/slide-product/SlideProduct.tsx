@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, memo, useCallback, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -23,6 +23,65 @@ interface SlideProductProps {
   hideHeader?: boolean;
 }
 
+// Sub-component for indicator and controls to isolate re-renders
+const SliderControls = memo(({ 
+  swiper, 
+  totalItems, 
+  canLoop, 
+  t 
+}: { 
+  swiper: any, 
+  totalItems: number, 
+  canLoop: boolean,
+  t: any
+}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!swiper) return;
+    
+    const handleSlideChange = () => {
+      setActiveIndex(swiper.realIndex);
+    };
+
+    swiper.on("slideChange", handleSlideChange);
+    return () => {
+      swiper.off("slideChange", handleSlideChange);
+    };
+  }, [swiper]);
+
+  const isAtStart = !canLoop && (swiper?.isBeginning ?? true);
+  const isAtEnd = !canLoop && (swiper?.isEnd ?? totalItems <= 4);
+
+  return (
+    <div className="hidden items-center gap-3 md:flex">
+      <button
+        type="button"
+        disabled={isAtStart}
+        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900"
+        onClick={() => swiper?.slidePrev()}
+        aria-label={t("home.sliderPrev")}
+      >
+        <FiChevronLeft className="text-lg" />
+      </button>
+      <button
+        type="button"
+        disabled={isAtEnd}
+        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900"
+        onClick={() => swiper?.slideNext()}
+        aria-label={t("home.sliderNext")}
+      >
+        <FiChevronRight className="text-lg" />
+      </button>
+      <span className="min-w-16 text-center text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+        {String(activeIndex + 1).padStart(2, "0")} / {String(totalItems).padStart(2, "0")}
+      </span>
+    </div>
+  );
+});
+
+SliderControls.displayName = "SliderControls";
+
 function SlideProduct({
   category,
   description,
@@ -33,18 +92,16 @@ function SlideProduct({
   hideHeader = false,
 }: SlideProductProps) {
   const { t } = useTranslation();
-  const items = Array.isArray(products) ? products : [];
+  const items = React.useMemo(() => (Array.isArray(products) ? products : []), [products]);
   const slidesPer = 4;
   const canLoop = items.length > slidesPer;
-  const prevBtnRef = useRef<HTMLButtonElement>(null);
-  const nextBtnRef = useRef<HTMLButtonElement>(null);
   const [swiper, setSwiper] = useState<any>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const isAtStart = !canLoop && (swiper?.isBeginning ?? true);
-  const isAtEnd = !canLoop && (swiper?.isEnd ?? items.length <= 1);
 
   const finalPadding = sectionPaddingClassName ?? (hideHeader ? "py-4" : "py-20");
+
+  const onSwiper = useCallback((instance: any) => {
+    setSwiper(instance);
+  }, []);
 
   return (
     <section className={`${useShell ? "shell " : ""}${finalPadding}`.trim()}>
@@ -54,37 +111,14 @@ function SlideProduct({
           title={category}
           description={description}
         >
-          <div className="hidden items-center gap-3 md:flex">
-            <button
-              ref={prevBtnRef}
-              type="button"
-              disabled={isAtStart}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900"
-              onClick={() => swiper?.slidePrev()}
-              aria-label={t("home.sliderPrev")}
-            >
-              <FiChevronLeft className="text-lg" />
-            </button>
-            <button
-              ref={nextBtnRef}
-              type="button"
-              disabled={isAtEnd}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900"
-              onClick={() => swiper?.slideNext()}
-              aria-label={t("home.sliderNext")}
-            >
-              <FiChevronRight className="text-lg" />
-            </button>
-            <span className="min-w-16 text-center text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-              {String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
-            </span>
-          </div>
+          <SliderControls 
+            swiper={swiper} 
+            totalItems={items.length} 
+            canLoop={canLoop} 
+            t={t} 
+          />
         </SectionHeader>
       )}
-
-      {/* Navigation for headless mode (if requested) - usually better to just use Swiper pagination on mobile 
-          but if we want manual arrows in headless mode we'd need another UI solution here. 
-          For now, we'll keep it simple and rely on swiper pagination/grab. */}
 
       {items.length === 0 ? (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -94,32 +128,29 @@ function SlideProduct({
         </div>
       ) : (
         <div className="relative">
-           {/* Add minimal navigation if header is hidden but we want arrow controls */}
-            {hideHeader && (
-              <div className="absolute -top-12 right-0 hidden items-center gap-2 md:flex">
-                 <button
-                   onClick={() => swiper?.slidePrev()}
-                   disabled={isAtStart}
-                   aria-label={t("home.sliderPrev")}
-                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-primary transition-all hover:bg-bg-secondary disabled:opacity-30"
-                 >
-                   <FiChevronLeft />
-                 </button>
-                 <button
-                   onClick={() => swiper?.slideNext()}
-                   disabled={isAtEnd}
-                   aria-label={t("home.sliderNext")}
-                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-primary transition-all hover:bg-bg-secondary disabled:opacity-30"
-                 >
-                   <FiChevronRight />
-                 </button>
-              </div>
-            )}
+          {hideHeader && swiper && (
+            <div className="absolute -top-12 right-0 hidden items-center gap-2 md:flex">
+               <button
+                 onClick={() => swiper.slidePrev()}
+                 aria-label={t("home.sliderPrev")}
+                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-primary transition-all hover:bg-bg-secondary disabled:opacity-30"
+               >
+                 <FiChevronLeft />
+               </button>
+               <button
+                 onClick={() => swiper.slideNext()}
+                 aria-label={t("home.sliderNext")}
+                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-primary transition-all hover:bg-bg-secondary disabled:opacity-30"
+               >
+                 <FiChevronRight />
+               </button>
+            </div>
+          )}
 
           <Swiper
             loop={canLoop}
             grabCursor
-            speed={400} // Shorter speed for snappier feel
+            speed={400}
             spaceBetween={18}
             watchSlidesProgress={true}
             resistanceRatio={0.85}
@@ -127,13 +158,9 @@ function SlideProduct({
             modules={[Navigation, Pagination, A11y]}
             pagination={{
               clickable: true,
-              dynamicBullets: true, // Dynamic bullets are easier on the eyes for many slides
+              dynamicBullets: true,
             }}
-            onSwiper={(instance) => {
-              setSwiper(instance);
-              setActiveIndex(instance.realIndex || 0);
-            }}
-            onSlideChange={(instance) => setActiveIndex(instance.realIndex)}
+            onSwiper={onSwiper}
             breakpoints={{
               320: { slidesPerView: 1.15, spaceBetween: 14 },
               480: { slidesPerView: 1.4, spaceBetween: 16 },
@@ -143,9 +170,8 @@ function SlideProduct({
             }}
             className="slide-product-swiper pb-12"
           >
-
-            {items.map((product, index) => (
-              <SwiperSlide key={product.id || index} className="!h-auto">
+            {items.map((product) => (
+              <SwiperSlide key={product.id} className="!h-auto">
                 <Product item={product} />
               </SwiperSlide>
             ))}
@@ -156,5 +182,4 @@ function SlideProduct({
   );
 }
 
-
-export default SlideProduct;
+export default memo(SlideProduct);

@@ -180,12 +180,36 @@ export function Providers({ children, initialTheme, initialLocale }: ProvidersPr
           <Footer />
 
           <Toaster
-            position="bottom-right"
+            position="bottom-center"
             toastOptions={{
+              duration: 4000,
+              className: "premium-toast",
               style: {
-                background: '#e9e9e9',
-                borderRadius: '5px',
-                padding: '8px',
+                background: theme === "dark" ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.85)",
+                color: theme === "dark" ? "#f8fafc" : "#0f172a",
+                backdropFilter: "blur(20px) saturate(180%)",
+                WebkitBackdropFilter: "blur(20px) saturate(180%)",
+                border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.05)",
+                borderRadius: "1.25rem",
+                padding: "16px 24px",
+                fontSize: "0.9375rem",
+                fontWeight: "500",
+                letterSpacing: "-0.01em",
+                boxShadow: theme === "dark"
+                  ? "0 20px 40px -10px rgba(0, 0, 0, 0.5)"
+                  : "0 20px 40px -10px rgba(0, 0, 0, 0.1)",
+              },
+              success: {
+                iconTheme: {
+                  primary: "#10b981",
+                  secondary: "#fff",
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: "#f43f5e",
+                  secondary: "#fff",
+                },
               },
             }}
           />

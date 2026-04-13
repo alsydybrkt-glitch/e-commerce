@@ -28,6 +28,7 @@ export const HeroSlide = ({
           alt={imageAlt}
           fill
           priority={priority}
+          quality={85}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           sizes="100vw"
@@ -52,4 +53,3 @@ export const HeroSlide = ({
     </div>
   );
 };
-

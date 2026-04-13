@@ -20,11 +20,11 @@ export default function Contact() {
     event.preventDefault();
 
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      toast.error(t("contact.fillFields"));
+      toast.error(t("notifications.fillRequired"));
       return;
     }
 
-    toast.success(t("contact.sent"));
+    toast.success(t("notifications.messageSent"));
     setForm({ name: "", email: "", message: "" });
   };
 

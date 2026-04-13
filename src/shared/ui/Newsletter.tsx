@@ -13,12 +13,12 @@ export function Newsletter() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !email.includes("@")) {
-      toast.error(t("footer.subscribeMissing"));
+      toast.error(t("notifications.invalidEmail"));
       return;
     }
 
     setIsSubscribed(true);
-    toast.success(t("footer.subscribeSuccess"));
+    toast.success(t("notifications.subscribeSuccess"));
     setEmail("");
   };
 
@@ -60,7 +60,7 @@ export function Newsletter() {
           ) : (
             <div className="flex items-center justify-center gap-3 text-lg font-bold text-brand-600 dark:text-brand-400">
               <FiCheckCircle className="text-2xl" />
-              {t("footer.subscribeSuccess")}
+              {t("notifications.subscribeSuccess")}
             </div>
           )}
 

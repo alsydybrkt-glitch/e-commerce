@@ -5,8 +5,14 @@ import { Product as ProductType, Category } from "@/features/products/services/p
 import { getTranslations } from "@/shared/i18n/get-translations";
 
 // UI Components
-import { TrustBar } from "@/shared/ui/TrustBar";
-import { Newsletter } from "@/shared/ui/Newsletter";
+const TrustBar = dynamic(() => import("@/shared/ui/TrustBar").then(mod => mod.TrustBar), {
+  loading: () => <div className="h-20 animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
+  ssr: false
+});
+const Newsletter = dynamic(() => import("@/shared/ui/Newsletter").then(mod => mod.Newsletter), {
+  loading: () => <div className="h-64 animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
+  ssr: false
+});
 import { RecentlyViewedSection, CategorySlidesSection } from "./HomeClientSections";
 
 // Lazy load non-critical sections

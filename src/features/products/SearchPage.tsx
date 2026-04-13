@@ -1,8 +1,7 @@
 import SearchQueryClient from "@/features/products/components/SearchQueryClient";
 import ServerPagination from "@/features/products/components/ServerPagination";
 import { Product as ProductType } from "@/features/products/services/productsApi";
-import SlideProduct from "@/features/products/slide-product/SlideProduct";
-import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
+import ProductGrid from "./components/ProductGrid";
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
 
@@ -61,14 +60,7 @@ export default function SearchPage({
         </div>
       ) : (
         <div className="mt-4">
-          <RenderWhenVisible minHeight={540}>
-            <SlideProduct
-              category={`Results for ${query}`}
-              products={products}
-              hideHeader={true}
-              useShell={false}
-            />
-          </RenderWhenVisible>
+          <ProductGrid products={products} />
         </div>
       )}
 
@@ -83,4 +75,3 @@ export default function SearchPage({
     </div>
   );
 }
-

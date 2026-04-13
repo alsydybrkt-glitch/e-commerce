@@ -42,7 +42,7 @@ const LazySection = ({
   children,
   className,
   minHeight = 400,
-  rootMargin = "200px",
+  rootMargin = "400px",
   onVisible,
 }: LazySectionProps) => {
   return (

@@ -1,5 +1,5 @@
 "use client";
-import { memo, useMemo, useState, useEffect } from "react";
+import { memo, useMemo, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FaHeart, FaShare, FaStar } from "react-icons/fa";
 import { IoHeartOutline } from "react-icons/io5";
@@ -10,11 +10,9 @@ import toast from "react-hot-toast";
 import { Interactive } from "@/shared/ui/Interactive";
 import {
   add,
-  makeSelectCartItemQuantity,
 } from "@/features/cart/store/cartSlice";
 import {
   addFavorite,
-  makeSelectIsFavorite,
   removeFavorite,
 } from "@/features/favorites/store/favoriteSlice";
 import { shareProduct } from "@/features/products/utils/product-tools";
@@ -39,10 +37,10 @@ function Product({ item }: { item: ProductType }) {
   }, []);
 
   const isInCart = isMounted && cartQuantity > 0;
-  const image = getProductImage(item);
+  const image = useMemo(() => getProductImage(item), [item]);
   const favoriteVisible = isMounted ? isFavorite : false;
 
-  const handleAddToCart = (e: any) => {
+  const handleAddToCart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(add({ ...item, quantity: 1 }));
@@ -51,7 +49,7 @@ function Product({ item }: { item: ProductType }) {
         <div className="space-y-1">
           <p className="font-semibold text-text-primary">{item.title}</p>
           <p className="text-xs text-text-secondary">
-            {isInCart ? t("product.quantityUpdated") : t("product.addedToCart")}
+            {cartQuantity > 0 ? t("notifications.addedToCart") : t("notifications.addedToCart")}
           </p>
           <Link
             href="/carts"
@@ -64,9 +62,9 @@ function Product({ item }: { item: ProductType }) {
       </div>,
       { duration: 3000 },
     );
-  };
+  }, [dispatch, item, cartQuantity, t]);
 
-  const handleToggleFavorite = (e: any) => {
+  const handleToggleFavorite = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isFavorite) {
@@ -74,10 +72,10 @@ function Product({ item }: { item: ProductType }) {
       return;
     }
     dispatch(addFavorite(item));
-    toast.success(t("product.addedToFavorites"));
-  };
+    toast.success(t("notifications.addedToFavorites"));
+  }, [dispatch, item, isFavorite, t]);
 
-  const handleShare = async (e: any) => {
+  const handleShare = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     try {
@@ -89,13 +87,13 @@ function Product({ item }: { item: ProductType }) {
       );
       toast.success(
         result === "shared"
-          ? t("product.sharedSuccess")
-          : t("product.linkCopied"),
+          ? t("notifications.shareSuccess")
+          : t("notifications.linkCopied"),
       );
     } catch {
-      toast.error(t("product.shareError"));
+      toast.error(t("notifications.error"));
     }
-  };
+  }, [item, t]);
 
   return (
     <Interactive 
@@ -187,6 +185,5 @@ function Product({ item }: { item: ProductType }) {
     </Interactive>
   );
 }
-
 
 export default memo(Product);

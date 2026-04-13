@@ -413,6 +413,23 @@ export const translations = {
         description: "Refined timepieces that balance style and function.",
       },
     },
+    notifications: {
+      success: "Success",
+      error: "Error",
+      info: "Information",
+      addedToCart: "Added to cart successfully",
+      removedFromCart: "Removed from cart",
+      addedToFavorites: "Added to favorites",
+      removedFromFavorites: "Removed from favorites",
+      linkCopied: "Link copied to clipboard",
+      shareSuccess: "Shared successfully",
+      subscribeSuccess: "Successfully subscribed to newsletter",
+      messageSent: "Message sent successfully",
+      fillRequired: "Please fill in all required fields",
+      invalidEmail: "Please enter a valid email address",
+      promoSuccess: "Promo code '{code}' applied successfully",
+      promoInvalid: "Invalid promo code"
+    },
     admin: {
       sidebar: {
         overview: "Overview",
@@ -973,6 +990,23 @@ export const translations = {
       common: {
         poweredBy: "بدعم من Aura",
       },
+    },
+    notifications: {
+      success: "نجاح",
+      error: "خطأ",
+      info: "معلومات",
+      addedToCart: "تمت الإضافة إلى السلة بنجاح",
+      removedFromCart: "تمت إزالة المنتج من السلة",
+      addedToFavorites: "تمت الإضافة إلى المفضلة",
+      removedFromFavorites: "تمت إزالة المنتج من المفضلة",
+      linkCopied: "تم نسخ رابط المنتج",
+      shareSuccess: "تمت المشاركة بنجاح",
+      subscribeSuccess: "شكراً لاشتراكك في النشرة البريدية",
+      messageSent: "تم إرسال رسالتك بنجاح",
+      fillRequired: "يرجى تعبئة جميع الحقول المطلوبة",
+      invalidEmail: "يرجى إدخال بريد إلكتروني صالح",
+      promoSuccess: "تم تطبيق كود الخصم '{code}' بنجاح",
+      promoInvalid: "كود الخصم غير صالح"
     },
   },
 };
