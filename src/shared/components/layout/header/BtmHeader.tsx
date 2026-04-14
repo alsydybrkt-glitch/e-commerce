@@ -68,7 +68,8 @@ function BottomHeader() {
   const handleMobileSearch = useCallback(() => {
     const query = mobileSearchQuery.trim();
     if (!query) return;
-    router.push(`/search?query=${encodeURIComponent(query)}`);
+    const locale = window.location.pathname.split("/")[1] || "en";
+    router.push(`/${locale}/search?query=${encodeURIComponent(query)}`);
     setMobileSearchQuery("");
     closeAll();
   }, [mobileSearchQuery, router, closeAll]);
@@ -143,15 +144,16 @@ function BottomHeader() {
                 <Link
                   key={link.path}
                   href={link.path}
-                  className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
+                  aria-current={active ? "page" : undefined}
+                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                     active
-                      ? "bg-surface-interactive text-text-primary dark:bg-slate-800 dark:text-slate-100"
-                      : "text-text-secondary hover:text-text-primary dark:text-slate-400 dark:hover:text-slate-100"
+                      ? "glass bg-brand-50/50 text-brand-700 dark:bg-brand-900/20 dark:text-brand-400 shadow-sm"
+                      : "text-text-secondary hover:bg-slate-50 hover:text-text-primary dark:hover:bg-slate-800/40"
                   }`}
                   onClick={closeAll}
                 >
                   <span
-                    className={`text-base ${active ? "text-text-secondary" : "text-text-muted"}`}
+                    className={`text-base transition-colors duration-300 ${active ? "text-brand-600 dark:text-brand-400" : "text-text-muted"}`}
                   >
                     {link.icon}
                   </span>
@@ -164,12 +166,16 @@ function BottomHeader() {
 
         <div className="flex items-center gap-3 lg:hidden">
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-md border border-border bg-surface-primary text-xl text-text-secondary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+            className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-300 active:scale-95 ${
+              openMobile 
+                ? "bg-brand-50 border-brand-100 text-brand-600 dark:bg-brand-900/20 dark:border-brand-800 dark:text-brand-400" 
+                : "border-border bg-surface-primary text-text-secondary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+            }`}
             onClick={() => setOpenMobile(!openMobile)}
             aria-label="Toggle menu"
             type="button"
           >
-            {openMobile ? <MdClose /> : <TiThMenu />}
+            {openMobile ? <MdClose className="text-2xl" /> : <TiThMenu className="text-xl" />}
           </button>
         </div>
       </div>

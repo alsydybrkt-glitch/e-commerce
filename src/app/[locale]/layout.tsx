@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { Inter, Outfit } from 'next/font/google'
+import { Inter, Outfit, Cairo } from 'next/font/google'
 import Script from 'next/script'
 import '@/app/styles/index.css'
 import { Providers } from './providers'
@@ -15,6 +15,13 @@ const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-outfit',
+})
+
+const cairo = Cairo({
+  subsets: ['arabic'],
+  display: 'swap',
+  variable: '--font-cairo',
+  weight: ['300', '400', '500', '600', '700', '900'],
 })
 
 export const metadata: Metadata = {
@@ -107,7 +114,7 @@ export default function RootLayout({
       lang={initialLocale}
       dir={initialLocale === 'ar' ? 'rtl' : 'ltr'}
       data-theme={initialTheme}
-      className={`${inter.variable} ${outfit.variable}`}
+      className={`${inter.variable} ${outfit.variable} ${cairo.variable} ${initialLocale === 'ar' ? 'font-arabic' : ''}`}
       suppressHydrationWarning
     >
       <head>
@@ -119,8 +126,16 @@ export default function RootLayout({
         className={`font-sans antialiased text-slate-900 dark:text-slate-50 dark:bg-slate-950`}
         suppressHydrationWarning
       >
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[2000] focus:px-6 focus:py-3 focus:bg-brand-600 focus:text-white focus:rounded-xl focus:shadow-2xl focus:font-bold focus:outline-none transition-all"
+        >
+          {initialLocale === 'ar' ? 'تخطي إلى المحتوى الرئيسي' : 'Skip to main content'}
+        </a>
         <Providers initialTheme={initialTheme} initialLocale={initialLocale}>
-          {children}
+          <div id="main-content">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

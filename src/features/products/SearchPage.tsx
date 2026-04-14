@@ -12,6 +12,7 @@ interface SearchPageProps {
   currentPage: number;
   totalPages: number;
   searchParams?: RawSearchParams;
+  locale: string;
 }
 
 export default function SearchPage({
@@ -21,6 +22,7 @@ export default function SearchPage({
   currentPage,
   totalPages,
   searchParams,
+  locale,
 }: SearchPageProps) {
   const hasQuery = query.trim().length > 0;
 
@@ -70,6 +72,7 @@ export default function SearchPage({
           currentPage={currentPage}
           totalPages={totalPages}
           searchParams={searchParams}
+          locale={locale}
         />
       )}
     </div>

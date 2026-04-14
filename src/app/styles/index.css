@@ -17,13 +17,25 @@
     color-scheme: light dark;
   }
 
+  html.font-arabic,
+  .font-arabic {
+    font-family: var(--font-cairo), sans-serif !important;
+  }
+
+  /* Optimize Arabic Typography */
+  html[dir="rtl"] {
+    --line-height-tight: 1.4;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.8;
+  }
+
   ::selection {
     background-color: var(--color-brand-100);
     color: var(--color-brand-700);
   }
 
   body {
-    @apply min-h-screen font-sans antialiased;
+    @apply min-h-screen font-sans antialiased flex flex-col;
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-tight);
     background-color: var(--color-bg-primary);
@@ -171,8 +183,49 @@
   animation: shimmer 2s infinite linear;
 }
 
-/* Fix for dark mode system overrides */
-[data-theme='dark'] .glass {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Fix for dark mode system overrides & Enhanced Glassmorphism */
+.glass {
+  @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/40 border border-white/20 dark:border-slate-800/20 shadow-sm transition-all duration-300;
 }
+
+.glass-darker {
+  @apply backdrop-blur-2xl bg-white/40 dark:bg-slate-950/40 border border-white/10 dark:border-slate-900/10 shadow-md transition-all duration-300;
+}
+
+[data-theme='dark'] .glass {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ==================== PREMIUM SWIPER PAGINATION ==================== */
+.premium-pagination {
+  position: relative !important;
+  bottom: 0 !important;
+  margin-top: 1.5rem !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.premium-pagination .swiper-pagination-bullet {
+  @apply transition-all duration-300;
+  width: 8px;
+  height: 8px;
+  background: var(--color-text-muted) !important;
+  opacity: 0.3;
+  margin: 0 !important;
+  border-radius: 4px;
+}
+
+.premium-pagination .swiper-pagination-bullet-active {
+  width: 24px;
+  background: var(--color-brand-600) !important;
+  opacity: 1;
+}
+
+/* Specific fix for ProductGallery on mobile */
+.gallery-pagination {
+  margin-top: 1rem !important;
+}
+

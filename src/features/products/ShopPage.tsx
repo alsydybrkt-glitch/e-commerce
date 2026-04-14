@@ -1,3 +1,4 @@
+import { getTranslations } from "@/shared/i18n/get-translations";
 import ServerPagination from "@/features/products/components/ServerPagination";
 import ShopFiltersClient from "@/features/products/components/ShopFiltersClient";
 import { ShopSortKey } from "@/features/products/constants/shop";
@@ -19,6 +20,7 @@ interface ShopPageProps {
   sortBy: ShopSortKey;
   inStockOnly: boolean;
   searchParams?: RawSearchParams;
+  locale: string;
 }
 
 export default function ShopPage({
@@ -32,13 +34,16 @@ export default function ShopPage({
   sortBy,
   inStockOnly,
   searchParams,
+  locale,
 }: ShopPageProps) {
+  const { t } = getTranslations(locale);
+
   return (
     <section className="section-gap overflow-x-hidden">
       <header className="shell mb-6">
-        <h1 className="text-3xl font-black tracking-tight sm:text-4xl">Shop</h1>
+        <h1 className="text-3xl font-black tracking-tight sm:text-4xl">{t("shop.mainTitle")}</h1>
         <p className="mt-2 text-sm text-slate-500 max-w-xl">
-          Discover our full collection. Use filters to narrow down your search or explore everything we have to offer.
+          {t("shop.mainDescription")}
         </p>
       </header>
 
@@ -52,16 +57,16 @@ export default function ShopPage({
         />
 
         <div className="mb-8 ml-1 text-sm font-medium text-slate-400">
-          Showing <span className="text-slate-900 dark:text-white">{products.length}</span> of {totalFilteredProducts} products
+          {t("shop.showing", { count: products.length, total: totalFilteredProducts })}
         </div>
       </div>
 
       {products.length === 0 ? (
         <div className="shell">
           <div className="rounded-[32px] border-2 border-dashed border-slate-200 bg-slate-50/50 px-6 py-20 text-center dark:border-slate-800 dark:bg-slate-900/20">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">No matching products</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t("shop.emptyTitle")}</h2>
             <p className="mt-2 text-slate-500">
-              Try another search term or remove some filters.
+              {t("shop.emptyCopy")}
             </p>
           </div>
         </div>
@@ -83,6 +88,7 @@ export default function ShopPage({
           currentPage={currentPage}
           totalPages={totalPages}
           searchParams={searchParams}
+          locale={locale}
         />
       </div>
     </section>

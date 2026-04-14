@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, memo, useCallback, useEffect } from "react";
+import React, { useRef, useState, memo, useCallback, useEffect, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -103,6 +103,8 @@ function SlideProduct({
     setSwiper(instance);
   }, []);
 
+  const paginationId = useMemo(() => `pagination-${category.replace(/\s+/g, '-').toLowerCase()}`, [category]);
+
   return (
     <section className={`${useShell ? "shell " : ""}${finalPadding}`.trim()}>
       {!hideHeader && (
@@ -158,7 +160,8 @@ function SlideProduct({
             modules={[Navigation, Pagination, A11y]}
             pagination={{
               clickable: true,
-              dynamicBullets: true,
+              dynamicBullets: false,
+              el: `.${paginationId}`, 
             }}
             onSwiper={onSwiper}
             breakpoints={{
@@ -168,7 +171,7 @@ function SlideProduct({
               992: { slidesPerView: 3, spaceBetween: 20 },
               1280: { slidesPerView: 4, spaceBetween: 22 },
             }}
-            className="slide-product-swiper pb-12"
+            className="slide-product-swiper"
           >
             {items.map((product) => (
               <SwiperSlide key={product.id} className="!h-auto">
@@ -176,6 +179,8 @@ function SlideProduct({
               </SwiperSlide>
             ))}
           </Swiper>
+          {/* Custom positioning container for pagination */}
+          <div className={`${paginationId} premium-pagination`}></div>
         </div>
       )}
     </section>

@@ -66,12 +66,12 @@ export default function GuideSlider({ guides }: GuideSliderProps) {
       <Swiper
         loop={canLoop}
         grabCursor
-        speed={500}
+        speed={600}
         spaceBetween={24}
         modules={[Navigation, Pagination, A11y]}
         pagination={{
           clickable: true,
-          el: ".guide-slider-pagination",
+          el: ".guide-premium-pagination",
         }}
         onSwiper={(instance) => {
           setSwiper(instance);
@@ -83,7 +83,7 @@ export default function GuideSlider({ guides }: GuideSliderProps) {
           640: { slidesPerView: 2.1, spaceBetween: 20 },
           1024: { slidesPerView: 3, spaceBetween: 24 },
         }}
-        className="!overflow-visible pb-12"
+        className="!overflow-visible"
       >
         {guides.map((guide) => (
           <SwiperSlide key={guide.categorySlug} className="!h-auto">
@@ -95,7 +95,7 @@ export default function GuideSlider({ guides }: GuideSliderProps) {
         ))}
       </Swiper>
       
-      <div className="guide-slider-pagination mt-4 flex justify-center gap-2" />
+      <div className="guide-premium-pagination premium-pagination" />
     </div>
   );
 }

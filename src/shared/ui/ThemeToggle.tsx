@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
-import { useTheme } from "@/components/providers/useTheme";
+import { useTheme } from "@/shared/theme/useTheme";
 import { useTranslation } from "@/shared/i18n/useTranslation";
 
 function ThemeToggle() {

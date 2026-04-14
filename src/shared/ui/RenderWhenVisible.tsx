@@ -55,8 +55,13 @@ function RenderWhenVisible({
       ) : (
         <div
           aria-hidden="true"
-          className={`surface-card animate-pulse ${minHeightClass}`}
-        />
+          className={`surface-card flex items-center justify-center animate-pulse ${minHeightClass}`}
+        >
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
+            <span className="text-xs font-medium text-slate-400">Loading section...</span>
+          </div>
+        </div>
       )}
     </div>
   );

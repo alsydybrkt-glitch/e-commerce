@@ -16,14 +16,6 @@ interface CategoryPageProps {
   locale: string;
 }
 
-function formatCategoryLabel(slug: string) {
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(" ");
-}
-
 export default function CategoryPage({
   categorySlug,
   products,
@@ -33,9 +25,9 @@ export default function CategoryPage({
   searchParams,
   locale,
 }: CategoryPageProps) {
-  const { t } = getTranslations(locale as any);
+  const { t, tCategoryName } = getTranslations(locale as any);
   
-  const categoryTitle = formatCategoryLabel(categorySlug);
+  const categoryTitle = tCategoryName(categorySlug);
 
   return (
     <div className="min-h-[80vh] bg-slate-50 dark:bg-slate-950/20">
@@ -76,16 +68,14 @@ export default function CategoryPage({
 
       <section className="shell overflow-x-hidden pb-32 pt-16">
         {products.length > 0 ? (
-          <RenderWhenVisible minHeight={600}>
-            <SlideProduct
-              category={categoryTitle}
-              kicker={t("common.featured") || "Featured"}
-              products={products}
-              useShell={false}
-              sectionPaddingClassName="py-0"
-              hideHeader={false}
-            />
-          </RenderWhenVisible>
+          <SlideProduct
+            category={categoryTitle}
+            kicker={t("common.featured") || "Featured"}
+            products={products}
+            useShell={false}
+            sectionPaddingClassName="py-0"
+            hideHeader={false}
+          />
         ) : (
           <div className="rounded-[32px] border-2 border-dashed border-slate-200 bg-white px-6 py-20 text-center dark:border-slate-800 dark:bg-slate-900/20">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t("category.noProducts")}</h2>

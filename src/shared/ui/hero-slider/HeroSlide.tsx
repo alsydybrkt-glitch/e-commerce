@@ -28,10 +28,9 @@ export const HeroSlide = ({
           alt={imageAlt}
           fill
           priority={priority}
-          quality={85}
-          loading={priority ? "eager" : "lazy"}
+          quality={90}
           decoding="async"
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 1200px, 1600px"
           className="object-cover opacity-80 transition-opacity duration-1000"
         />
 

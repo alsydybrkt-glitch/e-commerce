@@ -5,6 +5,7 @@ import { searchProductsPage } from "@/features/products/services/productsApi";
 const SEARCH_PAGE_SIZE = 12;
 
 type PageProps = {
+  params: { locale: string };
   searchParams?: Record<string, string | string[] | undefined>;
 };
 
@@ -49,7 +50,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ searchParams = {} }: PageProps) {
+export default async function Page({ params, searchParams = {} }: PageProps) {
+  const { locale } = params;
   const query = toSingleValue(searchParams.query).trim();
 
   if (!query) {
@@ -61,6 +63,7 @@ export default async function Page({ searchParams = {} }: PageProps) {
         currentPage={1}
         totalPages={1}
         searchParams={searchParams}
+        locale={locale}
       />
     );
   }
@@ -94,6 +97,7 @@ export default async function Page({ searchParams = {} }: PageProps) {
       currentPage={currentPage}
       totalPages={totalPages}
       searchParams={searchParams}
+      locale={locale}
     />
   );
 }

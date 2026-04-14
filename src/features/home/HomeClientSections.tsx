@@ -107,7 +107,7 @@ export function CategorySlidesSection({ initialCategories, initialProducts, loca
 
   return (
     <>
-      {initialCategories.map((category: Category, index: number) => (
+      {initialCategories.slice(0, 3).map((category: Category, index: number) => (
         <div key={category.slug}>
           <LazySection
             className="deferred-section"

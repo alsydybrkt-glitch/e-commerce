@@ -1,4 +1,5 @@
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
+import { getTranslations } from "@/shared/i18n/get-translations";
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
 
@@ -7,6 +8,7 @@ interface ServerPaginationProps {
   currentPage: number;
   totalPages: number;
   searchParams?: RawSearchParams;
+  locale: string;
 }
 
 function toSingleValue(
@@ -52,7 +54,10 @@ export default function ServerPagination({
   currentPage,
   totalPages,
   searchParams = {},
+  locale,
 }: ServerPaginationProps) {
+  const { t } = getTranslations(locale);
+
   if (totalPages <= 1) {
     return null;
   }
@@ -62,7 +67,7 @@ export default function ServerPagination({
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label={t("shop.pagination.ariaLabel") || "Pagination"}
       className="mt-10 flex items-center justify-center gap-3"
     >
       {currentPage > 1 ? (
@@ -70,16 +75,16 @@ export default function ServerPagination({
           href={buildPageHref(pathname, searchParams, previousPage)}
           className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-900"
         >
-          Previous
+          {t("shop.pagination.previous")}
         </Link>
       ) : (
         <span className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-400 dark:border-slate-700 dark:text-slate-500">
-          Previous
+          {t("shop.pagination.previous")}
         </span>
       )}
 
       <span className="text-sm text-slate-600 dark:text-slate-300">
-        Page {currentPage} of {totalPages}
+        {t("shop.pagination.pageOf", { current: currentPage, total: totalPages })}
       </span>
 
       {currentPage < totalPages ? (
@@ -87,11 +92,11 @@ export default function ServerPagination({
           href={buildPageHref(pathname, searchParams, nextPage)}
           className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-900"
         >
-          Next
+          {t("shop.pagination.next")}
         </Link>
       ) : (
         <span className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-400 dark:border-slate-700 dark:text-slate-500">
-          Next
+          {t("shop.pagination.next")}
         </span>
       )}
     </nav>

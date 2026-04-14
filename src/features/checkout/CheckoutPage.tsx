@@ -155,7 +155,7 @@ export default function CheckoutPage() {
               <input
                 type="text"
                 name="zipCode"
-                placeholder="ZIP / Postal Code"
+                placeholder={t("checkout.zipCode")}
                 required
                 value={formData.zipCode}
                 onChange={handleChange}
@@ -173,7 +173,7 @@ export default function CheckoutPage() {
                <input
                 type="text"
                 name="cardNumber"
-                placeholder="Card Number (Valid Format)"
+                placeholder={t("checkout.cardNumber")}
                 required
                 maxLength={19}
                 value={formData.cardNumber}
@@ -183,7 +183,7 @@ export default function CheckoutPage() {
               <input
                 type="text"
                 name="expiry"
-                placeholder="MM/YY"
+                placeholder={t("checkout.expiry")}
                 required
                 maxLength={5}
                 value={formData.expiry}
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
                <input
                 type="text"
                 name="cvc"
-                placeholder="CVC"
+                placeholder={t("checkout.cvc")}
                 required
                 maxLength={4}
                 value={formData.cvc}
@@ -214,7 +214,7 @@ export default function CheckoutPage() {
         </div>
         <div className="mt-4 flex justify-between text-sm text-slate-600 dark:text-slate-300">
           <span>{t("checkout.shippingCost")}:</span>
-          <span>Free</span>
+          <span>{t("checkout.shippingFree")}</span>
         </div>
         
         <div className="mt-6 border-t border-slate-200 pt-6 flex justify-between text-xl font-bold text-slate-900 dark:border-slate-700 dark:text-white">

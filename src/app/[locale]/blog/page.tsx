@@ -6,6 +6,7 @@ import { getTranslations, Locale } from "@/shared/i18n/get-translations";
 import { getProductImage } from "@/features/products/utils/product-helpers";
 
 import BlogHero from "@/features/blog/components/BlogHero";
+import BlogHeader from "@/features/blog/components/BlogHeader";
 import GuideSlider from "@/features/blog/components/GuideSlider";
 import { Newsletter } from "@/shared/ui/Newsletter";
 import * as motion from "framer-motion/client";
@@ -19,8 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = (cookieStore.get("locale")?.value as Locale) || "en";
   const { t } = getTranslations(locale);
 
-  const title = `${t("nav.blog")} | ${t("blog.title") || "Product guides and shopping inspiration"}`;
-  const description = t("blog.topicsCopy");
+  const title = t("blog.kicker");
+  const description = t("blog.title");
 
   return {
     title,
@@ -84,18 +85,10 @@ export default async function Page() {
 
   return (
     <main className="blog-page shell section-gap overflow-x-hidden">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="mb-16 text-center lg:text-left"
-      >
-        <span className="section-kicker shadow-sm">{t("blog.kicker")}</span>
-        <h1 className="mt-4 max-w-4xl font-display text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-7xl">
-          {t("blog.title")}
-        </h1>
-        <div className="mt-6 h-1 w-20 bg-brand-500 rounded-full hidden lg:block" />
-      </motion.div>
+      <BlogHeader
+        kicker={t("blog.kicker")}
+        title={t("blog.title")}
+      />
 
       <section>
         {featuredGuide && (

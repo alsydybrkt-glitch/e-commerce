@@ -37,9 +37,9 @@ export const Interactive = ({
       {...variants[variant]}
       transition={{
         type: "spring",
-        stiffness: 400,
-        damping: 30,
-        mass: 0.8,
+        stiffness: 500,
+        damping: 25,
+        mass: 1,
       }}
       {...props}
     >

@@ -80,7 +80,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
 
     setTimeout(() => setIsAdding(false), 800);
     setSelectedQuantity(1);
-  }, [dispatch, product, selectedQuantity, t, router]);
+  }, [dispatch, product, selectedQuantity, t, cartQuantity]);
 
   const toggleFavorite = useCallback(() => {
     if (isFavorite) {
@@ -131,7 +131,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             <button 
               onClick={toggleFavorite}
               className="flex h-[56px] w-[56px] items-center justify-center rounded-[24px] border border-slate-200 text-xl transition hover:border-brand-500 hover:text-brand-600 dark:border-slate-700 dark:hover:border-brand-400"
-              aria-label="Favorite"
+              aria-label={t("common.favorite") || "Favorite"}
             >
               {mounted && isFavorite ? <FaHeart className="text-rose-500" /> : <IoMdHeartEmpty className="text-slate-400" />}
             </button>
@@ -141,7 +141,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             <button 
                onClick={handleShare}
                className="flex h-[56px] w-[56px] items-center justify-center rounded-[24px] border border-slate-200 text-xl text-slate-400 transition hover:border-brand-500 hover:text-brand-600 dark:border-slate-700 dark:hover:border-brand-400"
-               aria-label="Share"
+               aria-label={t("common.share") || "Share"}
             >
               <FaShare className="text-lg" />
             </button>

@@ -35,10 +35,21 @@ function HeroSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSwiperReady, setIsSwiperReady] = useState(false);
 
-  // Auto-initialize Swiper after hydration
+  // Auto-initialize Swiper after hydration & handle keyboard navigation
   useEffect(() => {
     setIsSwiperReady(true);
-  }, []);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        if (isRTL) handlePrev(); else handleNext();
+      } else if (e.key === "ArrowLeft") {
+        if (isRTL) handleNext(); else handlePrev();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isRTL]);
 
   const handleNext = () => swiperRef.current?.slideNext();
   const handlePrev = () => swiperRef.current?.slidePrev();
@@ -74,6 +85,7 @@ function HeroSlider() {
             onNext={() => {}} 
             onPrev={() => {}} 
             onSetIndex={() => {}} 
+            t={t}
           />
         </div>
       ) : (
@@ -119,6 +131,7 @@ function HeroSlider() {
             onNext={handleNext}
             onPrev={handlePrev}
             onSetIndex={handleSetIndex}
+            t={t}
           />
         </Swiper>
       )}

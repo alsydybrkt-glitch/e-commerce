@@ -9,10 +9,12 @@ import {
   fetchAllCategoryProducts,
   fetchAllProductCategories,
 } from "@/features/products/services/productsApi";
+import { getTranslations } from "@/shared/i18n/get-translations";
 
 const SHOP_PAGE_SIZE = 12;
 
 type PageProps = {
+  params: { locale: string };
   searchParams?: Record<string, string | string[] | undefined>;
 };
 
@@ -40,15 +42,19 @@ function parseSort(value: string | string[] | undefined): ShopSortKey {
     : "featured";
 }
 
-export const metadata: Metadata = {
-  title: "Shop Full Catalog | Aura-Market",
-  description: "Browse our entire collection of premium products. Find everything you need with Aura-Market's intuitive discovery experience.",
-  alternates: {
-    canonical: "/shop",
-  },
-};
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const { t } = getTranslations(params.locale);
+  return {
+    title: t("shop.metadata.title"),
+    description: t("shop.metadata.description"),
+    alternates: {
+      canonical: "/shop",
+    },
+  };
+}
 
-export default async function Page({ searchParams = {} }: PageProps) {
+export default async function Page({ params, searchParams = {} }: PageProps) {
+  const { locale } = params;
   const categories = await fetchAllProductCategories();
   const firstCategory = categories[0]?.slug ?? "";
   const requestedCategory = toSingleValue(searchParams.category);
@@ -69,6 +75,7 @@ export default async function Page({ searchParams = {} }: PageProps) {
         sortBy="featured"
         inStockOnly={false}
         searchParams={searchParams}
+        locale={locale}
       />
     );
   }
@@ -103,6 +110,7 @@ export default async function Page({ searchParams = {} }: PageProps) {
       sortBy={sortBy}
       inStockOnly={inStockOnly}
       searchParams={searchParams}
+      locale={locale}
     />
   );
 }

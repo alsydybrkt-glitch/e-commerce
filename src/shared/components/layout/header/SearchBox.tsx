@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation"; // ✅ Fix #3: استخدام usePathname بدل window.location
 import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsBySearch } from "@/features/products/store/productsSlice";
@@ -30,6 +30,7 @@ function highlight(text: string, query: string) {
 function SearchBox() {
   const { t, tCategoryName } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname(); // ✅ Fix #3: usePathname بدل window.location
   const dispatch = useDispatch<AppDispatch>();
 
   const products = useSelector(
@@ -42,23 +43,37 @@ function SearchBox() {
   const [loading, setLoading] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const mountedRef = useRef(true); // ✅ Fix #7: تتبع حالة الـ mount لمنع memory leak
+
+  // ✅ Fix #7: cleanup عند unmount
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const normalizedQuery = query.trim().toLowerCase();
 
   const suggestions = useMemo(() => {
-    return products?.slice(0, 4) || [];
+    return products?.slice(0, 3) || [];
   }, [products]);
 
-  // debounce search
+  // ✅ Fix #2 & #8: reset loading لو query أقل من 2 + Fix #7: منع memory leak
   useEffect(() => {
-    if (normalizedQuery.length < 2) return;
+    if (normalizedQuery.length < 2) {
+      setLoading(false); // ✅ Fix #8: reset loading state لو query قصير
+      return;
+    }
 
     setLoading(true);
 
     const timer = setTimeout(() => {
-      dispatch(fetchProductsBySearch(normalizedQuery)).finally(() =>
-        setLoading(false)
-      );
+      dispatch(fetchProductsBySearch(normalizedQuery)).finally(() => {
+        if (mountedRef.current) { // ✅ Fix #7: بس لو component لسه موجود
+          setLoading(false);
+        }
+      });
     }, 350);
 
     return () => clearTimeout(timer);
@@ -93,7 +108,7 @@ function SearchBox() {
     router.push(`/search?q=${encodeURIComponent(query.trim())}`);
 
     setQuery("");
-    setFocused(false);
+    setFocused(false); // ✅ Fix #4: الـ dropdown بيتقفل عند submit (كان موجود بس متأكدين منه)
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -116,8 +131,10 @@ function SearchBox() {
         e.preventDefault();
 
         const product = suggestions[activeIndex];
+        // ✅ Fix #3: استخدام pathname من usePathname بدل window.location
+        const locale = pathname.split("/")[1] || "en";
 
-        router.push(`/product/${product.id}`);
+        router.push(`/${locale}/product/${product.id}`);
 
         setQuery("");
         setFocused(false);
@@ -134,9 +151,10 @@ function SearchBox() {
 
   return (
     <div ref={containerRef} className="relative w-full max-w-2xl">
+      {/* ✅ Fix #5: aria-expanded كـ boolean مش string */}
       <div
         role="combobox"
-        aria-expanded={expanded ? "true" : "false"}
+        aria-expanded={!!expanded}
         aria-haspopup="listbox"
         aria-controls="search-suggestions"
       >
@@ -173,16 +191,17 @@ function SearchBox() {
       </div>
 
       {expanded && (
-        <div className="surface-card absolute inset-x-0 top-[calc(100%+10px)] z-20 overflow-hidden p-2">
+        // ✅ Fix #1: إضافة rounded-2xl و shadow-lg للـ dropdown ليكون consistent
+        <div className="surface-card absolute inset-x-0 top-[calc(100%+10px)] z-20 overflow-hidden rounded-2xl shadow-lg p-2">
           {loading && (
             <div className="p-4 text-sm text-slate-500 animate-pulse">
-              Searching...
+              {t("common.searching")}
             </div>
           )}
 
           {!loading && suggestions.length === 0 && (
             <div className="p-4 text-sm text-slate-500">
-              No products found
+              {t("common.noProductsFound")}
             </div>
           )}
 
@@ -196,7 +215,7 @@ function SearchBox() {
                     key={product.id}
                     id={`search-option-${index}`}
                     role="option"
-                    aria-selected={selected ? "true" : "false"}
+                    aria-selected={!!selected} // ✅ Fix #5: boolean مش string
                     className={`rounded-2xl transition ${
                       selected
                         ? "bg-slate-100 dark:bg-slate-800 ring-1 ring-brand-500/20"

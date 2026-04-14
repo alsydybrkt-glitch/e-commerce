@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import { Provider as ReduxProvider } from 'react-redux'
 import Footer from '@/shared/components/layout/footer/Footer'
 import Header from '@/shared/components/layout/header/Header'
-import { ThemeContext } from '@/components/providers/ThemeContext'
+import { ThemeContext } from '@/shared/theme/ThemeContext'
 import { LoadingBar } from '@/shared/ui/LoadingBar'
 import ScrollToTop from '@/shared/ui/ScrollToTop'
 import { I18nContext } from '@/shared/i18n/I18nContext'
@@ -173,7 +173,11 @@ export function Providers({ children, initialTheme, initialLocale }: ProvidersPr
 
           <Header />
           <main className="flex-grow">
-            <Suspense fallback={null}>
+            <Suspense fallback={
+              <div className="shell py-20 flex items-center justify-center">
+                <div className="h-24 w-24 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
+              </div>
+            }>
               {children}
             </Suspense>
           </main>

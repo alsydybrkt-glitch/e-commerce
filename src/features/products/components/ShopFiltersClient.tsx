@@ -7,9 +7,9 @@ import { Category } from "@/features/products/services/productsApi";
 import { 
   ShopSortKey, 
   SHOP_SORT_KEYS, 
-  SHOP_SORT_LABELS 
 } from "@/features/products/constants/shop";
 import { Interactive } from "@/shared/ui/Interactive";
+import { useTranslation } from "@/shared/i18n/useTranslation";
 
 // Swiper styles
 import "swiper/css";
@@ -30,6 +30,7 @@ export default function ShopFiltersClient({
   sortBy,
   inStockOnly,
 }: ShopFiltersClientProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
   const currentSearchParams = useSearchParams();
@@ -162,19 +163,19 @@ export default function ShopFiltersClient({
       <div className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-2 xl:grid-cols-4 dark:border-slate-800 dark:bg-slate-900/50">
         <label className="block">
           <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Search
+            {t("shop.refineTitle") || "Search"}
           </span>
           <input
             value={searchInput}
             onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Search in category"
+            placeholder={t("shop.searchPlaceholder")}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
         </label>
 
         <label className="block">
           <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Sort
+            {t("category.sortBy") || "Sort"}
           </span>
           <select
             value={sortBy}
@@ -183,7 +184,7 @@ export default function ShopFiltersClient({
           >
             {SHOP_SORT_KEYS.map((option) => (
               <option key={option} value={option}>
-                {SHOP_SORT_LABELS[option]}
+                {t("shop.sortOptions." + option)}
               </option>
             ))}
           </select>
@@ -195,16 +196,16 @@ export default function ShopFiltersClient({
             checked={inStockOnly}
             onChange={(event) => handleStockChange(event.target.checked)}
           />
-          In stock only
+          {t("shop.inStockOnly")}
         </label>
 
         <button
           type="button"
           onClick={handleReset}
           disabled={activeFiltersCount === 0}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700"
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700"
         >
-          Clear filters ({activeFiltersCount})
+          {t("shop.clearFilters")} ({activeFiltersCount})
         </button>
       </div>
     </section>
