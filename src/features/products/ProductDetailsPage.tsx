@@ -8,7 +8,6 @@ import { ProductTrustSignals } from "./components/ProductTrustSignals";
 import { RelatedProducts } from "./components/RelatedProducts";
 import { ProductReviews } from "./ProductReviews";
 import { Suspense } from "react";
-import { PageAnimationWrapper } from "@/shared/ui/PageAnimationWrapper";
 import { ProductDetailsSkeleton } from "./ProductDetailsSkeleton";
 
 interface ProductDetailsPageProps {
@@ -22,14 +21,14 @@ export default function ProductDetailsPage({ product, categoryProductsPromise, l
 
   return (
     <>
-      <main className="product-page shell section-gap overflow-x-hidden">
+      <main className="product-page shell section-gap overflow-x-hidden !pt-6 sm:!pt-10">
         <ProductBreadcrumbs 
           category={product.category} 
           productTitle={product.title} 
         />
 
         <Suspense fallback={<ProductDetailsSkeleton />}>
-          <article className="surface-card grid gap-8 p-4 sm:p-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">
+          <article className="surface-card grid gap-6 p-3 sm:gap-8 sm:p-8 md:gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 lg:p-12">
             {/* Left Column: Visuals */}
             <section aria-label={t("common.media") || "Product Media"}>
               <ProductGallery product={product} />
@@ -45,7 +44,7 @@ export default function ProductDetailsPage({ product, categoryProductsPromise, l
         </Suspense>
 
         {/* Reviews Section */}
-        <div className="mt-16">
+        <div className="mt-12 sm:mt-16">
           <ProductReviews productId={product.id} />
         </div>
       </main>
@@ -60,4 +59,3 @@ export default function ProductDetailsPage({ product, categoryProductsPromise, l
     </>
   );
 }
-

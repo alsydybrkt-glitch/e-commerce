@@ -26,6 +26,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  transpilePackages: ["swiper"],
 };
 
 export default nextConfig;

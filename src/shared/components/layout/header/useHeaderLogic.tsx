@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function useHeaderLogic() {
   const [openDesktopCategories, setOpenDesktopCategories] = useState(false);
   const [openMobileCategories, setOpenMobileCategories] = useState(false);
   const [openMobile, setOpenMobile] = useState(false);
 
-  const closeAll = () => {
+  const closeAll = useCallback(() => {
     setOpenDesktopCategories(false);
     setOpenMobileCategories(false);
     setOpenMobile(false);
-  };
+  }, []);
 
   return {
     openDesktopCategories,

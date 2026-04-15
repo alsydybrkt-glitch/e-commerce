@@ -2,40 +2,39 @@ import { memo } from "react";
 
 function SkeletonProduct() {
   return (
-    <div className="group surface-card h-full min-h-[420px] animate-pulse overflow-hidden p-4 flex flex-col justify-between">
+    <div className="product-card group relative flex h-full flex-col rounded-[32px] border border-border-light bg-surface-primary p-4 animate-pulse dark:bg-slate-900/40 dark:border-slate-800/50">
       {/* Top Header Placeholder */}
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="h-6 w-24 rounded-full bg-slate-200 dark:bg-slate-700/50" />
-        <div className="flex gap-2">
-          <div className="h-9 w-9 rounded-full bg-slate-200 dark:bg-slate-700/50" />
-          <div className="h-9 w-9 rounded-full bg-slate-200 dark:bg-slate-700/50" />
+      <div className="mb-4 flex items-center justify-between">
+        <div className="h-4 w-20 rounded-md bg-slate-200 dark:bg-slate-800" />
+        <div className="flex gap-1.5">
+          <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800" />
+          <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800" />
         </div>
       </div>
 
       {/* Image Placeholder */}
-      <div className="relative mb-4 aspect-square overflow-hidden rounded-[24px] bg-slate-200/60 dark:bg-slate-700/30" />
+      <div className="relative mb-5 aspect-[4/5] overflow-hidden rounded-[24px] bg-slate-100 dark:bg-slate-800/50 shadow-inner" />
 
-      {/* Content Placeholders */}
-      <div className="space-y-3">
-        {/* Title Lines */}
+      {/* Content Spaceholders */}
+      <div className="flex-1 space-y-4">
+        {/* Title Placeholder */}
         <div className="space-y-2">
-          <div className="h-4 w-full rounded-full bg-slate-200 dark:bg-slate-700/50" />
-          <div className="h-4 w-4/5 rounded-full bg-slate-200 dark:bg-slate-700/50" />
+          <div className="h-4 w-full rounded-full bg-slate-200 dark:bg-slate-800" />
+          <div className="h-4 w-2/3 rounded-full bg-slate-200 dark:bg-slate-800" />
         </div>
 
-        {/* Stars Placeholder */}
-        <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-4 w-4 rounded-full bg-slate-200 dark:bg-slate-700/50" />
-          ))}
+        {/* Rating & Price Placeholder */}
+        <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-sm bg-amber-100 dark:bg-amber-900/20" />
+            <div className="h-3 w-8 rounded-full bg-slate-100 dark:bg-slate-800" />
+          </div>
+          <div className="h-6 w-16 rounded-lg bg-slate-200 dark:bg-slate-800" />
         </div>
-
-        {/* Price Placeholder */}
-        <div className="h-7 w-1/4 rounded-lg bg-slate-200 dark:bg-slate-700/50" />
       </div>
 
       {/* Button Placeholder */}
-      <div className="mt-4 h-12 w-full rounded-2xl bg-slate-200 dark:bg-slate-700/50" />
+      <div className="mt-6 h-12 w-full rounded-xl bg-slate-200 dark:bg-slate-800" />
     </div>
   );
 }

@@ -1,24 +1,22 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaHeart, FaShare } from "react-icons/fa";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import toast from "react-hot-toast";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 import { useTranslation } from "@/shared/i18n/useTranslation";
 import { QuantitySelector } from "@/shared/ui/QuantitySelector";
 import { add, selectCartItemQuantity } from "@/features/cart/store/cartSlice";
 import { addFavorite, removeFavorite, selectIsFavorite } from "@/features/favorites/store/favoriteSlice";
 import { Product } from "@/features/products/services/productsApi";
-import { buildProductSharePayload, getProductImage } from "@/features/products/utils/product-helpers";
+import { buildProductSharePayload } from "@/features/products/utils/product-helpers";
 import { shareProduct } from "@/features/products/utils/product-tools";
 import { RootState } from "@/store";
 import { Interactive } from "@/shared/ui/Interactive";
 import { motion, AnimatePresence } from "framer-motion";
+import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 
 interface ProductPurchasePanelProps {
   product: Product;
@@ -27,33 +25,67 @@ interface ProductPurchasePanelProps {
 export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const router = useRouter();
   
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const purchaseActionsRef = useRef<HTMLDivElement | null>(null);
 
   const cartQuantity = useSelector((state: RootState) => selectCartItemQuantity(state, product.id));
   const isFavorite = useSelector((state: RootState) => selectIsFavorite(state, product.id));
   const isInCart = cartQuantity > 0;
+  const totalPrice = (product.price * selectedQuantity).toFixed(2);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Monitor scroll for sticky bar
   useEffect(() => {
-    const handleScroll = () => {
-      const purchaseActions = document.getElementById("main-purchase-actions");
-      if (purchaseActions) {
-        const rect = purchaseActions.getBoundingClientRect();
-        setShowSticky(rect.top < 0);
+    const mediaQuery = window.matchMedia("(max-width: 1023px)");
+    const handleViewportChange = () => {
+      setIsMobileViewport(mediaQuery.matches);
+    };
+
+    handleViewportChange();
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleViewportChange);
+    } else {
+      mediaQuery.addListener(handleViewportChange);
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === "function") {
+        mediaQuery.removeEventListener("change", handleViewportChange);
+      } else {
+        mediaQuery.removeListener(handleViewportChange);
       }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || !isMobileViewport) {
+      setShowSticky(false);
+      return;
+    }
+
+    const target = purchaseActionsRef.current;
+    if (!target || typeof IntersectionObserver === "undefined") {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowSticky(!entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [mounted, isMobileViewport]);
 
   const handleAddToCart = useCallback(() => {
     setIsAdding(true);
@@ -64,7 +96,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
         <div className="space-y-1">
           <p className="font-semibold text-text-primary">{product.title}</p>
           <p className="text-xs text-text-secondary">
-            {cartQuantity > 0 ? t("notifications.addedToCart") : t("notifications.addedToCart")}
+            {t("notifications.addedToCart")}
           </p>
           <Link
             href="/carts"
@@ -80,7 +112,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
 
     setTimeout(() => setIsAdding(false), 800);
     setSelectedQuantity(1);
-  }, [dispatch, product, selectedQuantity, t, cartQuantity]);
+  }, [dispatch, product, selectedQuantity, t]);
 
   const toggleFavorite = useCallback(() => {
     if (isFavorite) {
@@ -102,20 +134,25 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   }, [product, t]);
 
   return (
-    <div className="mt-8 space-y-6">
-      <div id="main-purchase-actions" className="flex flex-wrap items-center gap-4">
+    <div className="mt-8 space-y-5 pb-24 sm:space-y-6 lg:pb-0">
+      <div
+        ref={purchaseActionsRef}
+        id="main-purchase-actions"
+        className="flex flex-col gap-3 sm:gap-4"
+      >
         <QuantitySelector 
           quantity={selectedQuantity} 
           stock={product.stock} 
           onChange={setSelectedQuantity}
         />
 
-        <div className="flex flex-1 items-center gap-2">
-          <Interactive className="flex-1">
+        <div className="flex w-full items-center gap-2 sm:gap-3">
+          <Interactive className="min-w-0 flex-1">
             <button
+              type="button"
               onClick={handleAddToCart}
               disabled={isAdding}
-              className={`flex w-full items-center justify-center gap-3 rounded-[24px] py-4 text-sm font-bold transition-all duration-300
+              className={`flex h-11 w-full items-center justify-center gap-3 rounded-2xl px-3 text-sm font-bold transition-all duration-300 sm:h-[56px] sm:rounded-[24px]
                 ${isAdding 
                   ? "bg-emerald-500 text-white shadow-inner" 
                   : "bg-slate-900 text-white hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-500"
@@ -127,25 +164,29 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             </button>
           </Interactive>
 
-          <Interactive>
-            <button 
-              onClick={toggleFavorite}
-              className="flex h-[56px] w-[56px] items-center justify-center rounded-[24px] border border-slate-200 text-xl transition hover:border-brand-500 hover:text-brand-600 dark:border-slate-700 dark:hover:border-brand-400"
-              aria-label={t("common.favorite") || "Favorite"}
-            >
-              {mounted && isFavorite ? <FaHeart className="text-rose-500" /> : <IoMdHeartEmpty className="text-slate-400" />}
-            </button>
-          </Interactive>
+          <div className="flex shrink-0 items-center gap-2">
+            <Interactive>
+              <button 
+                type="button"
+                onClick={toggleFavorite}
+                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-lg transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
+                aria-label={t("common.favorite") || "Favorite"}
+              >
+                {mounted && isFavorite ? <FaHeart className="text-rose-500" /> : <IoMdHeartEmpty className="text-slate-400" />}
+              </button>
+            </Interactive>
 
-          <Interactive>
-            <button 
-               onClick={handleShare}
-               className="flex h-[56px] w-[56px] items-center justify-center rounded-[24px] border border-slate-200 text-xl text-slate-400 transition hover:border-brand-500 hover:text-brand-600 dark:border-slate-700 dark:hover:border-brand-400"
-               aria-label={t("common.share") || "Share"}
-            >
-              <FaShare className="text-lg" />
-            </button>
-          </Interactive>
+            <Interactive>
+              <button 
+                 type="button"
+                 onClick={handleShare}
+                 className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-lg text-slate-400 transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
+                 aria-label={t("common.share") || "Share"}
+              >
+                <FaShare className="text-lg" />
+              </button>
+            </Interactive>
+          </div>
         </div>
       </div>
 
@@ -157,24 +198,25 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
 
       {/* Sticky Mobile Bar with Premium Animation */}
       <AnimatePresence>
-        {showSticky && (
+        {mounted && isMobileViewport && showSticky && (
           <motion.div 
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-100 bg-white p-4 shadow-2xl lg:hidden dark:border-slate-800 dark:bg-slate-900/95"
+            className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-100/50 bg-white/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.1)] lg:hidden dark:border-slate-800/50 dark:bg-slate-950/90"
           >
             <div className="shell flex items-center justify-between gap-4">
-              <div className="flex flex-col">
+              <div className="min-w-0 flex flex-col">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t("common.total")}</span>
-                <span className="text-lg font-bold text-slate-900 dark:text-white">${product.price}</span>
+                <span className="truncate text-lg font-bold text-slate-900 dark:text-white">${totalPrice}</span>
               </div>
               
               <Interactive className="flex-1">
                 <button 
+                  type="button"
                   onClick={handleAddToCart}
-                  className="w-full rounded-2xl bg-brand-600 py-3.5 text-sm font-bold text-white shadow-lg transition"
+                  className="h-11 w-full rounded-2xl bg-brand-600 px-3 text-sm font-bold text-white shadow-lg transition sm:h-12"
                 >
                   {t("product.addToCart")}
                 </button>

@@ -47,8 +47,8 @@ export function ProductReviews({ productId }:  { productId?: string | number }) 
   };
 
   return (
-    <section className="mt-12 rounded-[32px] bg-slate-50/50 p-6 sm:p-10 dark:bg-slate-900/40 dark:ring-1 dark:ring-slate-800">
-      <div className="flex items-center justify-between">
+    <section className="mt-10 rounded-[28px] bg-slate-50/50 p-4 sm:mt-12 sm:rounded-[32px] sm:p-10 dark:bg-slate-900/40 dark:ring-1 dark:ring-slate-800">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t("product.reviews.title")}</h2>
         <div className="flex items-center gap-2">
            <StarRating rating={4.5} />
@@ -57,9 +57,9 @@ export function ProductReviews({ productId }:  { productId?: string | number }) 
       </div>
       
       {/* Add Review Form */}
-      <form onSubmit={handleSubmit} className="mt-8 rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-800/40 dark:ring-1 dark:ring-slate-700/50">
+      <form onSubmit={handleSubmit} className="mt-6 rounded-2xl bg-white p-4 shadow-sm sm:mt-8 sm:p-6 dark:bg-slate-800/40 dark:ring-1 dark:ring-slate-700/50">
         <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t("product.reviews.leaveReview")}</h3>
-        <div className="mt-4 flex items-center gap-6">
+        <div className="mt-4 flex flex-wrap items-center gap-4 sm:gap-6">
           <div className="flex flex-col gap-1">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{t("product.reviews.rating")}</label>
             <select 
@@ -99,7 +99,7 @@ export function ProductReviews({ productId }:  { productId?: string | number }) 
               transition={{ delay: index * 0.1 }}
               className="rounded-2xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:bg-slate-800/30 dark:ring-1 dark:ring-slate-800"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-4">
                   <div className="h-10 w-10 flex items-center justify-center rounded-full bg-brand-100 text-brand-600 font-bold dark:bg-brand-900/40 dark:text-brand-400">
                     {review.author[0]}
@@ -109,7 +109,9 @@ export function ProductReviews({ productId }:  { productId?: string | number }) 
                     <p className="text-xs font-medium text-slate-400 mt-0.5">{review.date}</p>
                   </div>
                 </div>
-                <StarRating rating={review.rating} />
+                <div className="flex justify-start sm:justify-end">
+                  <StarRating rating={review.rating} />
+                </div>
               </div>
               <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
                 {review.content}

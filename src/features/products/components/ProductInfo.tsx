@@ -25,13 +25,13 @@ export function ProductInfo({ product }: ProductInfoProps) {
         animate="animate" 
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-display text-3xl font-bold leading-tight text-slate-900 sm:text-4xl dark:text-slate-50">
+        <h1 className="font-display break-words text-2xl font-bold leading-tight text-slate-900 sm:text-3xl lg:text-4xl dark:text-slate-50">
           {product.title}
         </h1>
-        <div className="mt-4 flex items-center gap-4">
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
           <StarRating rating={product.rating} />
-          <span className="h-4 w-px bg-slate-200 dark:bg-slate-700" />
-          <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+          <span className="hidden h-4 w-px bg-slate-200 dark:bg-slate-700 sm:inline-block" />
+          <span className="min-w-0 truncate text-sm font-medium text-slate-500 dark:text-slate-400">
             {product.brand || t("product.details.premium")}
           </span>
         </div>
@@ -60,7 +60,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
           {t("product.details.description")}
         </h2>
-        <p className="text-base leading-7 text-slate-600 dark:text-slate-400">
+        <p className="break-words text-base leading-7 text-slate-600 dark:text-slate-400">
           {product.description}
         </p>
       </motion.div>

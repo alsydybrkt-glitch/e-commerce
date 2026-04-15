@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef, useState, memo, useCallback, useEffect, useMemo } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, A11y } from "swiper/modules";
+import dynamic from "next/dynamic";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { SectionHeader } from "@/shared/ui/SectionHeader";
 import Product from "./product";
@@ -9,6 +8,9 @@ import LoadingOfSlideProduct from "./loadingOfSlideProduct";
 import { useTranslation } from "@/shared/i18n/useTranslation";
 import { Product as ProductType } from "@/features/products/services/productsApi";
 
+import { Navigation, Pagination, A11y } from "swiper/modules";
+
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -103,7 +105,8 @@ function SlideProduct({
     setSwiper(instance);
   }, []);
 
-  const paginationId = useMemo(() => `pagination-${category.replace(/\s+/g, '-').toLowerCase()}`, [category]);
+  const uniqueId = React.useId().replace(/:/g, ""); // Remove colons to make it CSS selector safe
+  const paginationClass = `pagination-${uniqueId}`;
 
   return (
     <section className={`${useShell ? "shell " : ""}${finalPadding}`.trim()}>
@@ -161,7 +164,7 @@ function SlideProduct({
             pagination={{
               clickable: true,
               dynamicBullets: false,
-              el: `.${paginationId}`, 
+              el: `.${paginationClass}`, 
             }}
             onSwiper={onSwiper}
             breakpoints={{
@@ -173,14 +176,14 @@ function SlideProduct({
             }}
             className="slide-product-swiper"
           >
-            {items.map((product) => (
+            {items.map((product, index) => (
               <SwiperSlide key={product.id} className="!h-auto">
-                <Product item={product} />
+                <Product item={product} priority={index < 4} />
               </SwiperSlide>
             ))}
           </Swiper>
           {/* Custom positioning container for pagination */}
-          <div className={`${paginationId} premium-pagination`}></div>
+          <div className={`${paginationClass} premium-pagination`}></div>
         </div>
       )}
     </section>

@@ -1,14 +1,15 @@
-'use client'
+"use client";
+import { Suspense, useEffect, useMemo, useState, lazy } from 'react'
+import { LazyMotion, domAnimation } from 'framer-motion'
+import dynamic from 'next/dynamic'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Toaster } from 'react-hot-toast'
+const Toaster = dynamic(() => import('react-hot-toast').then(mod => mod.Toaster), { ssr: false })
+const ScrollToTop = dynamic(() => import('@/shared/ui/ScrollToTop'), { ssr: false })
 import { Provider as ReduxProvider } from 'react-redux'
 import Footer from '@/shared/components/layout/footer/Footer'
 import Header from '@/shared/components/layout/header/Header'
 import { ThemeContext } from '@/shared/theme/ThemeContext'
 import { LoadingBar } from '@/shared/ui/LoadingBar'
-import ScrollToTop from '@/shared/ui/ScrollToTop'
 import { I18nContext } from '@/shared/i18n/I18nContext'
 import { translations } from '@/shared/i18n/translations'
 import store from '@/store'
@@ -62,9 +63,9 @@ export function Providers({ children, initialTheme, initialLocale }: ProvidersPr
       html.style.colorScheme = isDark ? 'dark' : 'light'
     }
 
-    if (body) {
-      body.classList.toggle('theme-dark', isDark)
-      body.classList.toggle('theme-light', !isDark)
+    if (body && !body.classList.contains(`theme-${theme}`)) {
+      body.classList.remove('theme-dark', 'theme-light')
+      body.classList.add(`theme-${theme}`)
     }
 
     window.localStorage.setItem(THEME_STORAGE_KEY, theme)
@@ -164,62 +165,64 @@ export function Providers({ children, initialTheme, initialLocale }: ProvidersPr
   }, [locale])
 
   return (
-    <I18nContext.Provider value={i18nValue}>
-      <ThemeContext.Provider value={themeValue}>
-        <ReduxProvider store={store}>
-          <Suspense fallback={null}>
-            <LoadingBar />
-          </Suspense>
-
-          <Header />
-          <main className="flex-grow">
-            <Suspense fallback={
-              <div className="shell py-20 flex items-center justify-center">
-                <div className="h-24 w-24 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
-              </div>
-            }>
-              {children}
+    <LazyMotion features={domAnimation}>
+      <I18nContext.Provider value={i18nValue}>
+        <ThemeContext.Provider value={themeValue}>
+          <ReduxProvider store={store}>
+            <Suspense fallback={null}>
+              <LoadingBar />
             </Suspense>
-          </main>
-          <Footer />
 
-          <Toaster
-            position="bottom-center"
-            toastOptions={{
-              duration: 4000,
-              className: "premium-toast",
-              style: {
-                background: theme === "dark" ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.85)",
-                color: theme === "dark" ? "#f8fafc" : "#0f172a",
-                backdropFilter: "blur(20px) saturate(180%)",
-                WebkitBackdropFilter: "blur(20px) saturate(180%)",
-                border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.05)",
-                borderRadius: "1.25rem",
-                padding: "16px 24px",
-                fontSize: "0.9375rem",
-                fontWeight: "500",
-                letterSpacing: "-0.01em",
-                boxShadow: theme === "dark"
-                  ? "0 20px 40px -10px rgba(0, 0, 0, 0.5)"
-                  : "0 20px 40px -10px rgba(0, 0, 0, 0.1)",
-              },
-              success: {
-                iconTheme: {
-                  primary: "#10b981",
-                  secondary: "#fff",
+            <Header />
+            <main className="flex-grow">
+              <Suspense fallback={
+                <div className="shell py-20 flex items-center justify-center">
+                  <div className="h-24 w-24 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
+                </div>
+              }>
+                {children}
+              </Suspense>
+            </main>
+            <Footer />
+
+            <Toaster
+              position="bottom-center"
+              toastOptions={{
+                duration: 4000,
+                className: "premium-toast",
+                style: {
+                  background: theme === "dark" ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.85)",
+                  color: theme === "dark" ? "#f8fafc" : "#0f172a",
+                  backdropFilter: "blur(20px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(20px) saturate(180%)",
+                  border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.05)",
+                  borderRadius: "1.25rem",
+                  padding: "16px 24px",
+                  fontSize: "0.9375rem",
+                  fontWeight: "500",
+                  letterSpacing: "-0.01em",
+                  boxShadow: theme === "dark"
+                    ? "0 20px 40px -10px rgba(0, 0, 0, 0.5)"
+                    : "0 20px 40px -10px rgba(0, 0, 0, 0.1)",
                 },
-              },
-              error: {
-                iconTheme: {
-                  primary: "#f43f5e",
-                  secondary: "#fff",
+                success: {
+                  iconTheme: {
+                    primary: "#10b981",
+                    secondary: "#fff",
+                  },
                 },
-              },
-            }}
-          />
-          <ScrollToTop />
-        </ReduxProvider>
-      </ThemeContext.Provider>
-    </I18nContext.Provider>
+                error: {
+                  iconTheme: {
+                    primary: "#f43f5e",
+                    secondary: "#fff",
+                  },
+                },
+              }}
+            />
+            <ScrollToTop />
+          </ReduxProvider>
+        </ThemeContext.Provider>
+      </I18nContext.Provider>
+    </LazyMotion>
   )
 }

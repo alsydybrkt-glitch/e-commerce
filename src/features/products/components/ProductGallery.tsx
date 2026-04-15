@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 import { ImageLightbox } from "@/shared/ui/ImageLightbox";
 import { getProductGallery } from "@/features/products/utils/product-helpers";
 import { Product } from "@/features/products/services/productsApi";
@@ -11,7 +12,6 @@ import { Interactive } from "@/shared/ui/Interactive";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation";
 
 interface ProductGalleryProps {
   product: Product;
@@ -21,107 +21,138 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   const images = useMemo(() => getProductGallery(product, 4), [product]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  // ✅ Fix: Wait for DOM to be ready before rendering Swiper
+  // This prevents the white page crash caused by Swiper trying to
+  // initialize pagination before the ref element exists in the DOM
   useEffect(() => {
-    setMounted(true);
+    setIsMounted(true);
+  }, []);
+
+  const handleSlideChange = useCallback((swiper: SwiperType) => {
+    setCurrentIndex(swiper.activeIndex);
+  }, []);
+
+  const handleThumbnailClick = useCallback((index: number) => {
+    setCurrentIndex(index);
+  }, []);
+
+  const handleOpenLightbox = useCallback(() => {
+    setIsLightboxOpen(true);
+  }, []);
+
+  const handleCloseLightbox = useCallback(() => {
+    setIsLightboxOpen(false);
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Main Image Viewport */}
-      <div className="relative aspect-square w-full sm:rounded-[32px] overflow-hidden bg-slate-50 dark:bg-slate-800/20 min-h-[350px] sm:min-h-0">
+      <div className="relative w-full overflow-hidden bg-slate-50 min-h-[280px] max-h-[420px] aspect-[4/5] dark:bg-slate-800/20 sm:rounded-[32px] sm:aspect-square sm:min-h-0 sm:max-h-none">
 
         {/* ============================================================
-            MOBILE SWIPER (sm:hidden)
-            ✅ Fix: إزلنا الـ SSR placeholder تماماً وخلينا الـ Swiper
-            يشتغل من أول لحظة بدون preload مكرر.
-            الـ priority بقت على أول صورة في الـ Swiper بس.
+            MOBILE VIEW (sm:hidden)
+            ✅ Key Fix: render a simple <img> on server, swap to Swiper
+            after mount — avoids Swiper crashing on SSR/hydration
         ============================================================ */}
-        <div className="h-[400px] w-full sm:hidden relative">
-          {mounted ? (
+        <div className="relative h-full w-full sm:hidden">
+          {!isMounted ? (
+            // ✅ SSR-safe static image: no Swiper, no crash, correct LCP
+            <div className="relative h-full w-full bg-slate-50 dark:bg-slate-800/40">
+              <Image
+                src={images[0]}
+                alt={product.title}
+                fill
+                priority
+                sizes="100vw"
+                className="object-contain p-4"
+              />
+            </div>
+          ) : (
+            // ✅ Client-only Swiper: safe to render after DOM is ready
             <Swiper
               modules={[Pagination]}
               pagination={{
                 clickable: true,
-                el: ".gallery-pagination",
+                // ✅ Use className string (not ref) — safest approach
+                // that works across all Swiper versions
+                el: ".swiper-gallery-pagination",
               }}
-              onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              onSlideChange={handleSlideChange}
+              initialSlide={currentIndex}
               className="h-full w-full"
+              observer
+              observeParents
             >
               {images.map((image: string, index: number) => (
-                <SwiperSlide key={index}>
-                  <div
-                    className="relative h-full w-full bg-slate-50 dark:bg-slate-800/40"
-                    onClick={() => setIsLightboxOpen(true)}
+                <SwiperSlide key={image}>
+                  <button
+                    type="button"
+                    aria-label={`View ${product.title} image ${index + 1} fullscreen`}
+                    className="relative h-full w-full bg-slate-50 dark:bg-slate-800/40 cursor-zoom-in border-0 outline-none"
+                    onClick={handleOpenLightbox}
                   >
                     <Image
                       src={image}
                       alt={`${product.title} ${index + 1}`}
                       fill
-                      // ✅ Fix: priority على أول صورة بس في الـ Swiper
-                      // مفيش placeholder منفصل يعمل preload مكرر
                       priority={index === 0}
                       sizes="100vw"
-                      className="object-contain p-6"
+                      className="object-contain p-4"
                     />
-                  </div>
+                  </button>
                 </SwiperSlide>
               ))}
             </Swiper>
-          ) : (
-            // ✅ Fix: الـ placeholder دلوقتي بدون priority ولا preload
-            // عشان منعملش preload لصورة هتتعمل preload تاني في الـ Swiper
-            <div className="absolute inset-0">
-              <Image
-                src={images[0]}
-                alt={product.title}
-                fill
-                // ❌ مش priority — ده اللي كان بيسبب الـ warning
-                priority={false}
-                sizes="100vw"
-                className="object-contain p-6"
-              />
-            </div>
           )}
 
-          {/* Mobile pagination dots */}
-          <div className="premium-pagination gallery-pagination sm:hidden" />
+          {/* ✅ Pagination + Counter — always in DOM so Swiper finds the el */}
+          <div className="pointer-events-none absolute bottom-3 left-0 right-0 z-10 flex flex-col items-center gap-2">
+            <div className="rounded-full bg-slate-900/60 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md">
+              {currentIndex + 1} / {images.length}
+            </div>
+            <div className="swiper-gallery-pagination premium-pagination pointer-events-auto" />
+          </div>
         </div>
 
         {/* ============================================================
-            DESKTOP IMAGE VIEW (hidden on mobile)
-            ✅ Fix: priority بس لو مش على موبايل (sm breakpoint)
-            استخدمنا sizes أدق عشان الـ preload يكون صح
+            DESKTOP VIEW (hidden on mobile)
+            No changes needed here — desktop never had the white page issue
         ============================================================ */}
         <div className="hidden h-full w-full sm:block">
           <Interactive className="h-full w-full">
-            <div
+            <button
+              type="button"
+              aria-label={`View ${product.title} fullscreen`}
               className="group relative h-full w-full cursor-zoom-in rounded-[32px] bg-slate-50 p-6 dark:bg-slate-800/40 dark:ring-1 dark:ring-slate-700/50"
-              onClick={() => setIsLightboxOpen(true)}
+              onClick={handleOpenLightbox}
             >
               <Image
                 src={images[currentIndex]}
                 alt={product.title}
                 fill
-                // ✅ Fix: priority تفضل على الـ desktop
-                // لكن الـ sizes بقت أدق بدل ما تكون عامة
                 priority
                 sizes="(max-width: 640px) 0px, (max-width: 1200px) 50vw, 33vw"
-                //       ↑ 0px على موبايل = مش هيعمل preload للموبايل
                 className="object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
               />
-            </div>
+            </button>
           </Interactive>
         </div>
       </div>
 
-      {/* Thumbnails (desktop only) */}
+      {/* Thumbnails — desktop only */}
       <div className="hidden sm:grid grid-cols-4 gap-3">
         {images.map((image: string, index: number) => (
-          <Interactive key={index}>
+          <Interactive key={image}>
             <button
-              onClick={() => setCurrentIndex(index)}
+              type="button"
+              onClick={() => handleThumbnailClick(index)}
               className={`relative aspect-square w-full overflow-hidden rounded-2xl border-2 transition-all p-1
                 ${
                   currentIndex === index
@@ -130,12 +161,12 @@ export function ProductGallery({ product }: ProductGalleryProps) {
                 }
               `}
               aria-label={`View image ${index + 1}`}
-              aria-current={currentIndex === index}
+              aria-pressed={currentIndex === index}
             >
               <div className="relative h-full w-full">
                 <Image
                   src={image}
-                  alt={`${product.title} thumb ${index + 1}`}
+                  alt={`${product.title} thumbnail ${index + 1}`}
                   fill
                   sizes="100px"
                   className="object-contain"
@@ -150,7 +181,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
         images={images}
         currentIndex={currentIndex}
         isOpen={isLightboxOpen}
-        onClose={() => setIsLightboxOpen(false)}
+        onClose={handleCloseLightbox}
         onNavigate={setCurrentIndex}
       />
     </div>

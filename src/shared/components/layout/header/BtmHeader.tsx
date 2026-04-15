@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -14,7 +14,6 @@ import {
   FiTruck,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import HeaderIcons from "./HeaderIcons";
 import useHeaderLogic from "./useHeaderLogic";
 import { useTranslation } from "@/shared/i18n/useTranslation";
 
@@ -24,10 +23,12 @@ const DesktopMegaMenu = dynamic(() =>
   { ssr: false }
 );
 
-const MobileDrawer = dynamic(() => 
+const MobileDrawer = dynamic(() =>
   import("./MobileDrawer").then(mod => mod.MobileDrawer),
   { ssr: false }
 );
+
+const preloadMobileDrawer = () => import("./MobileDrawer");
 
 function BottomHeader() {
   const { t, isRTL } = useTranslation();
@@ -62,61 +63,94 @@ function BottomHeader() {
     closeAll,
   } = useHeaderLogic();
 
-  const [mobileSearchQuery, setMobileSearchQuery] = useState("");
   const router = useRouter();
 
-  const handleMobileSearch = useCallback(() => {
-    const query = mobileSearchQuery.trim();
-    if (!query) return;
-    const locale = window.location.pathname.split("/")[1] || "en";
-    router.push(`/${locale}/search?query=${encodeURIComponent(query)}`);
-    setMobileSearchQuery("");
-    closeAll();
-  }, [mobileSearchQuery, router, closeAll]);
+  const handleMobileSearch = useCallback((query: string) => {
+    const normalizedQuery = query.trim();
 
-  const handleMobileSearchKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleMobileSearch();
-      }
-    },
-    [handleMobileSearch],
-  );
+    if (!normalizedQuery) return;
+
+    const locale = window.location.pathname.split("/")[1] || "en";
+    router.push(`/${locale}/search?query=${encodeURIComponent(normalizedQuery)}`);
+    closeAll();
+  }, [router, closeAll]);
 
   useEffect(() => {
-    const handler = (e: any) => {
-      if (!e.target.closest("[data-categories-menu]")) {
-        setOpenDesktopCategories(false);
-      }
+    const preload = () => {
+      void preloadMobileDrawer();
     };
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
+
+    const globalScope = globalThis as any;
+
+    if (typeof globalScope.requestIdleCallback === "function") {
+      const idleId = globalScope.requestIdleCallback(preload, { timeout: 1500 });
+      return () => {
+        if (typeof globalScope.cancelIdleCallback === "function") {
+          globalScope.cancelIdleCallback(idleId);
+        }
+      };
+    }
+
+    const timeoutId = globalScope.setTimeout(preload, 900);
+    return () => globalScope.clearTimeout(timeoutId);
+  }, []);
+
+  const toggleMobileDrawer = useCallback(() => {
+    if (!openMobile) {
+      void preloadMobileDrawer();
+    }
+    setOpenMobile((prev) => !prev);
+  }, [openMobile, setOpenMobile]);
+
+  const handleDesktopCategoriesToggle = useCallback(() => {
+    setOpenDesktopCategories((prev) => !prev);
+  }, [setOpenDesktopCategories]);
+
+  const handleDesktopOutsideClick = useCallback((e: MouseEvent) => {
+    const target = e.target as HTMLElement | null;
+    if (!target?.closest("[data-categories-menu]")) {
+      setOpenDesktopCategories(false);
+    }
   }, [setOpenDesktopCategories]);
 
   useEffect(() => {
-    if (openMobile) {
-      document.body.style.overflow = "hidden";
-      document.body.style.height = "100%";
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.height = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.height = "";
-    };
-  }, [openMobile]);
+    document.addEventListener("click", handleDesktopOutsideClick);
+    return () => document.removeEventListener("click", handleDesktopOutsideClick);
+  }, [handleDesktopOutsideClick]);
+
+  useEffect(() => {
+    if (!openMobile) return;
+
+    const closeOnRouteChange = () => closeAll();
+    window.addEventListener("popstate", closeOnRouteChange);
+    return () => window.removeEventListener("popstate", closeOnRouteChange);
+  }, [openMobile, closeAll]);
+
+  const categoriesList = useMemo(() => {
+    if (Array.isArray(categories)) return categories;
+    return [];
+  }, [categories]);
+
+  const activePath = pathname || "/";
+
+  const handleNavigateFromDrawer = useCallback(() => {
+    closeAll();
+  }, [closeAll]);
+
+  const handleDrawerSearch = useCallback((query: string) => {
+    if (!query) return;
+    handleMobileSearch(query);
+  }, [handleMobileSearch]);
 
   return (
     <div className="py-2">
-      <div className="shell flex items-center justify-between gap-4">
+      <div className="shell flex items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-3">
           <div className="relative hidden lg:block" data-categories-menu>
             <button
               type="button"
               className="btn btn-secondary gap-2"
-              onClick={() => setOpenDesktopCategories(!openDesktopCategories)}
+              onClick={handleDesktopCategoriesToggle}
             >
               <TiThMenu className="text-sm" />
               {t("common.categories")}
@@ -129,7 +163,7 @@ function BottomHeader() {
 
             {openDesktopCategories && (
               <DesktopMegaMenu 
-                categories={categories} 
+                categories={categoriesList} 
                 isRTL={isRTL} 
                 onClose={closeAll} 
                 featuredLinks={featuredMenuLinks} 
@@ -139,7 +173,7 @@ function BottomHeader() {
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navLinks.map((link) => {
-              const active = pathname === link.path;
+              const active = activePath === link.path;
               return (
                 <Link
                   key={link.path}
@@ -171,7 +205,7 @@ function BottomHeader() {
                 ? "bg-brand-50 border-brand-100 text-brand-600 dark:bg-brand-900/20 dark:border-brand-800 dark:text-brand-400" 
                 : "border-border bg-surface-primary text-text-secondary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
             }`}
-            onClick={() => setOpenMobile(!openMobile)}
+            onClick={toggleMobileDrawer}
             aria-label="Toggle menu"
             type="button"
           >
@@ -182,15 +216,12 @@ function BottomHeader() {
 
       <MobileDrawer 
         isOpen={openMobile}
-        onClose={closeAll}
+        onClose={handleNavigateFromDrawer}
         isRTL={isRTL}
-        categories={categories}
+        categories={categoriesList}
         navLinks={navLinks}
-        pathname={pathname}
-        mobileSearchQuery={mobileSearchQuery}
-        setMobileSearchQuery={setMobileSearchQuery}
-        handleMobileSearch={handleMobileSearch}
-        handleMobileSearchKeyDown={handleMobileSearchKeyDown}
+        pathname={activePath}
+        onSearch={handleDrawerSearch}
       />
     </div>
   );

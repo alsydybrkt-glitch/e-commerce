@@ -13,7 +13,7 @@ function TopHeader() {
 
   return (
     <div className="border-b border-border-light bg-surface-primary dark:border-slate-800 dark:bg-slate-900 transition-colors">
-      <div className="shell flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between lg:py-6 lg:gap-6">
+      <div className="shell flex flex-col gap-3 py-3 md:flex-row md:items-center md:justify-between md:gap-6 lg:py-6">
         {/* Top Row: Logo and Mobile Utilities */}
         <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
           <Link href="/" className="group flex items-center gap-3 transition-all hover:opacity-90">

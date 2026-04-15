@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useTranslation } from "@/shared/i18n/useTranslation";
 

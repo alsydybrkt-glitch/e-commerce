@@ -1,6 +1,4 @@
-"use client";
-
-import { motion, HTMLMotionProps } from "framer-motion";
+import { m, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/shared/utils/utils";
 
 interface InteractiveProps extends HTMLMotionProps<"div"> {
@@ -32,7 +30,7 @@ export const Interactive = ({
   };
 
   return (
-    <motion.div
+    <m.div
       className={cn("cursor-pointer", className)}
       {...variants[variant]}
       transition={{
@@ -44,6 +42,6 @@ export const Interactive = ({
       {...props}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 };

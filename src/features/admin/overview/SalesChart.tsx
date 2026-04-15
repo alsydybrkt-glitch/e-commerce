@@ -1,19 +1,16 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer 
-} from "recharts";
+import { m } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useTranslation } from "@/shared/i18n/useTranslation";
-
 import { ChartData } from "@/features/admin/services/adminApi";
 import React from "react";
+
+const ResponsiveContainer = dynamic(() => import("recharts").then(mod => mod.ResponsiveContainer), { ssr: false });
+const AreaChart = dynamic(() => import("recharts").then(mod => mod.AreaChart), { ssr: false });
+const Area = dynamic(() => import("recharts").then(mod => mod.Area), { ssr: false });
+const XAxis = dynamic(() => import("recharts").then(mod => mod.XAxis), { ssr: false });
+const YAxis = dynamic(() => import("recharts").then(mod => mod.YAxis), { ssr: false });
+const CartesianGrid = dynamic(() => import("recharts").then(mod => mod.CartesianGrid), { ssr: false });
+const Tooltip = dynamic(() => import("recharts").then(mod => mod.Tooltip), { ssr: false });
 
 interface SalesChartProps {
   data: ChartData[];
@@ -28,7 +25,7 @@ export const SalesChart = React.memo(({ data: apiData }: SalesChartProps) => {
   }));
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       className="surface-card col-span-full h-[450px] p-8 lg:col-span-2 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
@@ -101,7 +98,7 @@ export const SalesChart = React.memo(({ data: apiData }: SalesChartProps) => {
           </AreaChart>
         </ResponsiveContainer>
       </div>
-    </motion.div>
+    </m.div>
   );
 });
 

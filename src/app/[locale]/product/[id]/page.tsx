@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { id: string; local
         images: product.images ? [{ url: product.images[0] }] : [],
       },
       alternates: {
-        canonical: `/product/${params.id}`,
+        canonical: `/${params.locale}/product/${params.id}`,
       },
     };
   } catch (error) {
@@ -49,4 +49,3 @@ export default async function Page({ params }: { params: { id: string; locale: s
     return notFound();
   }
 }
-

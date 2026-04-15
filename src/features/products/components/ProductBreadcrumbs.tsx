@@ -12,26 +12,32 @@ export function ProductBreadcrumbs({ category, productTitle }: BreadcrumbsProps)
   const { t, tCategoryName } = useTranslation();
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 overflow-hidden text-sm whitespace-nowrap">
+    <nav
+      aria-label="Breadcrumb"
+      className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 overflow-hidden text-xs sm:mb-6 sm:text-sm"
+    >
       <Link 
         href="/" 
-        className="text-slate-500 hover:text-brand-600 transition dark:text-slate-400 dark:hover:text-brand-400"
+        className="shrink-0 text-slate-500 transition hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400"
       >
         {t("nav.home")}
       </Link>
       
-      <FaChevronRight className="text-[10px] text-slate-300" />
+      <FaChevronRight className="shrink-0 text-[10px] text-slate-300" />
       
       <Link 
         href={`/category/${category}`} 
-        className="text-slate-500 hover:text-brand-600 transition capitalize dark:text-slate-400 dark:hover:text-brand-400"
+        className="max-w-[45vw] truncate capitalize text-slate-500 transition hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 sm:max-w-none"
       >
         {tCategoryName(category)}
       </Link>
       
-      <FaChevronRight className="text-[10px] text-slate-300" />
+      <FaChevronRight className="shrink-0 text-[10px] text-slate-300" />
       
-      <span className="font-medium text-slate-900 truncate dark:text-slate-100" aria-current="page">
+      <span
+        className="max-w-full truncate font-medium text-slate-900 dark:text-slate-100"
+        aria-current="page"
+      >
         {productTitle}
       </span>
     </nav>

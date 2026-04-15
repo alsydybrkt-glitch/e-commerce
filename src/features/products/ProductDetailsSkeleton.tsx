@@ -4,7 +4,7 @@ export function ProductDetailsSkeleton() {
       {/* Breadcrumbs Skeleton */}
       <div className="mb-6 h-4 w-48 rounded bg-slate-200 dark:bg-slate-800" />
 
-      <div className="surface-card grid gap-8 p-4 sm:p-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">
+      <div className="surface-card grid gap-8 p-4 sm:p-8 md:gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 lg:p-12">
         {/* Left Column: Visuals */}
         <div className="space-y-4">
           <div className="aspect-square w-full rounded-[32px] bg-slate-100 dark:bg-slate-800" />
