@@ -7,10 +7,10 @@ import { useRouter, usePathname } from "next/navigation"; // ✅ Fix #3: است�
 import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsBySearch } from "@/features/products/store/productsSlice";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { getProductImage } from "@/features/products/utils/product-helpers";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { getProductImage } from "@/shared/utils/product-helpers";
 import { AppDispatch, RootState } from "@/store";
-import { Product } from "@/features/products/services/productsApi";
+import { Product } from "@/services/api/productsApi";
 
 function highlight(text: string, query: string) {
   const regex = new RegExp(`(${query})`, "gi");
@@ -154,7 +154,7 @@ function SearchBox() {
       {/* ✅ Fix #5: aria-expanded كـ boolean مش string */}
       <div
         role="combobox"
-        aria-expanded={!!expanded}
+        aria-expanded={expanded ? "true" : "false"}
         aria-haspopup="listbox"
         aria-controls="search-suggestions"
       >
@@ -183,9 +183,10 @@ function SearchBox() {
 
           <button
             type="submit"
-            className="primary-btn !px-4 !py-2 text-xs"
+            className="primary-btn !px-3 !py-2 sm:!px-4"
           >
-            {t("common.search")}
+            <span className="hidden sm:inline">{t("common.search")}</span>
+            <FaSearch className="text-xs sm:hidden" />
           </button>
         </form>
       </div>
@@ -215,7 +216,7 @@ function SearchBox() {
                     key={product.id}
                     id={`search-option-${index}`}
                     role="option"
-                    aria-selected={!!selected} // ✅ Fix #5: boolean مش string
+                    aria-selected={selected ? "true" : "false"} // ✅ Fix #5: string "true"/"false" conform to valid values
                     className={`rounded-2xl transition ${
                       selected
                         ? "bg-slate-100 dark:bg-slate-800 ring-1 ring-brand-500/20"

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { FiTruck, FiShield, FiHeadphones, FiCreditCard } from "react-icons/fi";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function TrustBar() {
   const { t } = useTranslation();

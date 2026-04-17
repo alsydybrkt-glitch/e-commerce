@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { StarRating } from "@/shared/ui/StarRating";
 import { Interactive } from "@/shared/ui/Interactive";
 

@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { formatCurrency } from "@/features/cart/lib/formatCurrency";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { RecentOrder } from "@/features/admin/services/adminApi";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { RecentOrder } from "@/services/api/adminApi";
 
 const statusStyles = {
   completed: "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400",

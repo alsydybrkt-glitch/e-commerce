@@ -13,13 +13,13 @@ import {
   addFavorite,
   removeFavorite,
 } from "@/features/favorites/store/favoriteSlice";
-import { shareProduct } from "@/features/products/utils/product-tools";
+import { shareProduct } from "@/shared/utils/product-tools";
 import {
   buildProductSharePayload,
   getProductImage,
-} from "@/features/products/utils/product-helpers";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { Product as ProductType } from "@/features/products/services/productsApi";
+} from "@/shared/utils/product-helpers";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { Product as ProductType } from "@/services/api/productsApi";
 import SkeletonProduct from "./loadingOfSlideProduct";
 
 function Product({ item, priority = false }: { item: ProductType; priority?: boolean }) {

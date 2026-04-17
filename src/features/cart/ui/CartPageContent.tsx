@@ -6,7 +6,7 @@ import CartItemsList from "./CartItemsList";
 import EmptyCartState from "./EmptyCartState";
 import OrderSummary from "./OrderSummary";
 import CartSkeleton from "@/shared/ui/skeletons/CartSkeleton";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 function CartPageContent() {
   const { t } = useTranslation();

@@ -2,7 +2,7 @@
 
 import React, { memo } from "react";
 import Product from "../slide-product/product";
-import { Product as ProductType } from "@/features/products/services/productsApi";
+import { Product as ProductType } from "@/services/api/productsApi";
 
 interface ProductGridProps {
   products: ProductType[];

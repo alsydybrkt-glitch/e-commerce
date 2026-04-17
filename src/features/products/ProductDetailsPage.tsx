@@ -1,5 +1,5 @@
-import { getTranslations } from "@/shared/i18n/get-translations";
-import { Product } from "@/features/products/services/productsApi";
+import { getTranslations } from "@/config/i18n/get-translations";
+import { Product } from "@/services/api/productsApi";
 import { ProductGallery } from "./components/ProductGallery";
 import { ProductInfo } from "./components/ProductInfo";
 import { ProductPurchasePanel } from "./components/ProductPurchasePanel";
@@ -21,7 +21,7 @@ export default function ProductDetailsPage({ product, categoryProductsPromise, l
 
   return (
     <>
-      <main className="product-page shell section-gap overflow-x-hidden !pt-6 sm:!pt-10">
+      <div className="product-page shell section-gap overflow-x-hidden !pt-6 sm:!pt-10">
         <ProductBreadcrumbs 
           category={product.category} 
           productTitle={product.title} 
@@ -47,7 +47,7 @@ export default function ProductDetailsPage({ product, categoryProductsPromise, l
         <div className="mt-12 sm:mt-16">
           <ProductReviews productId={product.id} />
         </div>
-      </main>
+      </div>
 
       {/* Related Products Section — Outside the main shell to match HomePage layout */}
       <Suspense fallback={<div className="shell py-20"><div className="h-[540px] w-full animate-pulse rounded-[28px] bg-slate-100 dark:bg-slate-800/40" /></div>}>

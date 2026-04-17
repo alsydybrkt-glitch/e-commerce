@@ -3,13 +3,13 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
-import { Category } from "@/features/products/services/productsApi";
+import { Category } from "@/services/api/productsApi";
 import { 
   ShopSortKey, 
   SHOP_SORT_KEYS, 
-} from "@/features/products/constants/shop";
+} from "@/constants/shop";
 import { Interactive } from "@/shared/ui/Interactive";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 // Swiper styles
 import "swiper/css";

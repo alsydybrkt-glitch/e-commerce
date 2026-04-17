@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 function LanguageSwitcher() {
   const [mounted, setMounted] = useState(false);

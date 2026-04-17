@@ -2,7 +2,7 @@ import { memo } from "react";
 import Image from "next/image";
 import { FaTrashAlt } from "react-icons/fa";
 import { formatCurrency } from "../lib/formatCurrency";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { QuantitySelector } from "@/shared/ui/QuantitySelector";
 
 

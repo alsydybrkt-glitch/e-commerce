@@ -14,7 +14,7 @@ import {
   Store
 } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { useState } from "react";
 
 const sidebarLinks = [

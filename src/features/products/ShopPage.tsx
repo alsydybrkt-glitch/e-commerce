@@ -1,8 +1,8 @@
-import { getTranslations } from "@/shared/i18n/get-translations";
+import { getTranslations } from "@/config/i18n/get-translations";
 import ServerPagination from "@/features/products/components/ServerPagination";
 import ShopFiltersClient from "@/features/products/components/ShopFiltersClient";
-import { ShopSortKey } from "@/features/products/constants/shop";
-import { Category, Product as ProductType } from "@/features/products/services/productsApi";
+import { ShopSortKey } from "@/constants/shop";
+import { Category, Product as ProductType } from "@/services/api/productsApi";
 import Product from "@/features/products/slide-product/product";
 import SlideProduct from "@/features/products/slide-product/SlideProduct";
 import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";

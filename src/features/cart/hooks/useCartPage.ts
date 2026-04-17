@@ -12,8 +12,8 @@ import {
   selectCartSubtotal,
   selectFinalTotal,
 } from "@/features/cart/store/cartSlice";
-import { getPromoDiscount } from "../lib/promoCodes";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { getPromoDiscount } from "@/constants/promoCodes";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function useCartPage() {
   const { t } = useTranslation();

@@ -3,7 +3,7 @@ import { memo } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import Image from "next/image";
 import { FiArrowUpRight } from "react-icons/fi";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 interface CategoryCardProps {
   subtitle: string;

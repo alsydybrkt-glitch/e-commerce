@@ -3,7 +3,7 @@ import Image from "next/image";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { FiArrowUpRight, FiClock } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Interactive } from "@/shared/ui/Interactive";
 
 interface GuideCardProps {

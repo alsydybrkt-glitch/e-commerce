@@ -3,7 +3,7 @@ import { useState } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import toast from "react-hot-toast";
 import { FiArrowUpRight } from "react-icons/fi";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 function Footer() {
   const { t } = useTranslation();

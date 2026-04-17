@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, DollarSign, Package, Users, Activity } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 interface StatCardProps {
   title: string;
@@ -50,7 +50,7 @@ function StatCard({ title, value, change, isPositive, icon: Icon, index }: StatC
   );
 }
 
-import { DashboardStats } from "@/features/admin/services/adminApi";
+import { DashboardStats } from "@/services/api/adminApi";
 import { formatCurrency } from "@/features/cart/lib/formatCurrency";
 
 interface StatsCardsProps {

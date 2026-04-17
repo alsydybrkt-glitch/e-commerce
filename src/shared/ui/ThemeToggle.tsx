@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
-import { useTheme } from "@/shared/theme/useTheme";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTheme } from "@/shared/hooks/useTheme";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 function ThemeToggle() {
   const [mounted, setMounted] = useState(false);

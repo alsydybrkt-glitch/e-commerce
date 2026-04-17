@@ -1,5 +1,5 @@
 import { Skeleton, SkeletonText, SkeletonCircle } from "../Skeleton";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export default function CartSkeleton() {
   const { t } = useTranslation();

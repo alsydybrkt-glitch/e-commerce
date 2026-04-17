@@ -5,7 +5,7 @@ import {
   persistCartItems,
 } from "@/features/cart/lib/cartStorage";
 import { RootState } from "@/store";
-import { CartItem } from "@/shared/types";
+import { CartItem } from "@/types";
 
 function buildQuantityById(items: CartItem[] = []) {
   return items.reduce(

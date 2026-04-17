@@ -1,7 +1,7 @@
 "use client";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { formatCurrency } from "../lib/formatCurrency";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 interface OrderSummaryProps {
   discount: number;

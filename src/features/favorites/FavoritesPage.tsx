@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearFavorites } from "@/features/favorites/store/favoriteSlice";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { motion, AnimatePresence } from "framer-motion";
 import Product from "@/features/products/slide-product/product";
 import { Interactive } from "@/shared/ui/Interactive";

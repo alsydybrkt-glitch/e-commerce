@@ -1,7 +1,7 @@
 import { m } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { ChartData } from "@/features/admin/services/adminApi";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { ChartData } from "@/services/api/adminApi";
 import React from "react";
 
 const ResponsiveContainer = dynamic(() => import("recharts").then(mod => mod.ResponsiveContainer), { ssr: false });

@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import CategoryCard from "./CategoryCard";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 interface CategoryData {
   subtitle: string;

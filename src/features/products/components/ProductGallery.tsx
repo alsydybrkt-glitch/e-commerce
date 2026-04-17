@@ -6,8 +6,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { ImageLightbox } from "@/shared/ui/ImageLightbox";
-import { getProductGallery } from "@/features/products/utils/product-helpers";
-import { Product } from "@/features/products/services/productsApi";
+import { getProductGallery } from "@/shared/utils/product-helpers";
+import { Product } from "@/services/api/productsApi";
 import { Interactive } from "@/shared/ui/Interactive";
 
 import "swiper/css";
@@ -51,7 +51,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   return (
     <div className="space-y-3 sm:space-y-4">
       {/* Main Image Viewport */}
-      <div className="relative w-full overflow-hidden bg-slate-50 min-h-[280px] max-h-[420px] aspect-[4/5] dark:bg-slate-800/20 sm:rounded-[32px] sm:aspect-square sm:min-h-0 sm:max-h-none">
+      <div className="relative w-full overflow-hidden bg-slate-50 min-h-[200px] max-h-[300px] aspect-[4/3] dark:bg-slate-800/20 sm:rounded-[32px] sm:aspect-square sm:min-h-0 sm:max-h-none">
 
         {/* ============================================================
             MOBILE VIEW (sm:hidden)
@@ -77,8 +77,6 @@ export function ProductGallery({ product }: ProductGalleryProps) {
               modules={[Pagination]}
               pagination={{
                 clickable: true,
-                // ✅ Use className string (not ref) — safest approach
-                // that works across all Swiper versions
                 el: ".swiper-gallery-pagination",
               }}
               onSwiper={(swiper) => {
@@ -87,8 +85,6 @@ export function ProductGallery({ product }: ProductGalleryProps) {
               onSlideChange={handleSlideChange}
               initialSlide={currentIndex}
               className="h-full w-full"
-              observer
-              observeParents
             >
               {images.map((image: string, index: number) => (
                 <SwiperSlide key={image}>

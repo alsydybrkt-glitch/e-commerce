@@ -3,7 +3,7 @@
 import { Bell, Search, User, Menu } from "lucide-react";
 import ThemeToggle from "@/shared/ui/ThemeToggle";
 import LanguageSwitcher from "@/shared/ui/LanguageSwitcher";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { cn } from "@/shared/utils/utils";
 
 export function AdminHeader() {

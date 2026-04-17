@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FiSend, FiCheckCircle } from "react-icons/fi";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function Newsletter() {
   const { t } = useTranslation();

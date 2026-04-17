@@ -1,6 +1,6 @@
 import SearchQueryClient from "@/features/products/components/SearchQueryClient";
 import ServerPagination from "@/features/products/components/ServerPagination";
-import { Product as ProductType } from "@/features/products/services/productsApi";
+import { Product as ProductType } from "@/services/api/productsApi";
 import ProductGrid from "./components/ProductGrid";
 
 type RawSearchParams = Record<string, string | string[] | undefined>;

@@ -6,7 +6,7 @@ import {
   searchProducts as searchProductsApi,
   Product,
   Category,
-} from "@/features/products/services/productsApi";
+} from "@/services/api/productsApi";
 import { RootState } from "@/store";
 
 export interface ProductsState {

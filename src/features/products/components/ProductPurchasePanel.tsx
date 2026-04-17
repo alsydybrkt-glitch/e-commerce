@@ -6,13 +6,13 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import toast from "react-hot-toast";
 
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { QuantitySelector } from "@/shared/ui/QuantitySelector";
 import { add, selectCartItemQuantity } from "@/features/cart/store/cartSlice";
 import { addFavorite, removeFavorite, selectIsFavorite } from "@/features/favorites/store/favoriteSlice";
-import { Product } from "@/features/products/services/productsApi";
-import { buildProductSharePayload } from "@/features/products/utils/product-helpers";
-import { shareProduct } from "@/features/products/utils/product-tools";
+import { Product } from "@/services/api/productsApi";
+import { buildProductSharePayload } from "@/shared/utils/product-helpers";
+import { shareProduct } from "@/shared/utils/product-tools";
 import { RootState } from "@/store";
 import { Interactive } from "@/shared/ui/Interactive";
 import { motion, AnimatePresence } from "framer-motion";
@@ -134,7 +134,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   }, [product, t]);
 
   return (
-    <div className="mt-8 space-y-5 pb-24 sm:space-y-6 lg:pb-0">
+    <div className="mt-4 space-y-4 pb-24 sm:mt-8 sm:space-y-6 lg:pb-0">
       <div
         ref={purchaseActionsRef}
         id="main-purchase-actions"
@@ -146,13 +146,13 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           onChange={setSelectedQuantity}
         />
 
-        <div className="flex w-full items-center gap-2 sm:gap-3">
-          <Interactive className="min-w-0 flex-1">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+          <Interactive className="w-full sm:min-w-0 sm:flex-1">
             <button
               type="button"
               onClick={handleAddToCart}
               disabled={isAdding}
-              className={`flex h-11 w-full items-center justify-center gap-3 rounded-2xl px-3 text-sm font-bold transition-all duration-300 sm:h-[56px] sm:rounded-[24px]
+              className={`flex h-12 w-full items-center justify-center gap-3 rounded-2xl px-3 text-sm font-bold transition-all duration-300 sm:h-[56px] sm:rounded-[24px]
                 ${isAdding 
                   ? "bg-emerald-500 text-white shadow-inner" 
                   : "bg-slate-900 text-white hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-500"
@@ -164,12 +164,12 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             </button>
           </Interactive>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex w-full items-center justify-center gap-2 sm:w-auto sm:shrink-0 sm:justify-start">
             <Interactive>
               <button 
                 type="button"
                 onClick={toggleFavorite}
-                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-lg transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
+                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-lg transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
                 aria-label={t("common.favorite") || "Favorite"}
               >
                 {mounted && isFavorite ? <FaHeart className="text-rose-500" /> : <IoMdHeartEmpty className="text-slate-400" />}
@@ -180,7 +180,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
               <button 
                  type="button"
                  onClick={handleShare}
-                 className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-lg text-slate-400 transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
+                 className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-lg text-slate-400 transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
                  aria-label={t("common.share") || "Share"}
               >
                 <FaShare className="text-lg" />
@@ -216,7 +216,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
                 <button 
                   type="button"
                   onClick={handleAddToCart}
-                  className="h-11 w-full rounded-2xl bg-brand-600 px-3 text-sm font-bold text-white shadow-lg transition sm:h-12"
+                  className="h-10 w-full rounded-2xl bg-brand-600 px-3 text-sm font-bold text-white shadow-lg transition sm:h-12"
                 >
                   {t("product.addToCart")}
                 </button>

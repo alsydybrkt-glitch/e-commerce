@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Product from "@/features/products/slide-product/product";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
 import { AppDispatch } from "@/store";
 

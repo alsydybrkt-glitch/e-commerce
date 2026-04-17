@@ -5,7 +5,7 @@ import {
   FaUndoAlt, 
   FaMedal 
 } from "react-icons/fa";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function ProductTrustSignals() {
   const { t } = useTranslation();

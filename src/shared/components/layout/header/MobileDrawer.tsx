@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import React, { memo, useEffect, useMemo, useCallback, useState } from "react";
+import React, { memo, useEffect, useMemo, useCallback, useState, useRef } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdClose, MdArrowForward } from "react-icons/md";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { Category, Product } from "@/features/products/services/productsApi";
-import { NavLink } from "@/shared/types";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { Category, Product } from "@/services/api/productsApi";
+import { NavLink } from "@/types";
 import {
   FiShoppingBag,
   FiHeart,
@@ -214,6 +214,9 @@ export const MobileDrawer = memo(function MobileDrawer({
 }: MobileDrawerProps) {
   const { t, tCategoryName } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
+  const initialFocusRef = useRef<HTMLButtonElement>(null);
+  const lastFocusedElement = useRef<HTMLElement | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   const deals = useMemo(() => dealsOfDay.slice(0, 4), [dealsOfDay]);
   const categoriesPreview = useMemo(() => categories.slice(0, 8), [categories]);
@@ -235,30 +238,72 @@ export const MobileDrawer = memo(function MobileDrawer({
     [handleSearchSubmit]
   );
 
+  // Handle Body Scroll Lock
   useEffect(() => {
-    if (!isOpen) {
-      setSearchQuery("");
-      return;
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
-
-    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  const escHandler = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    },
-    [onClose]
-  );
-
+  // Handle Focus Trap & Keyboard Events
   useEffect(() => {
-    if (!isOpen) return;
-    document.addEventListener("keydown", escHandler);
-    return () => document.removeEventListener("keydown", escHandler);
-  }, [isOpen, escHandler]);
+    if (!isOpen) {
+      // Restore focus when closing
+      if (lastFocusedElement.current) {
+        lastFocusedElement.current.focus();
+      }
+      return;
+    }
+
+    // Capture the element that had focus before opening the drawer
+    lastFocusedElement.current = document.activeElement as HTMLElement;
+
+    // Set initial focus to the close button for accessibility
+    const focusTimeout = setTimeout(() => {
+      initialFocusRef.current?.focus();
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (e.key === "Tab" && containerRef.current) {
+        const focusableElements = containerRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      clearTimeout(focusTimeout);
+    };
+  }, [isOpen, onClose]);
 
   const drawerVariants = useMemo(
     () => ({
@@ -288,8 +333,10 @@ export const MobileDrawer = memo(function MobileDrawer({
           />
 
           <motion.aside
+            ref={containerRef}
             role="dialog"
             aria-modal="true"
+            aria-label="Mobile Navigation Menu"
             variants={drawerVariants}
             initial="hidden"
             animate="visible"
@@ -301,7 +348,7 @@ export const MobileDrawer = memo(function MobileDrawer({
             <div className="flex items-center justify-between border-b border-slate-50 p-6 dark:border-slate-900">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
-                  <FiUser size={18} />
+                  <FiUser size={18} aria-hidden="true" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -313,12 +360,13 @@ export const MobileDrawer = memo(function MobileDrawer({
                 </div>
               </div>
               <button
+                ref={initialFocusRef}
                 onClick={onClose}
                 aria-label={t("common.close") || "Close"}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-transform active:scale-90 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-slate-900"
                 type="button"
               >
-                <MdClose size={22} />
+                <MdClose size={22} aria-hidden="true" />
               </button>
             </div>
 

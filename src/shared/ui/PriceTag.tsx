@@ -1,4 +1,4 @@
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 interface PriceTagProps {
   price: number;
@@ -16,8 +16,8 @@ export function PriceTag({ price, discountPercentage, className = "", size = "md
 
   const sizeClasses = {
     sm: "text-lg",
-    md: "text-2xl sm:text-3xl",
-    lg: "text-3xl sm:text-4xl",
+    md: "text-xl sm:text-3xl",
+    lg: "text-xl sm:text-4xl",
   };
 
   return (

@@ -5,15 +5,21 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { SectionHeader } from "@/shared/ui/SectionHeader";
 import Product from "./product";
 import LoadingOfSlideProduct from "./loadingOfSlideProduct";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { Product as ProductType } from "@/features/products/services/productsApi";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { Product as ProductType } from "@/services/api/productsApi";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 
-import { Navigation, Pagination, A11y } from "swiper/modules";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+// Dynamically import Swiper component for mobile only to optimize bundle size
+const MobileProductSwiper = dynamic(() => import("./MobileProductSwiper"), {
+  loading: () => (
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:hidden">
+      {[...Array(2)].map((_, index) => (
+        <LoadingOfSlideProduct key={index} />
+      ))}
+    </div>
+  ),
+  ssr: false, // Swiper is client-only
+});
 
 interface SlideProductProps {
   category: string;
@@ -25,64 +31,63 @@ interface SlideProductProps {
   hideHeader?: boolean;
 }
 
-// Sub-component for indicator and controls to isolate re-renders
-const SliderControls = memo(({ 
-  swiper, 
-  totalItems, 
-  canLoop, 
+/**
+ * Premium Pagination for the Grid view
+ */
+const GridPagination = memo(({ 
+  currentPage, 
+  totalPages, 
+  onPageChange,
   t 
 }: { 
-  swiper: any, 
-  totalItems: number, 
-  canLoop: boolean,
+  currentPage: number, 
+  totalPages: number, 
+  onPageChange: (page: number) => void,
   t: any
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    if (!swiper) return;
-    
-    const handleSlideChange = () => {
-      setActiveIndex(swiper.realIndex);
-    };
-
-    swiper.on("slideChange", handleSlideChange);
-    return () => {
-      swiper.off("slideChange", handleSlideChange);
-    };
-  }, [swiper]);
-
-  const isAtStart = !canLoop && (swiper?.isBeginning ?? true);
-  const isAtEnd = !canLoop && (swiper?.isEnd ?? totalItems <= 4);
+  if (totalPages <= 1) return null;
 
   return (
-    <div className="hidden items-center gap-3 md:flex">
+    <div className="mt-10 flex items-center justify-center gap-4">
       <button
         type="button"
-        disabled={isAtStart}
-        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900"
-        onClick={() => swiper?.slidePrev()}
+        disabled={currentPage === 0}
+        onClick={() => onPageChange(currentPage - 1)}
+        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 dark:border-slate-800 dark:bg-slate-900"
         aria-label={t("home.sliderPrev")}
       >
         <FiChevronLeft className="text-lg" />
       </button>
+
+      <div className="flex items-center gap-2">
+        {[...Array(totalPages)].map((_, i) => (
+          <button
+            key={i}
+            onClick={() => onPageChange(i)}
+            className={`h-2.5 rounded-full transition-all duration-300 ${
+              currentPage === i 
+                ? "w-8 bg-brand-500" 
+                : "w-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
+            }`}
+            aria-label={`Go to page ${i + 1}`}
+          />
+        ))}
+      </div>
+
       <button
         type="button"
-        disabled={isAtEnd}
-        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900"
-        onClick={() => swiper?.slideNext()}
+        disabled={currentPage === totalPages - 1}
+        onClick={() => onPageChange(currentPage + 1)}
+        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 dark:border-slate-800 dark:bg-slate-900"
         aria-label={t("home.sliderNext")}
       >
         <FiChevronRight className="text-lg" />
       </button>
-      <span className="min-w-16 text-center text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-        {String(activeIndex + 1).padStart(2, "0")} / {String(totalItems).padStart(2, "0")}
-      </span>
     </div>
   );
 });
 
-SliderControls.displayName = "SliderControls";
+GridPagination.displayName = "GridPagination";
 
 function SlideProduct({
   category,
@@ -94,19 +99,30 @@ function SlideProduct({
   hideHeader = false,
 }: SlideProductProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile(1024);
   const items = React.useMemo(() => (Array.isArray(products) ? products : []), [products]);
-  const slidesPer = 4;
-  const canLoop = items.length > slidesPer;
-  const [swiper, setSwiper] = useState<any>(null);
+  
+  // Pagination State for Desktop Grid
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  
+  const paginatedItems = useMemo(() => {
+    if (isMobile) return items;
+    return items.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  }, [items, currentPage, isMobile]);
+
+  const canLoop = items.length > 4;
 
   const finalPadding = sectionPaddingClassName ?? (hideHeader ? "py-4" : "py-20");
 
-  const onSwiper = useCallback((instance: any) => {
-    setSwiper(instance);
-  }, []);
-
-  const uniqueId = React.useId().replace(/:/g, ""); // Remove colons to make it CSS selector safe
+  const uniqueId = React.useId().replace(/:/g, "");
   const paginationClass = `pagination-${uniqueId}`;
+
+  // Reset page when products change
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [items.length, category]);
 
   return (
     <section className={`${useShell ? "shell " : ""}${finalPadding}`.trim()}>
@@ -116,12 +132,29 @@ function SlideProduct({
           title={category}
           description={description}
         >
-          <SliderControls 
-            swiper={swiper} 
-            totalItems={items.length} 
-            canLoop={canLoop} 
-            t={t} 
-          />
+          {isMobile ? null : (
+            <div className="hidden items-center gap-3 md:flex">
+               <button
+                  onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                  disabled={currentPage === 0}
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 dark:border-slate-800 dark:bg-slate-900"
+                  aria-label={t("home.sliderPrev")}
+                >
+                  <FiChevronLeft className="text-lg" />
+                </button>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                  disabled={currentPage >= totalPages - 1}
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-secondary transition-all hover:bg-bg-secondary hover:text-text-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 dark:border-slate-800 dark:bg-slate-900"
+                  aria-label={t("home.sliderNext")}
+                >
+                  <FiChevronRight className="text-lg" />
+                </button>
+                <span className="min-w-16 text-center text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+                  {String(currentPage + 1).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
+                </span>
+            </div>
+          )}
         </SectionHeader>
       )}
 
@@ -133,57 +166,34 @@ function SlideProduct({
         </div>
       ) : (
         <div className="relative">
-          {hideHeader && swiper && (
-            <div className="absolute -top-12 right-0 hidden items-center gap-2 md:flex">
-               <button
-                 onClick={() => swiper.slidePrev()}
-                 aria-label={t("home.sliderPrev")}
-                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-primary transition-all hover:bg-bg-secondary disabled:opacity-30"
-               >
-                 <FiChevronLeft />
-               </button>
-               <button
-                 onClick={() => swiper.slideNext()}
-                 aria-label={t("home.sliderNext")}
-                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-primary transition-all hover:bg-bg-secondary disabled:opacity-30"
-               >
-                 <FiChevronRight />
-               </button>
+          {/* Main Rendering Logic */}
+          {isMobile ? (
+            <MobileProductSwiper 
+              items={items}
+              canLoop={canLoop}
+              paginationClass={paginationClass}
+              onSwiper={() => {}} 
+            />
+          ) : (
+            <div className="relative">
+              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                {paginatedItems.map((product, index) => (
+                  <div key={product.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both" style={{ animationDelay: `${index * 50}ms` }}>
+                    <Product item={product} priority={currentPage === 0 && index < 4} />
+                  </div>
+                ))}
+              </div>
+              
+              {!hideHeader && (
+                <GridPagination 
+                  currentPage={currentPage} 
+                  totalPages={totalPages} 
+                  onPageChange={setCurrentPage} 
+                  t={t} 
+                />
+              )}
             </div>
           )}
-
-          <Swiper
-            loop={canLoop}
-            grabCursor
-            speed={400}
-            spaceBetween={18}
-            watchSlidesProgress={true}
-            resistanceRatio={0.85}
-            touchRatio={1.1}
-            modules={[Navigation, Pagination, A11y]}
-            pagination={{
-              clickable: true,
-              dynamicBullets: false,
-              el: `.${paginationClass}`, 
-            }}
-            onSwiper={onSwiper}
-            breakpoints={{
-              320: { slidesPerView: 1.15, spaceBetween: 14 },
-              480: { slidesPerView: 1.4, spaceBetween: 16 },
-              640: { slidesPerView: 2.1, spaceBetween: 18 },
-              992: { slidesPerView: 3, spaceBetween: 20 },
-              1280: { slidesPerView: 4, spaceBetween: 22 },
-            }}
-            className="slide-product-swiper"
-          >
-            {items.map((product, index) => (
-              <SwiperSlide key={product.id} className="!h-auto">
-                <Product item={product} priority={index < 4} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          {/* Custom positioning container for pagination */}
-          <div className={`${paginationClass} premium-pagination`}></div>
         </div>
       )}
     </section>
@@ -191,3 +201,5 @@ function SlideProduct({
 }
 
 export default memo(SlideProduct);
+
+

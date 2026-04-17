@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import { getSafeProductQuantity } from "@/features/products/utils/product-helpers";
+import { getSafeProductQuantity } from "@/shared/utils/product-helpers";
 
 type QuantitySelectorProps = {
   quantity: number;

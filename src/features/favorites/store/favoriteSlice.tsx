@@ -1,7 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
-import { FavoriteItem } from "@/shared/types";
-import { Product } from "@/features/products/services/productsApi";
+import { FavoriteItem } from "@/types";
+import { Product } from "@/services/api/productsApi";
 
 const getFavorites = () => {
   if (typeof window !== "undefined") {

@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import HeroSlider from "@/shared/ui/hero-slider/HeroSlider";
-import { getProductImage } from "@/features/products/utils/product-helpers";
-import { Product as ProductType, Category } from "@/features/products/services/productsApi";
-import { getTranslations } from "@/shared/i18n/get-translations";
+import { getProductImage } from "@/shared/utils/product-helpers";
+import { Product as ProductType, Category } from "@/services/api/productsApi";
+import { getTranslations } from "@/config/i18n/get-translations";
 
 // UI Components
 const TrustBar = dynamic(() => import("@/shared/ui/TrustBar").then(mod => mod.TrustBar), {

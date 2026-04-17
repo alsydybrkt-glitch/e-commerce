@@ -1,5 +1,5 @@
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-import { getTranslations } from "@/shared/i18n/get-translations";
+import { getTranslations } from "@/config/i18n/get-translations";
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
 

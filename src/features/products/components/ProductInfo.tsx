@@ -1,7 +1,7 @@
 "use client";
 import { StarRating } from "@/shared/ui/StarRating";
-import { Product } from "@/features/products/services/productsApi";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { Product } from "@/services/api/productsApi";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { PriceTag } from "@/shared/ui/PriceTag";
 import { motion } from "framer-motion";
 
@@ -18,14 +18,14 @@ export function ProductInfo({ product }: ProductInfoProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-6">
       <motion.div 
         variants={fadeIn} 
         initial="initial" 
         animate="animate" 
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-display break-words text-2xl font-bold leading-tight text-slate-900 sm:text-3xl lg:text-4xl dark:text-slate-50">
+        <h1 className="font-display break-words text-lg font-bold leading-tight text-slate-900 sm:text-3xl lg:text-4xl dark:text-slate-50">
           {product.title}
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">

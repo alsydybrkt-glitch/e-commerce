@@ -5,12 +5,12 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { selectCartCount } from "@/features/cart/store/cartSlice";
 import { count } from "@/features/favorites/store/favoriteSlice";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 import { Interactive } from "@/shared/ui/Interactive";
 
 const iconBase =
-  "relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-lg text-slate-700 transition hover:border-brand-200 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300";
+  "relative flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl sm:rounded-2xl border border-slate-200 bg-white text-base sm:text-lg text-slate-700 transition hover:border-brand-200 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300";
 
 function HeaderIcons() {
   const { t } = useTranslation();

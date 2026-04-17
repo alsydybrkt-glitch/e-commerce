@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Plus, Search, Edit2, Trash2, MoreHorizontal, Filter } from "lucide-react";
 import { formatCurrency } from "@/features/cart/lib/formatCurrency";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 import { cn } from "@/shared/utils/utils";
 import { useState } from "react";
 

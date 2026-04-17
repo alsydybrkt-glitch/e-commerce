@@ -1,4 +1,4 @@
-import { CartItem } from "@/shared/types";
+import { CartItem } from "@/types";
 import CartItemCard from "./CartItemCard";
 
 interface CartItemsListProps {

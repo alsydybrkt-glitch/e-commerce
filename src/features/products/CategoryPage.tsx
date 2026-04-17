@@ -1,7 +1,7 @@
-import { Product as ProductType } from "@/features/products/services/productsApi";
+import { Product as ProductType } from "@/services/api/productsApi";
 import SlideProduct from "@/features/products/slide-product/SlideProduct";
 import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
-import { getTranslations } from "@/shared/i18n/get-translations";
+import { getTranslations } from "@/config/i18n/get-translations";
 import { SortDropdown } from "./components/SortDropdown";
 
 type RawSearchParams = Record<string, string | string[] | undefined>;

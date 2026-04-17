@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import dynamic from "next/dynamic";
 import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
-import { getRecentlyViewed } from "@/features/products/utils/product-tools";
+import { getRecentlyViewed } from "@/shared/utils/product-tools";
 import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
-import { Product as ProductType, Category } from "@/features/products/services/productsApi";
+import { Product as ProductType, Category } from "@/services/api/productsApi";
 import { AppDispatch, RootState } from "@/store";
 import { PromoBanner } from "@/shared/ui/PromoBanner";
-import { getTranslations } from "@/shared/i18n/get-translations";
+import { getTranslations } from "@/config/i18n/get-translations";
 
 const SlideProduct = dynamic(
   () => import("@/features/products/slide-product/SlideProduct"),

@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, lazy, use } from "react";
-import { Product } from "@/features/products/services/productsApi";
-import { useTranslation } from "@/shared/i18n/useTranslation";
+import { Product } from "@/services/api/productsApi";
+import { useTranslation } from "@/shared/hooks/useTranslation";
 
 import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
 

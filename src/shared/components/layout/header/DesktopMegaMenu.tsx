@@ -1,7 +1,7 @@
 "use client";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-import { useTranslation } from "@/shared/i18n/useTranslation";
-import { Category } from "@/features/products/services/productsApi";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { Category } from "@/services/api/productsApi";
 
 interface DesktopMegaMenuProps {
   categories: Category[];
