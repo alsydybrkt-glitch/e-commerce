@@ -50,7 +50,7 @@ function Header() {
   const [isInteracting, setIsInteracting] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);
-  const bottomVisibilityTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const bottomVisibilityTimerRef = useRef<NodeJS.Timeout | number | null>(null);
   const lastBottomVisibilityToggleAtRef = useRef(0);
   const pendingBottomVisibilityActionRef = useRef<"show" | "hide" | null>(null);
 

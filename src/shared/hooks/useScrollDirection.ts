@@ -41,7 +41,7 @@ export function useScrollDirection({
   const isScrollingRef = useRef(false);
   const lastActivityYRef = useRef(0);
   const latestScrollYRef = useRef(0);
-  const scrollIdleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollIdleTimerRef = useRef<NodeJS.Timeout | number | null>(null);
 
   useEffect(() => {
     const readAndCommit = () => {
