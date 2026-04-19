@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import Product from "@/features/products/slide-product/product";
+import Product from "@/features/products/slide-product/ProductCard";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
 import { AppDispatch } from "@/store";

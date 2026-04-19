@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { shallowEqual, useSelector } from "react-redux";
+import { useAppDispatch } from "@/store";
+import { fetchAllCategories } from "@/features/products/store/productsSlice";
 import dynamic from "next/dynamic";
 import {
   FiHome,
@@ -32,6 +34,11 @@ function Header() {
   const { t, isRTL } = useTranslation();
   const pathname = usePathname();
   const headerLogic = useHeaderLogic();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
 
   const categories = useSelector(
     (state: any) => state.products?.categories || [],
@@ -113,7 +120,19 @@ function Header() {
 
       clearBottomVisibilityTimer();
       pendingBottomVisibilityActionRef.current = nextAction;
+Next.js (14.2.35) is outdated (learn more)
+./src/features/favorites/FavoritesPage.tsx:7:1
+Module not found: Can't resolve '@/features/products/slide-product/product'
+   5 | import { useTranslation } from "@/shared/hooks/useTranslation";
+   6 | import { motion, AnimatePresence } from "framer-motion";
+>  7 | import Product from "@/features/products/slide-product/product";
+     | ^
+   8 | import { Interactive } from "@/shared/ui/Interactive";
+   9 | import { useRouter } from "next/navigation";
+  10 |
 
+https://nextjs.org/docs/messages/module-not-found
+This error occurred during the build process and can only be dismissed by fixing the error.
       bottomVisibilityTimerRef.current = window.setTimeout(() => {
         pendingBottomVisibilityActionRef.current = null;
         bottomVisibilityTimerRef.current = null;
@@ -235,10 +254,8 @@ function Header() {
         isOpen={headerLogic.openMobile}
         onClose={headerLogic.closeAll}
         isRTL={isRTL}
-        categories={categories}
         navLinks={navLinks}
         pathname={pathname ?? "/"}
-        onSearch={() => {}}
       />
     </header>
   );

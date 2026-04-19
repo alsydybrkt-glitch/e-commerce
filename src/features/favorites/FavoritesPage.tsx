@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearFavorites } from "@/features/favorites/store/favoriteSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { motion, AnimatePresence } from "framer-motion";
-import Product from "@/features/products/slide-product/product";
+import Product from "@/features/products/slide-product/ProductCard";
 import { Interactive } from "@/shared/ui/Interactive";
 import { useRouter } from "next/navigation";
 

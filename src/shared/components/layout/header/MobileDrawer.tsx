@@ -1,39 +1,25 @@
 "use client";
 
-import Image from "next/image";
-import React, { memo, useEffect, useMemo, useCallback, useState, useRef } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { motion, AnimatePresence } from "framer-motion";
-import { MdClose, MdArrowForward } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { useTranslation } from "@/shared/hooks/useTranslation";
-import { Category, Product } from "@/services/api/productsApi";
+
 import { NavLink } from "@/types";
 import {
-  FiShoppingBag,
-  FiHeart,
   FiUser,
-  FiPackage,
-  FiSearch,
-  FiExternalLink,
 } from "react-icons/fi";
 
 interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   isRTL: boolean;
-  categories: Category[];
   navLinks: NavLink[];
   pathname: string;
-  onSearch: (query: string) => void;
-  dealsOfDay?: Product[];
 }
 
-const QUICK_ACTIONS = [
-  { label: "Cart", href: "/carts", icon: FiShoppingBag },
-  { label: "Wishlist", href: "/favorites", icon: FiHeart },
-  { label: "Orders", href: "/orders", icon: FiPackage },
-  { label: "Share", href: "#", icon: FiExternalLink },
-] as const;
+
 
 const MenuSection = memo(function MenuSection({
   title,
@@ -59,33 +45,7 @@ const MenuSection = memo(function MenuSection({
   );
 });
 
-const QuickActions = memo(function QuickActions({ onClose }: { onClose: () => void }) {
-  return (
-    <MenuSection title="Shortcuts">
-      <div className="grid grid-cols-4 gap-2">
-        {QUICK_ACTIONS.map((item) => {
-          const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onClose}
-              className="aspect-square rounded-2xl bg-slate-50 text-center text-[10px] font-bold text-slate-600 transition-all active:scale-95 dark:bg-slate-900/50 dark:text-slate-400"
-            >
-              <div className="flex h-full flex-col items-center justify-center gap-2">
-                <span className="text-lg">
-                  <Icon />
-                </span>
-                {item.label}
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </MenuSection>
-  );
-});
 
 const PrimaryNavigation = memo(function PrimaryNavigation({
   navLinks,
@@ -129,114 +89,21 @@ const PrimaryNavigation = memo(function PrimaryNavigation({
   );
 });
 
-const CategoriesList = memo(function CategoriesList({
-  categories,
-  onClose,
-  isRTL,
-  title,
-  getCategoryName,
-}: {
-  categories: Category[];
-  onClose: () => void;
-  isRTL: boolean;
-  title: string;
-  getCategoryName: (key: string) => string;
-}) {
-  return (
-    <MenuSection title={title}>
-      <div className="grid grid-cols-1 gap-2">
-        {categories.map((category) => (
-          <Link
-            key={category.slug}
-            href={`/category/${category.slug}`}
-            onClick={onClose}
-            className="flex items-center justify-between rounded-2xl border border-slate-50 p-4 text-sm font-bold text-slate-700 active:bg-slate-50 dark:border-slate-800/50 dark:text-slate-300 dark:active:bg-slate-900"
-          >
-            <div className="flex items-center gap-3">
-              <span className="opacity-50">#</span>
-              {getCategoryName(category.slug || category.name)}
-            </div>
-            <MdArrowForward className={`opacity-20 ${isRTL ? "rotate-180" : ""}`} />
-          </Link>
-        ))}
-      </div>
-    </MenuSection>
-  );
-});
 
-const DealsStrip = memo(function DealsStrip({
-  deals,
-  onClose,
-}: {
-  deals: Product[];
-  onClose: () => void;
-}) {
-  if (deals.length === 0) return null;
 
-  return (
-    <MenuSection title="Special Offers">
-      <div className="no-scrollbar flex gap-4 overflow-x-auto pb-4">
-        {deals.map((product) => (
-          <Link
-            key={product.id}
-            href={`/product/${product.id}`}
-            onClick={onClose}
-            className="group min-w-[140px] flex-shrink-0 overflow-hidden"
-          >
-            <div className="relative aspect-square overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-2 dark:border-slate-900 dark:bg-slate-950">
-              <Image
-                src={product.thumbnail}
-                alt={product.title}
-                fill
-                loading="lazy"
-                className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-            <p className="mt-2 line-clamp-1 text-[11px] font-bold italic text-slate-800 dark:text-slate-200">
-              {product.title}
-            </p>
-          </Link>
-        ))}
-      </div>
-    </MenuSection>
-  );
-});
 
 export const MobileDrawer = memo(function MobileDrawer({
   isOpen,
   onClose,
   isRTL,
-  categories,
   navLinks,
   pathname,
-  onSearch,
-  dealsOfDay = [],
 }: MobileDrawerProps) {
-  const { t, tCategoryName } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState("");
-  const initialFocusRef = useRef<HTMLButtonElement>(null);
-  const lastFocusedElement = useRef<HTMLElement | null>(null);
-  const containerRef = useRef<HTMLElement>(null);
+  const { t } = useTranslation();
+  const initialFocusRef = React.useRef<HTMLButtonElement>(null);
+  const lastFocusedElement = React.useRef<HTMLElement | null>(null);
+  const containerRef = React.useRef<HTMLElement>(null);
 
-  const deals = useMemo(() => dealsOfDay.slice(0, 4), [dealsOfDay]);
-  const categoriesPreview = useMemo(() => categories.slice(0, 8), [categories]);
-
-  const handleSearchSubmit = useCallback(() => {
-    const query = searchQuery.trim();
-    if (!query) return;
-
-    onSearch(query);
-    setSearchQuery("");
-  }, [searchQuery, onSearch]);
-
-  const handleSearchKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key !== "Enter") return;
-      e.preventDefault();
-      handleSearchSubmit();
-    },
-    [handleSearchSubmit]
-  );
 
   // Handle Body Scroll Lock
   useEffect(() => {
@@ -371,39 +238,7 @@ export const MobileDrawer = memo(function MobileDrawer({
             </div>
 
             <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-8 scroll-smooth">
-              <MenuSection>
-                <div className="group flex items-center gap-3 rounded-2xl border border-transparent bg-slate-50 p-1.5 transition-all focus-within:border-brand-500/20 focus-within:bg-white dark:bg-slate-900/50 dark:focus-within:bg-slate-900">
-                  <div className="flex h-11 w-11 items-center justify-center text-slate-400">
-                    <FiSearch size={20} />
-                  </div>
-                  <input
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearchKeyDown}
-                    placeholder={t("common.search")}
-                    className="flex-1 bg-transparent text-sm font-bold text-slate-900 outline-none placeholder:text-slate-400 dark:text-white"
-                  />
-                  <button
-                    onClick={handleSearchSubmit}
-                    aria-label={t("common.search") || "Search"}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500/50 active:scale-95 dark:bg-brand-600"
-                    type="button"
-                  >
-                    <MdArrowForward size={20} className={isRTL ? "rotate-180" : ""} />
-                  </button>
-                </div>
-              </MenuSection>
-
-              <QuickActions onClose={onClose} />
               <PrimaryNavigation navLinks={navLinks} pathname={pathname} onClose={onClose} />
-              <CategoriesList
-                categories={categoriesPreview}
-                onClose={onClose}
-                isRTL={isRTL}
-                title={t("common.categories")}
-                getCategoryName={tCategoryName}
-              />
-              <DealsStrip deals={deals} onClose={onClose} />
             </div>
 
             <div className="border-t border-slate-50 bg-slate-50/50 p-6 dark:border-slate-900 dark:bg-slate-950/50">

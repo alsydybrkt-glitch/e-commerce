@@ -2,7 +2,7 @@
 import React, { useCallback, useRef } from "react";
 import { Navigation, Pagination, A11y, FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Product from "./product";
+import Product from "./ProductCard";
 import { Product as ProductType } from "@/services/api/productsApi";
 
 import "swiper/css";

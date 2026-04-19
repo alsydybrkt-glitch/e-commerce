@@ -20,7 +20,7 @@ import {
 } from "@/shared/utils/product-helpers";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Product as ProductType } from "@/services/api/productsApi";
-import SkeletonProduct from "./loadingOfSlideProduct";
+import SkeletonProduct from "./ProductSkeleton";
 
 function Product({ item, priority = false }: { item: ProductType; priority?: boolean }) {
   const { t, tCategoryName } = useTranslation();
@@ -30,11 +30,19 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
   const cartQuantity = useSelector(
     (state: any) => state.cart.quantityById?.[item.id] ?? 0
   );
-  const isFavorite = useSelector(
+  const isFavoriteRedux = useSelector(
     (state: any) => Boolean(state.favorites.ids?.[item.id])
   );
 
-  const isInCart = cartQuantity > 0;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Hydration-safe derived states
+  const isInCart = mounted ? cartQuantity > 0 : false;
+  const isFavorite = mounted ? isFavoriteRedux : false;
   const image = useMemo(() => getProductImage(item), [item]);
 
   const handleAddToCart = useCallback(
@@ -104,9 +112,9 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
   return (
     <Interactive
       variant="scale"
-      className="product-card group relative flex h-full flex-col rounded-[24px] border border-border-light bg-surface-primary p-3 sm:p-3.5 transition-all duration-500 hover:border-brand-500/20 hover:shadow-2xl hover:shadow-brand-500/10 dark:bg-slate-900/40 dark:border-slate-800/50 dark:hover:border-brand-400/30 dark:hover:bg-slate-900/80 hover:-translate-y-1.5"
+      className="product-card group relative flex h-full flex-col rounded-[2.5rem] border border-slate-100 bg-white p-3.5 sm:p-4 transition-all duration-500 hover:border-brand-500/20 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] dark:bg-slate-900/40 dark:border-slate-800/50 dark:hover:border-brand-400/30 dark:hover:bg-slate-900/80 hover:-translate-y-2"
     >
-      <div className="mb-4 flex items-center justify-between" suppressHydrationWarning>
+      <div className="mb-4 flex items-center justify-between">
         {isInCart ? (
           <span className="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-1 text-[10px] font-bold text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">
             <MdOutlineDone className="text-xs" />
@@ -122,7 +130,6 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
           <button
             type="button"
             onClick={handleToggleFavorite}
-            suppressHydrationWarning
             aria-label={
               isFavorite
                 ? t("product.removeFromFavorites")
@@ -190,7 +197,6 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
       <button
         type="button"
         onClick={handleAddToCart}
-        suppressHydrationWarning
         className={`mt-4 btn w-full h-11 rounded-xl transition-all active:scale-[0.96] flex items-center justify-center gap-2 ${
           isInCart ? "btn-secondary" : "btn-primary shadow-sm"
         }`}

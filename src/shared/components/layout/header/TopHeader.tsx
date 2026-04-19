@@ -11,7 +11,6 @@ import { useCallback, useMemo } from "react";
 import { TiThMenu } from "react-icons/ti";
 import { MdClose } from "react-icons/md";
 
-// ✅ Type محددة بدل any
 interface HeaderLogic {
   openMobile: boolean;
   setOpenMobile: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,31 +25,23 @@ function TopHeader({ headerLogic, isScrolled = false }: TopHeaderProps) {
   const { t } = useTranslation();
   const { openMobile, setOpenMobile } = headerLogic;
 
-  // ✅ useCallback لمنع إعادة الإنشاء في كل render
   const toggleMobileDrawer = useCallback(() => {
     setOpenMobile((prev) => !prev);
   }, [setOpenMobile]);
 
-  // ✅ تجميع الـ dynamic classes في متغيرات واضحة مع تحسين الأداء
+  // ✅ تثبيت الأحجام لمنع الـ lag الناتج عن الـ Reflow
   const styles = useMemo(() => ({
-    wrapper: isScrolled
-      ? "py-1 lg:py-1"
-      : "py-1.5 lg:py-3",
     wrapperBg: isScrolled
-      ? "border-b border-border-light bg-surface-primary/95 dark:border-slate-800 dark:bg-slate-900/95 shadow-md"
+      ? "border-b border-border-light bg-surface-primary/95 dark:border-slate-800 dark:bg-slate-900/95 shadow-lg"
       : "border-b border-transparent bg-transparent",
-    shell: isScrolled ? "py-0 lg:py-0.5" : "py-1.5 lg:py-3",
-    logoContainer: isScrolled
-      ? "h-8 w-8 lg:h-9 lg:w-9"
-      : "h-9 w-9 sm:h-12 sm:w-12 lg:h-14 lg:w-14",
-    logoText: isScrolled
-      ? "text-sm lg:text-base"
-      : "text-base sm:text-xl lg:text-2xl",
+    shell: "py-2 lg:py-3", // حشو ثابت
+    logoContainer: "h-9 w-9 sm:h-11 sm:w-11 lg:h-12 lg:w-12", // حجم ثابت متوسط
+    logoText: "text-base sm:text-lg lg:text-xl", // حجم خط ثابت
   }), [isScrolled]);
 
   return (
-    <div className={`transition-[padding,background-color,border-color,shadow] duration-300 ease-out will-change-[padding,background-color] ${styles.wrapperBg}`}>
-      <div className={`shell flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-6 transition-[padding] duration-300 ease-out ${styles.shell}`}>
+    <div className={`transition-[background-color,border-color,box-shadow] duration-500 ease-in-out will-change-[background-color,box-shadow] ${styles.wrapperBg}`}>
+      <div className={`shell flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-6 ${styles.shell}`}>
 
         {/* ── Row 1: Logo + Utilities ── */}
         <div className="flex items-center justify-between gap-3 w-full lg:w-auto">
@@ -60,7 +51,7 @@ function TopHeader({ headerLogic, isScrolled = false }: TopHeaderProps) {
             href="/"
             className="group flex items-center gap-1.5 transition-opacity hover:opacity-80 sm:gap-3"
           >
-            <div className={`flex items-center justify-center rounded-lg bg-bg-secondary border border-border-light dark:bg-slate-800 dark:border-slate-700 overflow-hidden transition-all duration-300 ease-out will-change-transform ${styles.logoContainer}`}>
+            <div className={`flex items-center justify-center rounded-lg bg-bg-secondary border border-border-light dark:bg-slate-800 dark:border-slate-700 overflow-hidden transition-all duration-300 ease-out ${styles.logoContainer}`}>
               <Image
                 src="/images/img/aura-logo.png"
                 alt="Aura logo"
@@ -73,16 +64,16 @@ function TopHeader({ headerLogic, isScrolled = false }: TopHeaderProps) {
             </div>
 
             <div className="flex flex-col">
-              <span className={`font-black tracking-tight text-text-primary dark:text-slate-100 leading-tight uppercase transition-[font-size] duration-300 ease-out ${styles.logoText}`}>
+              <span className={`font-black tracking-tight text-text-primary dark:text-slate-100 leading-tight uppercase ${styles.logoText}`}>
                 Aura
               </span>
 
               <span
                 aria-hidden={isScrolled}
-                className={`hidden sm:block overflow-hidden text-[6px] sm:text-[8px] lg:text-[9px] font-bold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400 transition-[max-height,opacity,transform] duration-200 ease-out ${
+                className={`hidden sm:block overflow-hidden text-[6px] sm:text-[8px] lg:text-[9px] font-bold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400 transition-all duration-300 ${
                   isScrolled
-                    ? "max-h-0 opacity-0 -translate-y-1 pointer-events-none"
-                    : "max-h-6 opacity-100 translate-y-0"
+                    ? "opacity-40 grayscale"
+                    : "opacity-100"
                 }`}
               >
                 {t("header.premiumCommerce")}
@@ -107,7 +98,6 @@ function TopHeader({ headerLogic, isScrolled = false }: TopHeaderProps) {
                   : "border-border bg-surface-primary text-text-secondary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
               }`}
               onClick={toggleMobileDrawer}
-              // ✅ aria محسّن
               aria-label={openMobile ? "Close menu" : "Open menu"}
               aria-expanded={openMobile}
               aria-controls="mobile-drawer"
@@ -123,14 +113,12 @@ function TopHeader({ headerLogic, isScrolled = false }: TopHeaderProps) {
 
         {/* ── Row 2: Search + Desktop Controls ── */}
         <div className="flex w-full items-center gap-1.5 lg:w-auto lg:gap-6">
-
           {/* Search */}
           <div className="flex-1 lg:max-w-md">
             <SearchBox />
           </div>
 
           {/* Desktop: Theme + Lang + Icons */}
-          {/* ✅ render مرة واحدة بس على الـ desktop */}
           <div className="hidden items-center gap-4 border-l border-border-light pl-4 dark:border-slate-800 lg:flex lg:gap-6 lg:pl-6">
             <div className="flex items-center gap-2">
               <ThemeToggle />
@@ -140,13 +128,11 @@ function TopHeader({ headerLogic, isScrolled = false }: TopHeaderProps) {
             <HeaderIcons />
           </div>
 
-          {/* Mobile: Language Switcher فقط (ThemeToggle و HeaderIcons فوق) */}
-          {/* ✅ مش بنكرر ThemeToggle أو HeaderIcons هنا */}
+          {/* Mobile: Language Switcher فقط */}
           <div className="shrink-0 lg:hidden">
             <LanguageSwitcher />
           </div>
         </div>
-
       </div>
     </div>
   );

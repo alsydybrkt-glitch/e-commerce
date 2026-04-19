@@ -14,7 +14,7 @@ import { HeroSlideItem } from "./HeroSlideItem";
 import type { HeroSlide } from "./types";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const AUTO_PLAY_INTERVAL = 6000;
+const AUTO_PLAY_INTERVAL = 5000;
 const SWIPE_THRESHOLD = 56;
 
 type SlideDirection = -1 | 1;
@@ -42,7 +42,7 @@ const SLIDE_CONFIGS: Omit<HeroSlide, "eyebrow" | "title" | "description">[] = [
   {
     id: "hero-audio",
     image: {
-      src: "https://images.unsplash.com/photo-1585386959984-a41552231658?auto=format&fit=crop&w=1600&q=80",
+      src: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1600&q=80",
       alt: "Wireless audio products and accessories",
     },
     primaryAction: { label: "", href: "/shop", ariaLabel: "" },
@@ -303,7 +303,7 @@ export default function AuraHero() {
       <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-100/70 blur-3xl" />
 
       <div className="mx-auto w-full max-w-7xl">
-        <div className="relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/90 shadow-[0_28px_90px_-40px_rgba(15,23,42,0.5)] backdrop-blur-sm">
+        <div className="relative overflow-hidden rounded-[0.5rem] border border-slate-200/80 bg-white/90 shadow-[0_28px_90px_-40px_rgba(15,23,42,0.5)] backdrop-blur-sm">
 
           {/* Slides */}
           <div className="relative" aria-live="polite">

@@ -48,18 +48,17 @@ export function SortDropdown() {
             onChange={(e) => handleSortChange(e.target.value)}
             disabled={isPending}
             aria-label={t("category.sortBy")}
-            className="appearance-none rounded-xl border border-slate-200 bg-white py-2 pl-4 pr-10 text-sm font-bold text-slate-900 outline-none transition-all hover:border-brand-500 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 disabled:opacity-50 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+            className="appearance-none rounded-2xl border border-slate-100 bg-white/80 py-2.5 pl-5 pr-11 text-[13px] font-black tracking-tight text-slate-800 outline-none transition-all hover:bg-white hover:border-slate-200 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/5 disabled:opacity-50 dark:border-white/10 dark:bg-slate-900/50 dark:text-white"
           >
-
             {SORT_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} value={option.value} className="dark:bg-slate-900">
                 {t(option.labelKey)}
               </option>
             ))}
           </select>
           <ChevronDown 
             size={16} 
-            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-brand-500" 
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-brand-500 transition-colors" 
           />
         </div>
       </div>

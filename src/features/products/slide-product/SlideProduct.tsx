@@ -3,8 +3,8 @@ import React, { useRef, useState, memo, useCallback, useEffect, useMemo } from "
 import dynamic from "next/dynamic";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { SectionHeader } from "@/shared/ui/SectionHeader";
-import Product from "./product";
-import LoadingOfSlideProduct from "./loadingOfSlideProduct";
+import Product from "./ProductCard";
+import LoadingOfSlideProduct from "./ProductSkeleton";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Product as ProductType } from "@/services/api/productsApi";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";

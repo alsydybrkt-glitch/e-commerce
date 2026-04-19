@@ -1,4 +1,4 @@
-import SkeletonProduct from "@/features/products/slide-product/loadingOfSlideProduct";
+import SkeletonProduct from "@/features/products/slide-product/ProductSkeleton";
 
 export function PageSkeleton() {
   return (

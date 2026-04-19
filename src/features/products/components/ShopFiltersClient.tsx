@@ -1,17 +1,16 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+
+import { useCallback, useMemo, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
+
 import { Category } from "@/services/api/productsApi";
-import { 
-  ShopSortKey, 
-  SHOP_SORT_KEYS, 
-} from "@/constants/shop";
+import { ShopSortKey, SHOP_SORT_KEYS } from "@/constants/shop";
 import { Interactive } from "@/shared/ui/Interactive";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 
-// Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -26,161 +25,208 @@ interface ShopFiltersClientProps {
 export default function ShopFiltersClient({
   categories,
   activeCategory,
-  searchTerm,
   sortBy,
   inStockOnly,
 }: ShopFiltersClientProps) {
   const { t } = useTranslation();
+
   const router = useRouter();
   const pathname = usePathname();
-  const currentSearchParams = useSearchParams();
+  const searchParams = useSearchParams();
+
   const [isPending, startTransition] = useTransition();
-  const [searchInput, setSearchInput] = useState(searchTerm);
 
-  useEffect(() => {
-    setSearchInput(searchTerm);
-  }, [searchTerm]);
+  /* -----------------------------
+     Active Filters Counter
+  ------------------------------ */
 
-  const activeFiltersCount = useMemo(
-    () =>
-      (searchTerm.trim() ? 1 : 0) +
-      (sortBy !== "featured" ? 1 : 0) +
-      (inStockOnly ? 1 : 0),
-    [inStockOnly, searchTerm, sortBy]
-  );
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+
+    if (sortBy !== "featured") count++;
+    if (inStockOnly) count++;
+
+    return count;
+  }, [sortBy, inStockOnly]);
+
+  /* -----------------------------
+     Update Filters
+  ------------------------------ */
 
   const updateFilters = useCallback(
     (updates: Record<string, string | null>) => {
-      const next = new URLSearchParams(currentSearchParams.toString());
+      const params = new URLSearchParams(searchParams.toString());
 
       Object.entries(updates).forEach(([key, value]) => {
-        if (value === null || value.trim() === "") {
-          next.delete(key);
+        if (!value || value.trim() === "") {
+          params.delete(key);
         } else {
-          next.set(key, value);
+          params.set(key, value);
         }
       });
 
-      const query = next.toString();
-      const target = query ? `${pathname}?${query}` : pathname;
+      const query = params.toString();
+      const url = query ? `${pathname}?${query}` : pathname;
 
       startTransition(() => {
-        router.replace(target, { scroll: false });
+        router.replace(url, { scroll: false });
       });
     },
-    [currentSearchParams, pathname, router]
+    [pathname, router, searchParams]
   );
 
-  useEffect(() => {
-    const nextQuery = searchInput.trim();
-    const currentQuery = searchTerm.trim();
+  /* -----------------------------
+     Handlers
+  ------------------------------ */
 
-    if (nextQuery === currentQuery) {
-      return undefined;
-    }
-
-    const timer = setTimeout(() => {
+  const handleCategoryChange = useCallback(
+    (slug: string) => {
       updateFilters({
-        query: nextQuery || null,
+        category: slug,
         page: null,
       });
-    }, 300);
+    },
+    [updateFilters]
+  );
 
-    return () => clearTimeout(timer);
-  }, [searchInput, searchTerm, updateFilters]);
+  const handleSortChange = useCallback(
+    (value: ShopSortKey) => {
+      updateFilters({
+        sort: value === "featured" ? null : value,
+        page: null,
+      });
+    },
+    [updateFilters]
+  );
 
-  const handleCategoryChange = (slug: string) => {
-    updateFilters({
-      category: slug,
-      page: null,
-    });
-  };
+  const handleStockChange = useCallback(
+    (checked: boolean) => {
+      updateFilters({
+        stock: checked ? "1" : null,
+        page: null,
+      });
+    },
+    [updateFilters]
+  );
 
-  const handleSortChange = (value: ShopSortKey) => {
-    updateFilters({
-      sort: value === "featured" ? null : value,
-      page: null,
-    });
-  };
-
-  const handleStockChange = (checked: boolean) => {
-    updateFilters({
-      stock: checked ? "1" : null,
-      page: null,
-    });
-  };
-
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     updateFilters({
       query: null,
       sort: null,
       stock: null,
       page: null,
     });
-  };
+  }, [updateFilters]);
+
+  /* -----------------------------
+     Category Button Style
+  ------------------------------ */
+
+  const categoryClass = (isActive: boolean) =>
+    `whitespace-nowrap rounded-2xl px-5 py-3 text-sm font-bold transition-all duration-300
+    ${
+      isActive
+        ? "bg-slate-900 text-white shadow-lg dark:bg-brand-600"
+        : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
+    }`;
+
+  /* -----------------------------
+     Memoized Categories
+  ------------------------------ */
+
+  const categoryItems = useMemo(() => {
+    return categories.map((category) => {
+      const isActive = category.slug === activeCategory;
+      const label = category.name || category.slug.replace(/-/g, " ");
+
+      return (
+        <Interactive key={category.slug}>
+          <button
+            type="button"
+            onClick={() => handleCategoryChange(category.slug)}
+            className={categoryClass(isActive)}
+          >
+            {label}
+          </button>
+        </Interactive>
+      );
+    });
+  }, [categories, activeCategory, handleCategoryChange]);
+
+  /* -----------------------------
+     Render
+  ------------------------------ */
 
   return (
-    <section className="mb-8 space-y-4">
-      {/* Premium Category Swiper */}
+    <section className="mb-10 space-y-6">
+
+      {/* -----------------------------
+         Categories
+      ------------------------------ */}
+
       <div className="relative">
-        {/* Edge masks for premium fade effect */}
-        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-white dark:from-slate-950/0 hidden sm:block"></div>
-        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-white dark:from-slate-950/0 hidden sm:block"></div>
 
-        <Swiper
-          modules={[FreeMode]}
-          freeMode={true}
-          slidesPerView="auto"
-          spaceBetween={10}
-          className="category-swiper !py-1"
-          watchSlidesProgress={true}
-        >
-          {categories.map((category) => {
-            const isActive = category.slug === activeCategory;
-            const label = category.name || category.slug.replace(/-/g, " ");
+        {/* Desktop */}
 
-            return (
-              <SwiperSlide key={category.slug} className="!w-auto">
-                <Interactive>
-                  <button
-                    type="button"
-                    onClick={() => handleCategoryChange(category.slug)}
-                    className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300
-                      ${isActive
-                        ? "bg-slate-900 text-white shadow-lg shadow-slate-200 dark:bg-brand-600 dark:shadow-none"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                </Interactive>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+        <div className="hidden lg:flex flex-wrap gap-3">
+          {categoryItems}
+        </div>
+
+        {/* Mobile */}
+
+        <div className="lg:hidden">
+          <Swiper
+            modules={[FreeMode]}
+            freeMode
+            slidesPerView="auto"
+            spaceBetween={10}
+            watchSlidesProgress
+            className="!py-2"
+          >
+            {categories.map((category) => {
+              const isActive = category.slug === activeCategory;
+              const label =
+                category.name || category.slug.replace(/-/g, " ");
+
+              return (
+                <SwiperSlide key={category.slug} className="!w-auto">
+                  <Interactive>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCategoryChange(category.slug)
+                      }
+                      className={categoryClass(isActive)}
+                    >
+                      {label}
+                    </button>
+                  </Interactive>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
       </div>
 
-      <div className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-2 xl:grid-cols-4 dark:border-slate-800 dark:bg-slate-900/50">
-        <label className="block">
-          <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {t("shop.refineTitle") || "Search"}
-          </span>
-          <input
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder={t("shop.searchPlaceholder")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
-          />
-        </label>
+      {/* -----------------------------
+         Filters Panel
+      ------------------------------ */}
+
+      <div className="glass-darker grid gap-4 rounded-3xl p-5 sm:p-6 md:grid-cols-3">
+
+        {/* Sort */}
 
         <label className="block">
-          <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
             {t("category.sortBy") || "Sort"}
           </span>
+
           <select
             value={sortBy}
-            onChange={(event) => handleSortChange(event.target.value as ShopSortKey)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+            onChange={(e) =>
+              handleSortChange(e.target.value as ShopSortKey)
+            }
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold outline-none transition focus:border-brand-500 dark:border-slate-800 dark:bg-slate-950"
           >
             {SHOP_SORT_KEYS.map((option) => (
               <option key={option} value={option}>
@@ -190,23 +236,43 @@ export default function ShopFiltersClient({
           </select>
         </label>
 
-        <label className="flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-700">
-          <input
-            type="checkbox"
-            checked={inStockOnly}
-            onChange={(event) => handleStockChange(event.target.checked)}
-          />
-          {t("shop.inStockOnly")}
-        </label>
+        {/* Stock */}
 
-        <button
-          type="button"
-          onClick={handleReset}
-          disabled={activeFiltersCount === 0}
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700"
-        >
-          {t("shop.clearFilters")} ({activeFiltersCount})
-        </button>
+        <div className="flex flex-col">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            {t("shop.inStockOnly")}
+          </span>
+
+          <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold dark:border-slate-800 dark:bg-slate-950">
+            <span>{t("shop.inStockOnly")}</span>
+
+            <input
+              type="checkbox"
+              checked={inStockOnly}
+              onChange={(e) =>
+                handleStockChange(e.target.checked)
+              }
+              className="h-5 w-5 accent-brand-600"
+            />
+          </label>
+        </div>
+
+        {/* Reset */}
+
+        <div className="flex flex-col">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            {t("shop.clearFilters")}
+          </span>
+
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={activeFiltersCount === 0 || isPending}
+            className="flex items-center justify-center rounded-2xl bg-rose-50 px-4 py-3 text-sm font-black uppercase tracking-widest text-rose-500 transition hover:bg-rose-100 disabled:opacity-30"
+          >
+            {isPending ? "..." : t("common.clear") || "Clear"}
+          </button>
+        </div>
       </div>
     </section>
   );

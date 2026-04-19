@@ -1,5 +1,5 @@
 import { Skeleton, SkeletonCircle } from "../Skeleton";
-import SkeletonProduct from "@/features/products/slide-product/loadingOfSlideProduct";
+import SkeletonProduct from "@/features/products/slide-product/ProductSkeleton";
 
 export default function FavoritesSkeleton() {
   return (
