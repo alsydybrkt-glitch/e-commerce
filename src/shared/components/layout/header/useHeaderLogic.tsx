@@ -17,7 +17,11 @@ export default function useHeaderLogic() {
     setOpenMobile: (val: boolean | ((prev: boolean) => boolean)) => {
       // Compatibility wrapper for standard useState behavior
       if (typeof val === "boolean") {
-        val ? openMobileMenu() : closeMobileMenu();
+        if (val) {
+          openMobileMenu();
+        } else {
+          closeMobileMenu();
+        }
       } else {
         // We don't really use functional updates here, but toggle is available
         toggleMobileMenu();
