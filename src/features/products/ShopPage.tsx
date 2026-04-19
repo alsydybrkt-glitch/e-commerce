@@ -57,6 +57,7 @@ export default function ShopPage({
           activeCategory={activeCategory}
           sortBy={sortBy}
           inStockOnly={inStockOnly}
+          searchTerm={searchTerm}
         />
 
         {/* RESULTS HEADER */}

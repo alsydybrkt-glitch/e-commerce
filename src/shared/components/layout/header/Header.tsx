@@ -57,7 +57,7 @@ function Header() {
   const [isInteracting, setIsInteracting] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);
-  const bottomVisibilityTimerRef = useRef<NodeJS.Timeout | number | null>(null);
+  const bottomVisibilityTimerRef = useRef<any>(null);
   const lastBottomVisibilityToggleAtRef = useRef(0);
   const pendingBottomVisibilityActionRef = useRef<"show" | "hide" | null>(null);
 
@@ -120,19 +120,7 @@ function Header() {
 
       clearBottomVisibilityTimer();
       pendingBottomVisibilityActionRef.current = nextAction;
-Next.js (14.2.35) is outdated (learn more)
-./src/features/favorites/FavoritesPage.tsx:7:1
-Module not found: Can't resolve '@/features/products/slide-product/product'
-   5 | import { useTranslation } from "@/shared/hooks/useTranslation";
-   6 | import { motion, AnimatePresence } from "framer-motion";
->  7 | import Product from "@/features/products/slide-product/product";
-     | ^
-   8 | import { Interactive } from "@/shared/ui/Interactive";
-   9 | import { useRouter } from "next/navigation";
-  10 |
 
-https://nextjs.org/docs/messages/module-not-found
-This error occurred during the build process and can only be dismissed by fixing the error.
       bottomVisibilityTimerRef.current = window.setTimeout(() => {
         pendingBottomVisibilityActionRef.current = null;
         bottomVisibilityTimerRef.current = null;
