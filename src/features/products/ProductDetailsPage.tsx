@@ -28,14 +28,14 @@ export default function ProductDetailsPage({ product, categoryProductsPromise, l
         />
 
         <Suspense fallback={<ProductDetailsSkeleton />}>
-          <article className="surface-card grid gap-6 p-3 sm:gap-8 sm:p-8 md:gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 lg:p-12">
+          <article className="surface-card grid max-w-full gap-6 p-3 sm:gap-8 sm:p-8 md:gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 lg:p-12">
             {/* Left Column: Visuals */}
-            <section aria-label={t("common.media") || "Product Media"}>
+            <section className="min-w-0" aria-label={t("common.media") || "Product Media"}>
               <ProductGallery product={product} />
             </section>
             
             {/* Right Column: Interaction */}
-            <section className="flex flex-col" aria-label={t("common.actions") || "Product Actions"}>
+            <section className="flex min-w-0 flex-col" aria-label={t("common.actions") || "Product Actions"}>
               <ProductInfo product={product} />
               <ProductPurchasePanel product={product} />
               <ProductTrustSignals />

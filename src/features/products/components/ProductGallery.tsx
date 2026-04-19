@@ -49,7 +49,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   }, []);
 
   return (
-    <div className="space-y-3 sm:space-y-4">
+    <div className="w-full max-w-full min-w-0 space-y-3 sm:space-y-4">
       {/* Main Image Viewport */}
       <div className="relative w-full overflow-hidden bg-slate-50 min-h-[200px] max-h-[300px] aspect-[4/3] dark:bg-slate-800/20 sm:rounded-[32px] sm:aspect-square sm:min-h-0 sm:max-h-none">
 
@@ -143,7 +143,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
       </div>
 
       {/* Thumbnails — desktop only */}
-      <div className="hidden sm:grid grid-cols-4 gap-3">
+      <div className="hidden min-w-0 sm:grid grid-cols-4 gap-3">
         {images.map((image: string, index: number) => (
           <Interactive key={image}>
             <button

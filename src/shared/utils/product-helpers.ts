@@ -107,7 +107,7 @@ export function getSafeProductQuantity(value: number, stock = 1) {
 export function buildProductSharePayload(product: Product, url: string) {
   return {
     title: product.title,
-    text: `Check out ${product.title} on Aura-Market`,
+    text: `Check out ${product.title} on Aura`,
     url,
   };
 }

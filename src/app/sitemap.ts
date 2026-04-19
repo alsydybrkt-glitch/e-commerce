@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aura-market.vercel.app'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aura.vercel.app'
   const lastModified = new Date()
 
   const locales = ['en', 'ar']

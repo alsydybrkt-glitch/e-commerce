@@ -15,6 +15,11 @@
   html {
     scroll-behavior: smooth;
     color-scheme: light dark;
+    scroll-padding-top: var(--site-header-offset, 130px);
+  }
+
+  :where([id]) {
+    scroll-margin-top: var(--site-header-offset, 130px);
   }
 
   html.font-arabic,
@@ -150,11 +155,19 @@
 
   /* Specialized Branding Components */
   .site-header {
-    @apply sticky top-0 z-dropdown w-full border-b transition-all duration-300;
+    @apply sticky top-0 z-[1000] w-full border-b;
+    transition-property: transform, background-color, border-color, box-shadow, opacity;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     background-color: var(--color-bg-overlay);
     border-color: var(--color-border-light);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-header.header-condensed {
+    @apply shadow-2xl shadow-black/10;
+    /* Optional: fine tune mobile height */
   }
 
   .section-kicker {
@@ -185,16 +198,27 @@
 
 /* Fix for dark mode system overrides & Enhanced Glassmorphism */
 .glass {
-  @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/40 border border-white/20 dark:border-slate-800/20 shadow-sm transition-all duration-300;
+  @apply backdrop-blur-xl bg-white/75 dark:bg-slate-900/60 border-b border-white/20 dark:border-slate-800/30 shadow-sm;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease-out;
 }
 
 .glass-darker {
-  @apply backdrop-blur-2xl bg-white/40 dark:bg-slate-950/40 border border-white/10 dark:border-slate-900/10 shadow-md transition-all duration-300;
+  @apply backdrop-blur-xl bg-white/85 dark:bg-slate-950/80 border-b border-black/5 dark:border-white/5 shadow-xl;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease-out;
 }
 
 [data-theme='dark'] .glass {
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .glass-darker {
+  background: rgba(2, 6, 23, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ==================== PREMIUM SWIPER PAGINATION ==================== */
@@ -228,4 +252,3 @@
 .gallery-pagination {
   margin-top: 1rem !important;
 }
-

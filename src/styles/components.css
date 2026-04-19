@@ -6,19 +6,7 @@
 @import "./design-tokens.css";
 
 /* ==================== HEADER / NAVBAR ==================== */
-
-/* ==================== HEADER / NAVBAR ==================== */
-
-.site-header {
-  background-color: var(--color-bg-primary);
-  border-bottom: 1px solid var(--color-border-light);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  position: sticky;
-  top: 0;
-  z-index: var(--z-dropdown);
-  transition: border-color var(--transition-base);
-}
+/* .site-header visual/sticky behavior is centralized in src/styles/index.css */
 
 .site-header-inner {
   display: flex;

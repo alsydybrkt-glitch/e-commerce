@@ -189,8 +189,8 @@ export const translations = {
         pageOf: "Page {current} of {total}",
       },
       metadata: {
-        title: "Shop Full Catalog | Aura-Market",
-        description: "Browse our entire collection of premium products. Find everything you need with Aura-Market's intuitive discovery experience.",
+        title: "Shop Full Catalog | Aura",
+        description: "Browse our entire collection of premium products. Find everything you need with Aura's intuitive discovery experience.",
       },
     },
     contact: {
@@ -261,7 +261,7 @@ export const translations = {
       cvc: "CVC",
       shippingFree: "Free",
       metadata: {
-        title: "Checkout | Aura-Market",
+        title: "Checkout | Aura",
         description: "Complete your purchase securely. Review your shipping, payment, and order details before confirming.",
       },
     },

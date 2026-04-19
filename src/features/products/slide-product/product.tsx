@@ -104,7 +104,7 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
   return (
     <Interactive
       variant="scale"
-      className="product-card group relative flex h-full flex-col rounded-[32px] border border-border-light bg-surface-primary p-4 transition-all duration-500 hover:border-brand-500/20 hover:shadow-2xl hover:shadow-brand-500/10 dark:bg-slate-900/40 dark:border-slate-800/50 dark:hover:border-brand-400/30 dark:hover:bg-slate-900/80 hover:-translate-y-1.5"
+      className="product-card group relative flex h-full flex-col rounded-[24px] border border-border-light bg-surface-primary p-3 sm:p-3.5 transition-all duration-500 hover:border-brand-500/20 hover:shadow-2xl hover:shadow-brand-500/10 dark:bg-slate-900/40 dark:border-slate-800/50 dark:hover:border-brand-400/30 dark:hover:bg-slate-900/80 hover:-translate-y-1.5"
     >
       <div className="mb-4 flex items-center justify-between" suppressHydrationWarning>
         {isInCart ? (
@@ -149,7 +149,7 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
       </div>
 
       <Link href={`/product/${item.id}`} className="block flex-1 group/image">
-        <div className="relative mb-5 aspect-[4/5] overflow-hidden rounded-[24px] bg-slate-50 dark:bg-slate-950/40 shadow-inner">
+        <div className="relative mb-3 aspect-square overflow-hidden rounded-[20px] bg-slate-50 dark:bg-slate-950/40 shadow-inner">
           <Image
             key={item.id}
             src={image}
@@ -157,7 +157,7 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
             fill
             sizes="(max-width: 640px) 95vw, (max-width: 1024px) 30vw, 300px"
             priority={priority}
-            className="object-contain p-6 transition-all duration-700 group-hover/image:scale-110 group-hover/image:rotate-2"
+            className="object-contain p-4 transition-all duration-700 group-hover/image:scale-110 group-hover/image:rotate-2"
           />
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white/10 to-transparent dark:from-black/10" />
         </div>
@@ -191,7 +191,7 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
         type="button"
         onClick={handleAddToCart}
         suppressHydrationWarning
-        className={`mt-6 btn w-full h-12 rounded-xl transition-all active:scale-[0.96] flex items-center justify-center gap-2 ${
+        className={`mt-4 btn w-full h-11 rounded-xl transition-all active:scale-[0.96] flex items-center justify-center gap-2 ${
           isInCart ? "btn-secondary" : "btn-primary shadow-sm"
         }`}
       >

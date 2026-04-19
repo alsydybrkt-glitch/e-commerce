@@ -2,7 +2,7 @@ import { memo } from "react";
 
 function SkeletonProduct() {
   return (
-    <div className="product-card group relative flex h-full flex-col rounded-[32px] border border-border-light bg-surface-primary p-4 animate-pulse dark:bg-slate-900/40 dark:border-slate-800/50">
+    <div className="product-card group relative flex h-full flex-col rounded-[24px] border border-border-light bg-surface-primary p-3 sm:p-3.5 animate-pulse dark:bg-slate-900/40 dark:border-slate-800/50">
       {/* Top Header Placeholder */}
       <div className="mb-4 flex items-center justify-between">
         <div className="h-4 w-20 rounded-md bg-slate-200 dark:bg-slate-800" />
@@ -13,7 +13,7 @@ function SkeletonProduct() {
       </div>
 
       {/* Image Placeholder */}
-      <div className="relative mb-5 aspect-[4/5] overflow-hidden rounded-[24px] bg-slate-100 dark:bg-slate-800/50 shadow-inner" />
+      <div className="relative mb-3 aspect-square overflow-hidden rounded-[20px] bg-slate-100 dark:bg-slate-800/50 shadow-inner" />
 
       {/* Content Spaceholders */}
       <div className="flex-1 space-y-4">
@@ -34,7 +34,7 @@ function SkeletonProduct() {
       </div>
 
       {/* Button Placeholder */}
-      <div className="mt-6 h-12 w-full rounded-xl bg-slate-200 dark:bg-slate-800" />
+      <div className="mt-4 h-11 w-full rounded-xl bg-slate-200 dark:bg-slate-800" />
     </div>
   );
 }

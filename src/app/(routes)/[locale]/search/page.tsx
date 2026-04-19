@@ -33,8 +33,8 @@ export async function generateMetadata({
 
   if (!query) {
     return {
-      title: "Search Catalog | Aura-Market",
-      description: "Search across thousands of premium products in Aura-Market's extensive catalog.",
+      title: "Search Catalog | Aura",
+      description: "Search across thousands of premium products in Aura's extensive catalog.",
       alternates: {
         canonical: "/search",
       },
@@ -42,8 +42,8 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Search "${query}" | Aura-Market`,
-    description: `Found results for "${query}" at Aura-Market. Shop the best selection of products matching your search.`,
+    title: `Search "${query}" | Aura`,
+    description: `Found results for "${query}" at Aura. Shop the best selection of products matching your search.`,
     alternates: {
       canonical: `/search?query=${encodeURIComponent(query)}`,
     },

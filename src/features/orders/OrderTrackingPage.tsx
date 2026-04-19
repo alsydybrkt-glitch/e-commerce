@@ -35,7 +35,7 @@ export default function OrderTrackingPage() {
 
   const fillSampleData = () => {
     setOrderId("94827163");
-    setEmail("demo@aura-market.example.com");
+    setEmail("demo@aura.example.com");
   };
 
   const containerVariants = {

@@ -3,8 +3,8 @@ import Home from "@/features/home/HomePage";
 import { fetchAllProductCategories, fetchCategoryProducts } from "@/services/api/productsApi";
 
 export const metadata: Metadata = {
-  title: 'Home | Aura-Market - Modern Shopping Redefined',
-  description: 'Experience the ultimate premium e-commerce platform. Shop the latest in electronics, fashion, and lifestyle with Aura-Market.',
+  title: 'Home | Aura - Modern Shopping Redefined',
+  description: 'Experience the ultimate premium e-commerce platform. Shop the latest in electronics, fashion, and lifestyle with Aura.',
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

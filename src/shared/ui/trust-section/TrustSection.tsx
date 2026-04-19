@@ -1,12 +1,26 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+
+import { useMemo, useState, useEffect, useId } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Product from "@/features/products/slide-product/product";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
 import { AppDispatch } from "@/store";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
+
+const MobileProductSwiper = dynamic(() => import("@/features/products/slide-product/MobileProductSwiper"), {
+  loading: () => (
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:hidden">
+      {[...Array(2)].map((_, index) => (
+        <div key={index} className="h-[400px] rounded-3xl bg-slate-100/50 dark:bg-slate-800/20 animate-pulse" />
+      ))}
+    </div>
+  ),
+  ssr: false,
+});
 
 function BestSellers() {
   const { t } = useTranslation();
@@ -14,6 +28,9 @@ function BestSellers() {
   const dispatch = useDispatch<AppDispatch>();
   const { items = {}, homeStatus } = useSelector((state: any) => state.products);
   const [activeTab, setActiveTab ] = useState("all");
+  const isMobile = useIsMobile(1024);
+  const uniqueId = useId().replace(/:/g, "");
+  const paginationClass = `pagination-best-${uniqueId}`;
 
   // Ensure data availability on mount
   useEffect(() => {
@@ -70,7 +87,7 @@ function BestSellers() {
 
   return (
     <section className="shell section-gap">
-      <div className="glass overflow-hidden p-6 sm:p-10 lg:p-12 shadow-2xl relative rounded-[40px] dark:bg-slate-900/10 dark:border-white/5 border-white/40">
+      <div className="glass overflow-hidden p-5 sm:p-8 lg:p-10 shadow-2xl relative rounded-[40px] dark:bg-slate-900/10 dark:border-white/5 border-white/40">
         {/* Subtle background decorative element */}
         <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-brand-500/5 blur-3xl pointer-events-none" />
         
@@ -128,27 +145,36 @@ function BestSellers() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"
               >
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-96 rounded-3xl bg-slate-100/50 dark:bg-slate-800/20 animate-pulse" />
+                  <div key={i} className="h-80 rounded-3xl bg-slate-100/50 dark:bg-slate-800/20 animate-pulse" />
                 ))}
               </motion.div>
             ) : bestSellers.length > 0 ? (
-              <motion.div 
-                key={activeTab}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-                className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3"
-              >
-                {bestSellers.map((product: any) => (
-                  <div key={product.id} className="group">
-                    <Product item={product} />
-                  </div>
-                ))}
-              </motion.div>
+              isMobile ? (
+                <MobileProductSwiper 
+                  items={bestSellers}
+                  canLoop={bestSellers.length > 3}
+                  paginationClass={paginationClass}
+                  onSwiper={() => {}} 
+                />
+              ) : (
+                <motion.div 
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+                  className="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-4"
+                >
+                  {bestSellers.map((product: any) => (
+                    <div key={product.id} className="group">
+                      <Product item={product} />
+                    </div>
+                  ))}
+                </motion.div>
+              )
             ) : (
               <motion.div 
                 initial={{ opacity: 0 }}

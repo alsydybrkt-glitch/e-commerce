@@ -23,12 +23,12 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Aura-Market | Premium E-Commerce Experience',
-    template: '%s | Aura-Market'
+    default: 'Aura | Premium E-Commerce Experience',
+    template: '%s | Aura'
   },
-  description: 'Discover the future of shopping with Aura-Market. Premium products, seamless experience, and lightning-fast delivery.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aura-market.vercel.app'),
-  keywords: ['e-commerce', 'premium products', 'modern shop', 'aura-market'],
+  description: 'Discover the future of shopping with Aura. Premium products, seamless experience, and lightning-fast delivery.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aura.vercel.app'),
+  keywords: ['e-commerce', 'premium products', 'modern shop', 'aura'],
 }
 
 const themeScript = `(function() {

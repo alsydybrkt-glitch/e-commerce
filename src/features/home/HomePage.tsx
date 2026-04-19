@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import HeroSlider from "@/shared/ui/hero-slider/HeroSlider";
+import AuraHero from "@/shared/ui/hero-slider/AuraHero";
 import { getProductImage } from "@/shared/utils/product-helpers";
 import { Product as ProductType, Category } from "@/services/api/productsApi";
 import { getTranslations } from "@/config/i18n/get-translations";
@@ -70,7 +70,7 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
 
   return (
     <div className="flex flex-col overflow-x-hidden">
-      <HeroSlider />
+      <AuraHero />
       
       {/* Strategic Trust Bar */}
       <TrustBar />

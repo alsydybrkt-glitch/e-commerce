@@ -20,7 +20,7 @@ export default function AdminLayout({
         </main>
 
         <footer className="border-t bg-white/50 px-8 py-4 text-xs font-semibold text-slate-400 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/50">
-          &copy; 2026 Aura-Market. Professional Administrative Dashboard.
+          &copy; 2026 Aura. Professional Administrative Dashboard.
         </footer>
       </div>
     </div>

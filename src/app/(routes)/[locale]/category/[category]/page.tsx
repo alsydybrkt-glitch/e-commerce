@@ -31,8 +31,8 @@ export async function generateMetadata({ params }: { params: { category: string 
   const categoryName = decodeURIComponent(params.category);
   const formattedTitle = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
   return {
-    title: `${formattedTitle} | Aura-Market`,
-    description: `Discover our premium selection of ${formattedTitle}. High-quality products and exclusive deals only at Aura-Market.`,
+    title: `${formattedTitle} | Aura`,
+    description: `Discover our premium selection of ${formattedTitle}. High-quality products and exclusive deals only at Aura.`,
     alternates: {
       canonical: `/category/${params.category}`,
     },
