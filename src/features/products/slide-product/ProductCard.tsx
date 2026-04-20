@@ -5,7 +5,7 @@ import { FaHeart, FaShare, FaStar } from "react-icons/fa";
 import { IoHeartOutline } from "react-icons/io5";
 import { MdOutlineAddShoppingCart, MdOutlineDone } from "react-icons/md";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store";
 import toast from "react-hot-toast";
 import { Interactive } from "@/shared/ui/Interactive";
 import { add } from "@/features/cart/store/cartSlice";
@@ -24,14 +24,14 @@ import SkeletonProduct from "./ProductSkeleton";
 
 function Product({ item, priority = false }: { item: ProductType; priority?: boolean }) {
   const { t, tCategoryName } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Redux state
-  const cartQuantity = useSelector(
-    (state: any) => state.cart.quantityById?.[item.id] ?? 0
+  const cartQuantity = useAppSelector(
+    (state) => state.cart.quantityById?.[item.id] ?? 0
   );
-  const isFavoriteRedux = useSelector(
-    (state: any) => Boolean(state.favorites.ids?.[item.id])
+  const isFavoriteRedux = useAppSelector(
+    (state) => Boolean(state.favorites.ids?.[item.id])
   );
 
   const [mounted, setMounted] = useState(false);

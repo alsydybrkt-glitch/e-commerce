@@ -1,6 +1,6 @@
 import { useCallback, useId, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store";
 import {
   applyDiscount,
   decreaseQty,
@@ -17,12 +17,12 @@ import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function useCartPage() {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const promoInputId = useId();
-  const items = useSelector(selectCartItems);
-  const subtotal = useSelector(selectCartSubtotal);
-  const total = useSelector(selectFinalTotal);
-  const discount = useSelector(selectCartDiscount);
+  const items = useAppSelector(selectCartItems);
+  const subtotal = useAppSelector(selectCartSubtotal);
+  const total = useAppSelector(selectFinalTotal);
+  const discount = useAppSelector(selectCartDiscount);
   const [promoCode, setPromoCode] = useState("");
 
   const applyPromoCode = useCallback(() => {

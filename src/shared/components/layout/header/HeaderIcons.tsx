@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/store";
 import { selectCartCount } from "@/features/cart/store/cartSlice";
 import { count } from "@/features/favorites/store/favoriteSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
@@ -14,8 +14,8 @@ const iconBase =
 
 function HeaderIcons() {
   const { t } = useTranslation();
-  const cartCount = useSelector(selectCartCount);
-  const favorites = useSelector(count);
+  const cartCount = useAppSelector(selectCartCount);
+  const favorites = useAppSelector(count);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);

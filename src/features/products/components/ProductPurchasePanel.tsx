@@ -1,6 +1,6 @@
 "use client";
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { FaHeart, FaShare } from "react-icons/fa";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
@@ -13,7 +13,7 @@ import { addFavorite, removeFavorite, selectIsFavorite } from "@/features/favori
 import { Product } from "@/services/api/productsApi";
 import { buildProductSharePayload } from "@/shared/utils/product-helpers";
 import { shareProduct } from "@/shared/utils/product-tools";
-import { RootState } from "@/store";
+// RootState not needed explicitly here anymore
 import { Interactive } from "@/shared/ui/Interactive";
 import { motion, AnimatePresence } from "framer-motion";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
@@ -24,7 +24,7 @@ interface ProductPurchasePanelProps {
 
 export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
@@ -33,8 +33,8 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const purchaseActionsRef = useRef<HTMLDivElement | null>(null);
 
-  const cartQuantity = useSelector((state: RootState) => selectCartItemQuantity(state, product.id));
-  const isFavorite = useSelector((state: RootState) => selectIsFavorite(state, product.id));
+  const cartQuantity = useAppSelector((state) => selectCartItemQuantity(state, product.id));
+  const isFavorite = useAppSelector((state) => selectIsFavorite(state, product.id));
   const isInCart = cartQuantity > 0;
   const totalPrice = (product.price * selectedQuantity).toFixed(2);
 

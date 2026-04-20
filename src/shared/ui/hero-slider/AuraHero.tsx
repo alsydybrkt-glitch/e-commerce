@@ -299,11 +299,11 @@ export default function AuraHero() {
       aria-roledescription="carousel"
     >
       {/* Background decorations */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-slate-50 via-white to-slate-100" />
-      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-100/70 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900" />
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-100/70 dark:bg-cyan-900/20 blur-3xl" />
 
       <div className="mx-auto w-full max-w-7xl">
-        <div className="relative overflow-hidden rounded-[0.5rem] border border-slate-200/80 bg-white/90 shadow-[0_28px_90px_-40px_rgba(15,23,42,0.5)] backdrop-blur-sm">
+        <div className="relative overflow-hidden rounded-[0.5rem] border border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 shadow-[0_28px_90px_-40px_rgba(15,23,42,0.5)] dark:shadow-[0_28px_90px_-40px_rgba(0,0,0,0.8)] backdrop-blur-sm">
 
           {/* Slides */}
           <div className="relative" aria-live="polite">
@@ -351,10 +351,10 @@ export default function AuraHero() {
                     // FIX 1: aria-current must be a string or undefined, not boolean
                     aria-current={isCurrent ? "true" : undefined}
                     aria-selected={isCurrent}
-                    className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 ${
+                    className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 dark:focus-visible:ring-slate-100 ${
                       isCurrent
-                        ? "w-8 bg-slate-900"
-                        : "w-2.5 bg-slate-400/70 hover:bg-slate-500"
+                        ? "w-8 bg-slate-900 dark:bg-slate-100"
+                        : "w-2.5 bg-slate-400/70 hover:bg-slate-500 dark:bg-slate-600/70 dark:hover:bg-slate-500"
                     }`}
                   />
                 );
@@ -367,7 +367,7 @@ export default function AuraHero() {
                 type="button"
                 onClick={goBackward}
                 aria-label={t("home.sliderPrev")}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-800 shadow-sm transition-colors duration-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 text-slate-800 dark:text-slate-200 shadow-sm transition-colors duration-300 hover:bg-slate-50 dark:hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 dark:focus-visible:ring-slate-100"
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -376,7 +376,7 @@ export default function AuraHero() {
                 type="button"
                 onClick={goForward}
                 aria-label={t("home.sliderNext")}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-800 shadow-sm transition-colors duration-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 text-slate-800 dark:text-slate-200 shadow-sm transition-colors duration-300 hover:bg-slate-50 dark:hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 dark:focus-visible:ring-slate-100"
               >
                 <ChevronRight className="h-5 w-5" aria-hidden="true" />
               </button>

@@ -1,14 +1,15 @@
 "use client";
 
 import { useMemo, useState, useEffect, useId } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Product from "@/features/products/slide-product/ProductCard";
+import { Product as ProductType } from "@/services/api/productsApi";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
-import { AppDispatch } from "@/store";
+// AppDispatch removed from import as we use hooks directly
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
 
 const MobileProductSwiper = dynamic(() => import("@/features/products/slide-product/MobileProductSwiper"), {
@@ -25,8 +26,8 @@ const MobileProductSwiper = dynamic(() => import("@/features/products/slide-prod
 function BestSellers() {
   const { t } = useTranslation();
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  const { items = {}, homeStatus } = useSelector((state: any) => state.products);
+  const dispatch = useAppDispatch();
+  const { items = {}, homeStatus } = useAppSelector((state) => state.products);
   const [activeTab, setActiveTab ] = useState("all");
   const isMobile = useIsMobile(1024);
   const uniqueId = useId().replace(/:/g, "");
@@ -168,7 +169,7 @@ function BestSellers() {
                   transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                   className="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-4"
                 >
-                  {bestSellers.map((product: any) => (
+                  {bestSellers.map((product: ProductType) => (
                     <div key={product.id} className="group">
                       <Product item={product} />
                     </div>

@@ -5,11 +5,11 @@ import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation"; // ✅ Fix #3: استخدام usePathname بدل window.location
 import { FaSearch } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+// Redux Hooks imported from store
 import { fetchProductsBySearch } from "@/features/products/store/productsSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { getProductImage } from "@/shared/utils/product-helpers";
-import { AppDispatch, RootState } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { Product } from "@/services/api/productsApi";
 
 function highlight(text: string, query: string) {
@@ -31,10 +31,10 @@ function SearchBox() {
   const { t, tCategoryName } = useTranslation();
   const router = useRouter();
   const pathname = usePathname(); // ✅ Fix #3: usePathname بدل window.location
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const products = useSelector(
-    (state: RootState) => state.products.searchResults
+  const products = useAppSelector(
+    (state) => state.products.searchResults
   );
 
   const [query, setQuery] = useState("");

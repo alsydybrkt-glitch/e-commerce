@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "@/store";
+import { Product as ProductType } from "@/services/api/productsApi";
 import { clearFavorites } from "@/features/favorites/store/favoriteSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,10 +13,10 @@ import FavoritesSkeleton from "@/shared/ui/skeletons/FavoritesSkeleton";
 
 function Favorites() {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const favorites = useSelector((state: any) => state.favorites.items);
+  const favorites = useAppSelector((state) => state.favorites.items);
 
   useEffect(() => {
     setIsMounted(true);
@@ -75,7 +76,7 @@ function Favorites() {
         <div className="mt-8">
           <div className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             <AnimatePresence mode="popLayout">
-              {favorites.map((item: any, index: number) => (
+              {favorites.map((item: ProductType, index: number) => (
                 <motion.div 
                   key={item.id} 
                   layout

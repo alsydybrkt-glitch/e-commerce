@@ -63,7 +63,7 @@ const ProductGrid = memo(function ProductGrid({ products, isLoading = false }: P
 
   // Render Desktop Grid
   return (
-    <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-6 animate-in fade-in duration-700">
+    <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 md:gap-6 animate-in fade-in duration-700">
       {products.map((product, index) => (
         <motion.div
           key={product.id}

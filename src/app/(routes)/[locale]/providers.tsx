@@ -8,7 +8,6 @@ const ScrollToTop = dynamic(() => import('@/shared/ui/ScrollToTop'), { ssr: fals
 import { Provider as ReduxProvider } from 'react-redux'
 import Footer from '@/shared/components/layout/footer/Footer'
 import Header from '@/shared/components/layout/header/Header'
-import { BottomHeader } from '@/shared/components/layout/bottom-nav/BottomHeader'
 import { ThemeContext } from '@/config/theme/ThemeContext'
 import { LoadingBar } from '@/shared/ui/LoadingBar'
 import { I18nContext } from '@/config/i18n/I18nContext'
@@ -187,7 +186,6 @@ export function Providers({ children, initialTheme, initialLocale }: ProvidersPr
                 </Suspense>
               </main>
               <Footer />
-              <BottomHeader />
 
               <Toaster
                 position="bottom-center"

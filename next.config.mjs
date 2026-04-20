@@ -23,6 +23,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "react-icons", "@mui/material", "@mui/icons-material", "framer-motion", "recharts"],
+  },
   eslint: {
     ignoreDuringBuilds: false,
   },

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useRouter } from "next/navigation";
 import { resetCart, selectFinalTotal, selectCartSubtotal, selectCartCount } from "@/features/cart/store/cartSlice";
 import { formatCurrency } from "@/features/cart/lib/formatCurrency";
@@ -13,12 +13,12 @@ import CheckoutSkeleton from "@/shared/ui/skeletons/CheckoutSkeleton";
 
 export default function CheckoutPage() {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   
-  const finalTotal = useSelector(selectFinalTotal);
-  const subtotal = useSelector(selectCartSubtotal);
-  const itemCount = useSelector(selectCartCount);
+  const finalTotal = useAppSelector(selectFinalTotal);
+  const subtotal = useAppSelector(selectCartSubtotal);
+  const itemCount = useAppSelector(selectCartCount);
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);

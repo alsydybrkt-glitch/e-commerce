@@ -2,8 +2,8 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { shallowEqual, useSelector } from "react-redux";
-import { useAppDispatch } from "@/store";
+import { shallowEqual } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchAllCategories } from "@/features/products/store/productsSlice";
 import dynamic from "next/dynamic";
 import {
@@ -40,8 +40,8 @@ function Header() {
     dispatch(fetchAllCategories());
   }, [dispatch]);
 
-  const categories = useSelector(
-    (state: any) => state.products?.categories || [],
+  const categories = useAppSelector(
+    (state) => state.products?.categories || [],
     shallowEqual,
   );
 
@@ -183,34 +183,41 @@ function Header() {
     };
   }, [clearBottomVisibilityTimer]);
 
+
   useEffect(() => {
     const headerElement = headerRef.current;
     if (!headerElement || typeof document === "undefined") {
       return;
     }
 
-    const updateHeaderOffset = () => {
-      const measuredHeight = Math.ceil(headerElement.getBoundingClientRect().height);
-      const safeOffset = measuredHeight + 8;
+    let rafId: number;
+
+    const updateHeaderOffset = (height: number) => {
+      const safeOffset = Math.ceil(height) + 8;
       document.documentElement.style.setProperty(
         "--site-header-offset",
         `${safeOffset}px`,
       );
     };
 
-    updateHeaderOffset();
-    window.addEventListener("resize", updateHeaderOffset);
+    updateHeaderOffset(headerElement.offsetHeight);
 
     let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver(() => {
-        updateHeaderOffset();
+      resizeObserver = new ResizeObserver((entries) => {
+        if (!entries.length) return;
+        const entry = entries[0];
+        const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          updateHeaderOffset(height);
+        });
       });
       resizeObserver.observe(headerElement);
     }
 
     return () => {
-      window.removeEventListener("resize", updateHeaderOffset);
+      if (rafId) cancelAnimationFrame(rafId);
       resizeObserver?.disconnect();
     };
   }, [
