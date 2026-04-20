@@ -1,160 +1,46 @@
+// features/search/ui/SearchBox.tsx
 "use client";
 
-import Image from "next/image";
-import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter, usePathname } from "next/navigation"; // ✅ Fix #3: استخدام usePathname بدل window.location
+import { useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
-// Redux Hooks imported from store
-import { fetchProductsBySearch } from "@/features/products/store/productsSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
-import { getProductImage } from "@/shared/utils/product-helpers";
-import { useAppDispatch, useAppSelector } from "@/store";
 import { Product } from "@/services/api/productsApi";
+import { useSearchBox } from "@/shared/hooks/useSearchBox";
+import { SearchSuggestionItem } from "@/features/search/ui/SearchSuggestionItem";
 
-function highlight(text: string, query: string) {
-  const regex = new RegExp(`(${query})`, "gi");
-  const parts = text.split(regex);
-
-  return parts.map((part, i) =>
-    part.toLowerCase() === query.toLowerCase() ? (
-      <span key={i} className="text-brand-600 font-semibold">
-        {part}
-      </span>
-    ) : (
-      part
-    )
-  );
-}
-
-function SearchBox() {
-  const { t, tCategoryName } = useTranslation();
-  const router = useRouter();
-  const pathname = usePathname(); // ✅ Fix #3: usePathname بدل window.location
-  const dispatch = useAppDispatch();
-
-  const products = useAppSelector(
-    (state) => state.products.searchResults
-  );
-
-  const [query, setQuery] = useState("");
-  const [focused, setFocused] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [loading, setLoading] = useState(false);
-
+export function SearchBox() {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
-  const mountedRef = useRef(true); // ✅ Fix #7: تتبع حالة الـ mount لمنع memory leak
 
-  // ✅ Fix #7: cleanup عند unmount
+  const {
+    query,
+    setQuery,
+    focused,
+    setFocused,
+    activeIndex,
+    loading,
+    expanded,
+    suggestions,
+    close,
+    handleSubmit,
+    handleKeyDown,
+  } = useSearchBox();
+
   useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
-
-  const normalizedQuery = query.trim().toLowerCase();
-
-  const suggestions = useMemo(() => {
-    return products?.slice(0, 3) || [];
-  }, [products]);
-
-  // ✅ Fix #2 & #8: reset loading لو query أقل من 2 + Fix #7: منع memory leak
-  useEffect(() => {
-    if (normalizedQuery.length < 2) {
-      setLoading(false); // ✅ Fix #8: reset loading state لو query قصير
-      return;
-    }
-
-    setLoading(true);
-
-    const timer = setTimeout(() => {
-      dispatch(fetchProductsBySearch(normalizedQuery)).finally(() => {
-        if (mountedRef.current) { // ✅ Fix #7: بس لو component لسه موجود
-          setLoading(false);
-        }
-      });
-    }, 350);
-
-    return () => clearTimeout(timer);
-  }, [normalizedQuery, dispatch]);
-
-  // click outside
-  useEffect(() => {
-    const handleClick = (event: PointerEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setFocused(false);
-        setActiveIndex(-1);
+    const handleClick = (e: PointerEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        close();
       }
     };
-
     document.addEventListener("pointerdown", handleClick);
-
     return () => document.removeEventListener("pointerdown", handleClick);
-  }, []);
-
-  useEffect(() => {
-    setActiveIndex(-1);
-  }, [query]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!query.trim()) return;
-
-    router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-
-    setQuery("");
-    setFocused(false); // ✅ Fix #4: الـ dropdown بيتقفل عند submit (كان موجود بس متأكدين منه)
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!suggestions.length) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((prev) =>
-        prev < suggestions.length - 1 ? prev + 1 : prev
-      );
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
-    }
-
-    if (e.key === "Enter") {
-      if (activeIndex >= 0) {
-        e.preventDefault();
-
-        const product = suggestions[activeIndex];
-        // ✅ Fix #3: استخدام pathname من usePathname بدل window.location
-        const locale = pathname.split("/")[1] || "en";
-
-        router.push(`/${locale}/product/${product.id}`);
-
-        setQuery("");
-        setFocused(false);
-      }
-    }
-
-    if (e.key === "Escape") {
-      setFocused(false);
-      setActiveIndex(-1);
-    }
-  };
-
-  const expanded = focused && normalizedQuery.length >= 2;
+  }, [close]);
 
   return (
     <div ref={containerRef} className="relative w-full max-w-2xl">
-      {/* ✅ Fix #5: aria-expanded كـ boolean مش string */}
       <div
         role="combobox"
-        aria-expanded={expanded ? "true" : "false"}
+        aria-expanded={expanded}
         aria-haspopup="listbox"
         aria-controls={expanded ? "search-suggestions" : undefined}
       >
@@ -194,69 +80,31 @@ function SearchBox() {
       </div>
 
       {expanded && (
-        // ✅ Fix #1: إضافة rounded-2xl و shadow-lg للـ dropdown ليكون consistent
         <div className="surface-card absolute inset-x-0 top-[calc(100%+10px)] z-20 overflow-hidden rounded-2xl shadow-lg p-2">
           {loading && (
-            <div className="p-4 text-sm text-slate-500 animate-pulse">
+            <p className="p-4 text-sm text-slate-500 animate-pulse">
               {t("common.searching")}
-            </div>
+            </p>
           )}
 
           {!loading && suggestions.length === 0 && (
-            <div className="p-4 text-sm text-slate-500">
+            <p className="p-4 text-sm text-slate-500">
               {t("common.noProductsFound")}
-            </div>
+            </p>
           )}
 
           {!loading && suggestions.length > 0 && (
             <ul id="search-suggestions" role="listbox">
-              {suggestions.map((product: Product, index: number) => {
-                const selected = activeIndex === index;
-
-                return (
-                  <li
-                    key={product.id}
-                    id={`search-option-${index}`}
-                    role="option"
-                    aria-selected={selected ? "true" : "false"} // ✅ Fix #5: string "true"/"false" conform to valid values
-                    className={`rounded-2xl transition ${
-                      selected
-                        ? "bg-slate-100 dark:bg-slate-800 ring-1 ring-brand-500/20"
-                        : "hover:bg-slate-50 dark:hover:bg-slate-800/80"
-                    }`}
-                  >
-                    <Link
-                      href={`/product/${product.id}`}
-                      className="flex items-center gap-3 px-3 py-3"
-                      onClick={() => {
-                        setQuery("");
-                        setFocused(false);
-                      }}
-                    >
-                      <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-700">
-                        <Image
-                          src={getProductImage(product)}
-                          alt={product.title}
-                          width={56}
-                          height={56}
-                          sizes="56px"
-                          className="object-cover"
-                        />
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
-                          {highlight(product.title, query)}
-                        </p>
-
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          ${product.price} — {tCategoryName(product.category)}
-                        </p>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
+              {suggestions.map((product: Product, index: number) => (
+                <SearchSuggestionItem
+                  key={product.id}
+                  product={product}
+                  index={index}
+                  activeIndex={activeIndex}
+                  query={query}
+                  onSelect={close}
+                />
+              ))}
             </ul>
           )}
         </div>

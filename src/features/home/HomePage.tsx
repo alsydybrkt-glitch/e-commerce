@@ -7,13 +7,13 @@ import { getTranslations } from "@/config/i18n/get-translations";
 // UI Components
 const TrustBar = dynamic(() => import("@/shared/ui/TrustBar").then(mod => mod.TrustBar), {
   loading: () => <div className="h-20 animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
-  ssr: false
 });
 const Newsletter = dynamic(() => import("@/shared/ui/Newsletter").then(mod => mod.Newsletter), {
   loading: () => <div className="h-64 animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
   ssr: false
 });
 import { RecentlyViewedSection, CategorySlidesSection } from "./HomeClientSections";
+import LazySection from "@/shared/ui/LazySection";
 
 // Lazy load non-critical sections
 const CategoriesGrid = dynamic(
@@ -88,9 +88,13 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
       />
 
       {/* Benefits Content / Social Trust */}
-      <div className="deferred-section min-h-[500px]">
+      <LazySection 
+        minHeightDesktop={1550} 
+        minHeightMobile={800}
+        id="performance-picks"
+      >
         <TrustSection />
-      </div>
+      </LazySection>
 
       {/* Retention Layer */}
       <Newsletter />

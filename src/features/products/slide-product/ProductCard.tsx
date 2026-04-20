@@ -22,27 +22,17 @@ import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Product as ProductType } from "@/services/api/productsApi";
 import SkeletonProduct from "./ProductSkeleton";
 
-function Product({ item, priority = false }: { item: ProductType; priority?: boolean }) {
-  const { t, tCategoryName } = useTranslation();
+function Product({
+  item,
+  priority = false,
+}: {
+  item: ProductType;
+  priority?: boolean;
+}) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  // Redux state
-  const cartQuantity = useAppSelector(
-    (state) => state.cart.quantityById?.[item.id] ?? 0
-  );
-  const isFavoriteRedux = useAppSelector(
-    (state) => Boolean(state.favorites.ids?.[item.id])
-  );
-
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Hydration-safe derived states
-  const isInCart = mounted ? cartQuantity > 0 : false;
-  const isFavorite = mounted ? isFavoriteRedux : false;
+  // Purely static derived values
   const image = useMemo(() => getProductImage(item), [item]);
 
   const handleAddToCart = useCallback(
@@ -73,9 +63,7 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
   );
 
   const handleToggleFavorite = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+    (isFavorite: boolean) => {
       if (isFavorite) {
         dispatch(removeFavorite(item.id));
       } else {
@@ -83,7 +71,7 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
         toast.success(t("notifications.addedToFavorites"));
       }
     },
-    [dispatch, item, isFavorite, t]
+    [dispatch, item, t]
   );
 
   const handleShare = useCallback(
@@ -115,34 +103,10 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
       className="product-card group relative flex h-full flex-col rounded-[2.5rem] border border-slate-100 bg-white p-3.5 sm:p-4 transition-all duration-500 hover:border-brand-500/20 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] dark:bg-slate-900/40 dark:border-slate-800/50 dark:hover:border-brand-400/30 dark:hover:bg-slate-900/80 hover:-translate-y-2"
     >
       <div className="mb-4 flex items-center justify-between">
-        {isInCart ? (
-          <span className="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-1 text-[10px] font-bold text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">
-            <MdOutlineDone className="text-xs" />
-            {t("product.inCart", { count: cartQuantity })}
-          </span>
-        ) : (
-          <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
-            {tCategoryName(item.category)}
-          </span>
-        )}
+        <InCartBadge item={item} />
 
         <div className="flex gap-1.5 opacity-100 lg:opacity-0 transition-all duration-300 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 translate-x-1 lg:translate-x-4">
-          <button
-            type="button"
-            onClick={handleToggleFavorite}
-            aria-label={
-              isFavorite
-                ? t("product.removeFromFavorites")
-                : t("product.addToFavorites")
-            }
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface-primary text-text-secondary shadow-sm transition-all duration-300 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-rose-950/20 active:scale-90"
-          >
-            {isFavorite ? (
-              <FaHeart className="text-rose-500" />
-            ) : (
-              <IoHeartOutline className="text-lg" />
-            )}
-          </button>
+          <FavoriteButton item={item} onToggle={handleToggleFavorite} />
           <button
             type="button"
             onClick={handleShare}
@@ -194,9 +158,91 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
         </div>
       </Link>
 
+      <AddToCartAction item={item} onAdd={handleAddToCart} />
+    </Interactive>
+  );
+}
+
+
+// --- Specialized Sub-components for Localized Hydration ---
+
+const InCartBadge = memo(({ item }: { item: ProductType }) => {
+  const { t, tCategoryName } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const cartQuantity = useAppSelector(
+    (state) => state.cart.quantityById?.[item.id] ?? 0
+  );
+  const isInCart = mounted ? cartQuantity > 0 : false;
+
+  if (isInCart) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-1 text-[10px] font-bold text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">
+        <MdOutlineDone className="text-xs" />
+        {t("product.inCart", { count: cartQuantity })}
+      </span>
+    );
+  }
+
+  return (
+    <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
+      {tCategoryName(item.category)}
+    </span>
+  );
+});
+InCartBadge.displayName = "InCartBadge";
+
+const FavoriteButton = memo(
+  ({ item, onToggle }: { item: ProductType; onToggle: (isFav: boolean) => void }) => {
+    const { t } = useTranslation();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
+    const isFavoriteRedux = useAppSelector((state) =>
+      Boolean(state.favorites.ids?.[item.id])
+    );
+    const isFavorite = mounted ? isFavoriteRedux : false;
+
+    return (
       <button
         type="button"
-        onClick={handleAddToCart}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onToggle(isFavorite);
+        }}
+        aria-label={
+          isFavorite ? t("product.removeFromFavorites") : t("product.addToFavorites")
+        }
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface-primary text-text-secondary shadow-sm transition-all duration-300 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-rose-950/20 active:scale-90"
+      >
+        {isFavorite ? (
+          <FaHeart className="text-rose-500" />
+        ) : (
+          <IoHeartOutline className="text-lg" />
+        )}
+      </button>
+    );
+  }
+);
+FavoriteButton.displayName = "FavoriteButton";
+
+const AddToCartAction = memo(
+  ({ item, onAdd }: { item: ProductType; onAdd: (e: React.MouseEvent) => void }) => {
+    const { t } = useTranslation();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
+    const isInCartRedux = useAppSelector(
+      (state) => (state.cart.quantityById?.[item.id] ?? 0) > 0
+    );
+    const isInCart = mounted ? isInCartRedux : false;
+
+    return (
+      <button
+        type="button"
+        onClick={onAdd}
         className={`mt-4 btn w-full h-11 rounded-xl transition-all active:scale-[0.96] flex items-center justify-center gap-2 ${
           isInCart ? "btn-secondary" : "btn-primary shadow-sm"
         }`}
@@ -204,8 +250,9 @@ function Product({ item, priority = false }: { item: ProductType; priority?: boo
         <MdOutlineAddShoppingCart className="text-lg" />
         {isInCart ? t("product.addOneMore") : t("product.addToCart")}
       </button>
-    </Interactive>
-  );
-}
+    );
+  }
+);
+AddToCartAction.displayName = "AddToCartAction";
 
 export default memo(Product);

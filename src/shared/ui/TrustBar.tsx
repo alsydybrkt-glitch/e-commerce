@@ -9,23 +9,23 @@ export function TrustBar() {
   const benefits = [
     {
       icon: <FiTruck className="text-2xl text-brand-600 dark:text-brand-400" />,
-      title: "Global Shipping",
-      description: "Fast and secure delivery to your doorstep.",
+      title: t("trust.benefits.shipping.title"),
+      description: t("trust.benefits.shipping.description"),
     },
     {
       icon: <FiShield className="text-2xl text-brand-600 dark:text-brand-400" />,
-      title: "Secure Payment",
-      description: "Certified payment processing for total peace of mind.",
+      title: t("trust.benefits.payment.title"),
+      description: t("trust.benefits.payment.description"),
     },
     {
       icon: <FiHeadphones className="text-2xl text-brand-600 dark:text-brand-400" />,
-      title: "24/7 Support",
-      description: "Expert assistance whenever you need it.",
+      title: t("trust.benefits.support.title"),
+      description: t("trust.benefits.support.description"),
     },
     {
       icon: <FiCreditCard className="text-2xl text-brand-600 dark:text-brand-400" />,
-      title: "Official Warranty",
-      description: "Full protection for all your tech investments.",
+      title: t("trust.benefits.warranty.title"),
+      description: t("trust.benefits.warranty.description"),
     },
   ];
 

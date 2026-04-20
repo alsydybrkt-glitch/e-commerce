@@ -133,7 +133,7 @@ body.theme-dark {
 
 :root {
   /* Typography — Using system-ui stack for premium feel */
-  --font-family-base: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-base: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-family-display: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --line-height-tight: 1.25;

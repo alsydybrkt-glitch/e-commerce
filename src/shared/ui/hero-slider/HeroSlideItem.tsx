@@ -104,10 +104,16 @@ export function HeroSlideItem({
                     fetchPriority={index === 0 ? "high" : "auto"}
                     sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 620px"
                     className="h-full w-full object-cover"
+                    onLoadingComplete={(img) => {
+                      // Optional: handle image load state for smoother transition if needed
+                    }}
                   />
                 </motion.div>
               ) : (
-                <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-800 dark:to-slate-700" />
+                <div className="absolute inset-0 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)] animate-pulse" />
+                  <div className="absolute inset-x-[-20%] inset-y-[-20%] bg-gradient-to-br from-slate-200/50 to-slate-300/50 dark:from-slate-700/50 dark:to-slate-900/50 blur-3xl" />
+                </div>
               )}
 
               <div className="absolute inset-0 bg-gradient-to-r from-slate-900/10 dark:from-slate-900/40 via-transparent to-slate-900/35 dark:to-slate-900/70" />

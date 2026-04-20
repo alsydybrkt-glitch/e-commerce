@@ -17,7 +17,7 @@ export default {
       /* ========== Fonts ========== */
 
       fontFamily: {
-        sans: ["var(--font-inter)", "Arial", "Helvetica", "sans-serif"],
+        sans: ["var(--font-outfit)", "Arial", "Helvetica", "sans-serif"],
         display: ["var(--font-outfit)", "Arial", "Helvetica", "sans-serif"],
       },
 

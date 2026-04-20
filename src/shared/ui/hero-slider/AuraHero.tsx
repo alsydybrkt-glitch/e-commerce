@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "@/shared/hooks/useTranslation";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { HeroSlideItem } from "./HeroSlideItem";
 import type { HeroSlide } from "./types";
 
@@ -79,6 +80,7 @@ function normalizeIndex(index: number, length: number) {
 export default function AuraHero() {
   const { t, isRTL } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile(768);
 
   const sliderRef = useRef<HTMLElement>(null);
 
@@ -189,12 +191,12 @@ export default function AuraHero() {
 
   const handlePointerMove = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
-      if (prefersReducedMotion || !sliderRef.current) return;
+      if (prefersReducedMotion || isMobile || !sliderRef.current) return;
       const bounds = sliderRef.current.getBoundingClientRect();
       pointerX.set(((event.clientX - bounds.left) / bounds.width - 0.5) * 14);
       pointerY.set(((event.clientY - bounds.top) / bounds.height - 0.5) * 10);
     },
-    [pointerX, pointerY, prefersReducedMotion],
+    [pointerX, pointerY, prefersReducedMotion, isMobile],
   );
 
   // ─── Keyboard ───────────────────────────────────────────────────────────────

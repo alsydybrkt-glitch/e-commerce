@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, memo } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { FaHeart, FaShare } from "react-icons/fa";
 import { IoMdHeartEmpty } from "react-icons/io";
@@ -29,18 +29,16 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const purchaseActionsRef = useRef<HTMLDivElement | null>(null);
 
-  const cartQuantity = useAppSelector((state) => selectCartItemQuantity(state, product.id));
-  const isFavorite = useAppSelector((state) => selectIsFavorite(state, product.id));
-  const isInCart = cartQuantity > 0;
-  const totalPrice = (product.price * selectedQuantity).toFixed(2);
-
+  // Lifecycle state for client-only features
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const totalPrice = (product.price * selectedQuantity).toFixed(2);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1023px)");
@@ -114,15 +112,18 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
     setSelectedQuantity(1);
   }, [dispatch, product, selectedQuantity, t]);
 
-  const toggleFavorite = useCallback(() => {
-    if (isFavorite) {
-      dispatch(removeFavorite(product.id));
-      toast.success(t("notifications.removedFromFavorites"));
-    } else {
-      dispatch(addFavorite(product));
-      toast.success(t("notifications.addedToFavorites"));
-    }
-  }, [dispatch, isFavorite, product, t]);
+  const toggleFavorite = useCallback(
+    (currentStatus: boolean) => {
+      if (currentStatus) {
+        dispatch(removeFavorite(product.id));
+        toast.success(t("notifications.removedFromFavorites"));
+      } else {
+        dispatch(addFavorite(product));
+        toast.success(t("notifications.addedToFavorites"));
+      }
+    },
+    [dispatch, product, t]
+  );
 
   const handleShare = useCallback(async () => {
     try {
@@ -165,16 +166,10 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           </Interactive>
 
           <div className="flex w-full items-center justify-center gap-2 sm:w-auto sm:shrink-0 sm:justify-start">
-            <Interactive>
-              <button 
-                type="button"
-                onClick={toggleFavorite}
-                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-lg transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
-                aria-label={t("common.favorite") || "Favorite"}
-              >
-                {mounted && isFavorite ? <FaHeart className="text-rose-500" /> : <IoMdHeartEmpty className="text-slate-400" />}
-              </button>
-            </Interactive>
+            <FavoriteAction
+              productId={product.id}
+              onToggle={toggleFavorite}
+            />
 
             <Interactive>
               <button 
@@ -190,11 +185,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
         </div>
       </div>
 
-      {mounted && isInCart && (
-        <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
-           {t("product.details.alreadyInCart", { count: cartQuantity })}
-        </p>
-      )}
+      <InCartStatus productId={product.id} />
 
       {/* Sticky Mobile Bar with Premium Animation */}
       <AnimatePresence>
@@ -228,3 +219,59 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
     </div>
   );
 }
+
+const FavoriteAction = memo(
+  ({
+    productId,
+    onToggle,
+  }: {
+    productId: number;
+    onToggle: (isFav: boolean) => void;
+  }) => {
+    const { t } = useTranslation();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
+    const isFavorite = useAppSelector((state) =>
+      selectIsFavorite(state, productId)
+    );
+
+    return (
+      <Interactive>
+        <button
+          type="button"
+          onClick={() => onToggle(isFavorite)}
+          className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-lg transition hover:border-brand-500 hover:text-brand-600 sm:h-[56px] sm:w-[56px] sm:rounded-[24px] sm:text-xl dark:border-slate-700 dark:hover:border-brand-400"
+          aria-label={t("common.favorite") || "Favorite"}
+        >
+          {mounted && isFavorite ? (
+            <FaHeart className="text-rose-500" />
+          ) : (
+            <IoMdHeartEmpty className="text-slate-400" />
+          )}
+        </button>
+      </Interactive>
+    );
+  }
+);
+FavoriteAction.displayName = "FavoriteAction";
+
+const InCartStatus = memo(({ productId }: { productId: number }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const cartQuantity = useAppSelector((state) =>
+    selectCartItemQuantity(state, productId)
+  );
+  const isInCart = cartQuantity > 0;
+
+  if (!mounted || !isInCart) return null;
+
+  return (
+    <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+      {t("product.details.alreadyInCart", { count: cartQuantity })}
+    </p>
+  );
+});
+InCartStatus.displayName = "InCartStatus";

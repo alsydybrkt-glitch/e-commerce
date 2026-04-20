@@ -40,14 +40,6 @@ function RenderWhenVisible({
     return () => observer.disconnect();
   }, [isVisible, onVisible, rootMargin]);
 
-  const heightClasses: Record<number, string> = {
-    320: "min-h-[320px]",
-    540: "min-h-[540px]",
-    620: "min-h-[620px]",
-  };
-
-  const minHeightClass = heightClasses[minHeight] || "min-h-[320px]";
-
   return (
     <div ref={hostRef} className={className}>
       {isVisible ? (
@@ -55,7 +47,8 @@ function RenderWhenVisible({
       ) : (
         <div
           aria-hidden="true"
-          className={`surface-card flex items-center justify-center animate-pulse ${minHeightClass}`}
+          className="surface-card flex items-center justify-center animate-pulse"
+          style={{ minHeight: `${minHeight}px` }}
         >
           <div className="flex flex-col items-center gap-4">
             <div className="h-12 w-12 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />

@@ -17,6 +17,7 @@ const nextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
+    deviceSizes: [320, 480, 640, 768, 1024, 1280, 1536, 1920],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },

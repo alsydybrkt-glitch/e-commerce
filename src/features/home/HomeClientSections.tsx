@@ -5,10 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
 import { getRecentlyViewed } from "@/shared/utils/product-tools";
-import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
 import { Product as ProductType, Category } from "@/services/api/productsApi";
 import { useAppDispatch, useAppSelector } from "@/store";
-
+import LazySection from "@/shared/ui/LazySection";
 import { getTranslations } from "@/config/i18n/get-translations";
 
 const SlideProduct = dynamic(
@@ -30,32 +29,7 @@ const SlideProduct = dynamic(
   }
 );
 
-interface LazySectionProps {
-  children: React.ReactNode;
-  className?: string;
-  minHeight?: number;
-  rootMargin?: string;
-  onVisible?: () => void;
-}
-
-const LazySection = ({
-  children,
-  className,
-  minHeight = 400,
-  rootMargin = "400px",
-  onVisible,
-}: LazySectionProps) => {
-  return (
-    <RenderWhenVisible
-      className={className}
-      minHeight={minHeight}
-      rootMargin={rootMargin}
-      onVisible={onVisible}
-    >
-      {children}
-    </RenderWhenVisible>
-  );
-};
+// Removed local LazySection - now using shared LazySection
 
 export function RecentlyViewedSection({ locale }: { locale: string }) {
   const [recentlyViewed, setRecentlyViewed] = useState<ProductType[]>([]);
@@ -68,7 +42,12 @@ export function RecentlyViewedSection({ locale }: { locale: string }) {
   if (recentlyViewed.length === 0) return null;
 
   return (
-    <LazySection className="deferred-section" minHeight={540}>
+    <LazySection 
+      className="deferred-section" 
+      minHeightDesktop={900} 
+      minHeightMobile={850}
+      id="recently-viewed"
+    >
       <SlideProduct
         kicker={t("home.recentlyViewedKicker")}
         category={t("home.recentlyViewedTitle")}
@@ -111,7 +90,9 @@ export function CategorySlidesSection({ initialCategories, initialProducts, loca
         <div key={category.slug}>
           <LazySection
             className="deferred-section"
-            minHeight={620}
+            minHeightDesktop={950}
+            minHeightMobile={900}
+            id={`category-${category.slug}`}
             onVisible={() =>
               setVisibleCategories((prev) =>
                 prev.includes(category.slug) ? prev : [...prev, category.slug],

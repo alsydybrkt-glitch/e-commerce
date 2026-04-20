@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useRef } from "react";
-import { Navigation, Pagination, A11y, FreeMode } from "swiper/modules";
+import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Product from "./ProductCard";
 import { Product as ProductType } from "@/services/api/productsApi";
@@ -8,7 +8,7 @@ import { Product as ProductType } from "@/services/api/productsApi";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/free-mode";
+
 
 interface MobileProductSwiperProps {
   items: ProductType[];
@@ -38,16 +38,11 @@ export default function MobileProductSwiper({
   return (
     <div className="mobile-product-swiper-wrapper relative w-full">
       <Swiper
-        loop={canLoop}
-        grabCursor
-        speed={450}
+        loop={false}
+        cssMode={true}
         spaceBetween={16}
         watchSlidesProgress
-        resistanceRatio={0.75}
-        touchRatio={1}
-        touchStartPreventDefault={false}
-        cssMode={false}
-        modules={[Navigation, Pagination, A11y, FreeMode]}
+        modules={[Navigation, Pagination, A11y]}
         pagination={{
           clickable: true,
           dynamicBullets: true,

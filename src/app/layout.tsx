@@ -1,13 +1,8 @@
 import type { Metadata } from 'next'
-import { Inter, Outfit, Cairo } from 'next/font/google'
+import { Outfit, Cairo } from 'next/font/google'
 import '@/styles/index.css'
 
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -19,7 +14,7 @@ const cairo = Cairo({
   subsets: ['arabic'],
   display: 'swap',
   variable: '--font-cairo',
-  weight: ['300', '400', '500', '600', '700', '900'],
+  weight: ['400', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -71,7 +66,7 @@ export default function RootLayout({
     <html 
       lang="en" 
       suppressHydrationWarning
-      className={`${inter.variable} ${outfit.variable} ${cairo.variable}`}
+      className={`${outfit.variable} ${cairo.variable}`}
     >
       <head>
         <script id="theme-strategy" dangerouslySetInnerHTML={{ __html: themeScript }} />

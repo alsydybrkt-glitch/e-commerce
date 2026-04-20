@@ -137,6 +137,24 @@ export const translations = {
     },
     trust: {
       title: "TrustSection",
+      benefits: {
+        shipping: {
+          title: "Global Shipping",
+          description: "Fast and secure delivery to your doorstep.",
+        },
+        payment: {
+          title: "Secure Payment",
+          description: "Certified payment processing for total peace of mind.",
+        },
+        support: {
+          title: "24/7 Support",
+          description: "Expert assistance whenever you need it.",
+        },
+        warranty: {
+          title: "Official Warranty",
+          description: "Full protection for all your tech investments.",
+        },
+      },
     },
     search: {
       kicker: "Search results",
@@ -676,6 +694,24 @@ export const translations = {
     },
     trust: {
       title: "قسم الثقة",
+      benefits: {
+        shipping: {
+          title: "شحن عالمي",
+          description: "توصيل سريع وآمن حتى باب منزلك.",
+        },
+        payment: {
+          title: "دفع آمن",
+          description: "معالجة مدفوعات معتمدة لراحة بال تامة.",
+        },
+        support: {
+          title: "دعم 24/7",
+          description: "مساعدة خبراء في أي وقت تحتاجها.",
+        },
+        warranty: {
+          title: "ضمان رسمي",
+          description: "حماية كاملة لجميع استثماراتك التقنية.",
+        },
+      },
     },
     search: {
       kicker: "نتائج البحث",
