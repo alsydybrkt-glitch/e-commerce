@@ -85,7 +85,6 @@ breakpoints={{
       {/* Pagination dots – visible only below lg */}
       <div
         className={`${paginationClass} premium-pagination mt-5 flex justify-center lg:hidden`}
-        role="tablist"
         aria-label="تصفح المنتجات"
       />
 

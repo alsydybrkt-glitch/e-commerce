@@ -36,7 +36,7 @@ export function HeroSlideItem({
             <motion.p
               initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-xs sm:text-sm uppercase tracking-[0.18em] font-semibold text-slate-500 dark:text-slate-400"
+              className="text-xs sm:text-sm uppercase tracking-[0.18em] font-semibold text-slate-700 dark:text-slate-300"
             >
               {slide.eyebrow}
             </motion.p>

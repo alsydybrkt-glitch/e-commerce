@@ -156,7 +156,7 @@ function SearchBox() {
         role="combobox"
         aria-expanded={expanded ? "true" : "false"}
         aria-haspopup="listbox"
-        aria-controls="search-suggestions"
+        aria-controls={expanded ? "search-suggestions" : undefined}
       >
         <form
           role="search"
@@ -170,8 +170,9 @@ function SearchBox() {
             autoComplete="off"
             value={query}
             placeholder={t("header.searchPlaceholder")}
+            aria-label={t("header.searchPlaceholder")}
             aria-autocomplete="list"
-            aria-controls="search-suggestions"
+            aria-controls={expanded ? "search-suggestions" : undefined}
             aria-activedescendant={
               activeIndex >= 0 ? `search-option-${activeIndex}` : undefined
             }
@@ -184,9 +185,10 @@ function SearchBox() {
           <button
             type="submit"
             className="primary-btn !px-3 !py-2 sm:!px-4"
+            aria-label={t("common.search")}
           >
             <span className="hidden sm:inline">{t("common.search")}</span>
-            <FaSearch className="text-xs sm:hidden" />
+            <FaSearch className="text-xs sm:hidden" aria-hidden="true" />
           </button>
         </form>
       </div>

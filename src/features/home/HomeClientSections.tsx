@@ -8,7 +8,7 @@ import { getRecentlyViewed } from "@/shared/utils/product-tools";
 import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
 import { Product as ProductType, Category } from "@/services/api/productsApi";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { PromoBanner } from "@/shared/ui/PromoBanner";
+
 import { getTranslations } from "@/config/i18n/get-translations";
 
 const SlideProduct = dynamic(
@@ -107,7 +107,7 @@ export function CategorySlidesSection({ initialCategories, initialProducts, loca
 
   return (
     <>
-      {initialCategories.slice(0, 3).map((category: Category, index: number) => (
+      {initialCategories.slice(0, 2).map((category: Category, index: number) => (
         <div key={category.slug}>
           <LazySection
             className="deferred-section"
@@ -125,16 +125,7 @@ export function CategorySlidesSection({ initialCategories, initialProducts, loca
             />
           </LazySection>
 
-          {/* High-impact Mid-page Promotional Banner */}
-          {index === 1 && (
-            <PromoBanner 
-              title="Elevate Your Sound Experience"
-              subtitle="Discover our curated audio collection with premium noise cancellation and immersive clarity."
-              ctaText="Explore Audio"
-              imageSrc="/images/img/hero-banner-3.jpg"
-              className="bg-surface-secondary/30 dark:bg-slate-900/20"
-            />
-          )}
+
         </div>
       ))}
     </>

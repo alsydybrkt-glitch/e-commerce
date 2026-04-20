@@ -219,7 +219,6 @@ export const MobileDrawer = memo(function MobileDrawer({
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    {t("header.profile.welcome")}
                   </span>
                   <span className="text-sm font-black leading-tight text-slate-900 dark:text-white">
                     Aura Guest
