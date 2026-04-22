@@ -19,10 +19,10 @@ export function SortDropdown() {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const currentSort = searchParams.get("sort") || "featured";
+  const currentSort = searchParams?.get("sort") || "featured";
 
   const handleSortChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || "");
     if (value === "featured") {
       params.delete("sort");
     } else {
@@ -32,7 +32,7 @@ export function SortDropdown() {
     params.delete("page");
 
     startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      router.push(`${pathname || "/"}?${params.toString()}`, { scroll: false });
     });
   };
 

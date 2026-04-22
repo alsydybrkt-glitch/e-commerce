@@ -78,7 +78,7 @@ export function useSearchBox() {
         Enter: () => {
           if (activeIndex >= 0) {
             const product = suggestions[activeIndex];
-            const locale = pathname.split("/")[1] || "en";
+            const locale = pathname?.split("/")[1] || "en";
             router.push(`/${locale}/product/${product.id}`);
             close();
           }

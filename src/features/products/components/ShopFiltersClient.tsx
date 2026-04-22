@@ -60,7 +60,7 @@ export default function ShopFiltersClient({
 
   const updateFilters = useCallback(
     (updates: Record<string, string | null>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() || "");
 
       Object.entries(updates).forEach(([key, value]) => {
         if (!value || value.trim() === "") {
@@ -71,7 +71,7 @@ export default function ShopFiltersClient({
       });
 
       const query = params.toString();
-      const url = query ? `${pathname}?${query}` : pathname;
+      const url = query ? `${pathname || "/"}?${query}` : (pathname || "/");
 
       startTransition(() => {
         router.replace(url, { scroll: false });
