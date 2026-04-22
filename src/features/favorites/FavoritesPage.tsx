@@ -4,7 +4,7 @@ import { useAppSelector, useAppDispatch } from "@/store";
 import { Product as ProductType } from "@/services/api/productsApi";
 import { clearFavorites } from "@/features/favorites/store/favoriteSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import Product from "@/features/products/slide-product/ProductCard";
 import { Interactive } from "@/shared/ui/Interactive";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ function Favorites() {
 
   if (!favorites?.length) {
     return (
-      <motion.section 
+      <m.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="shell section-gap"
@@ -47,14 +47,14 @@ function Favorites() {
             </button>
           </Interactive>
         </div>
-      </motion.section>
+      </m.section>
     );
   }
 
   return (
     <>
       <section className="shell section-gap">
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
@@ -71,13 +71,13 @@ function Favorites() {
               {t("favorites.clear")}
             </button>
           </Interactive>
-        </motion.div>
+        </m.div>
 
         <div className="mt-8">
           <div className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             <AnimatePresence mode="popLayout">
               {favorites.map((item: ProductType, index: number) => (
-                <motion.div 
+                <m.div 
                   key={item.id} 
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -87,7 +87,7 @@ function Favorites() {
                   className="h-full"
                 >
                   <Product item={item} />
-                </motion.div>
+                </m.div>
               ))}
             </AnimatePresence>
           </div>

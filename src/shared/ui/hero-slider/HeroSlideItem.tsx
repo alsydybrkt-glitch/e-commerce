@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, MotionValue } from "framer-motion";
+import { m, MotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { LocalizedLink } from "@/shared/ui/LocalizedLink";
 import type { HeroSlide } from "./types";
@@ -33,34 +33,34 @@ export function HeroSlideItem({
       <div className="grid items-center gap-8 md:gap-12 md:grid-cols-2 px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14">
         <div className="order-1 flex flex-col gap-5 md:gap-6 max-w-xl">
           {slide.eyebrow ? (
-            <motion.p
+            <m.p
               initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-xs sm:text-sm uppercase tracking-[0.18em] font-semibold text-slate-700 dark:text-slate-300"
             >
               {slide.eyebrow}
-            </motion.p>
+            </m.p>
           ) : null}
 
-          <motion.h1
+          <m.h1
             initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: "easeOut", delay: index === 0 ? 0 : 0.05 }}
             className="text-3xl sm:text-4xl xl:text-5xl font-semibold leading-tight text-slate-900 dark:text-white"
           >
             {slide.title}
-          </motion.h1>
+          </m.h1>
 
-          <motion.p
+          <m.p
             initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: "easeOut", delay: index === 0 ? 0 : 0.1 }}
             className="text-sm sm:text-base xl:text-lg text-slate-600 dark:text-slate-300 leading-relaxed"
           >
             {slide.description}
-          </motion.p>
+          </m.p>
 
-          <motion.div
+          <m.div
             initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: "easeOut", delay: index === 0 ? 0 : 0.15 }}
@@ -84,14 +84,14 @@ export function HeroSlideItem({
                 {slide.secondaryAction.label}
               </LocalizedLink>
             ) : null}
-          </motion.div>
+          </m.div>
         </div>
 
         <div className="order-2">
           <div className="relative isolate overflow-hidden rounded-[1.75rem] border border-slate-200/70 dark:border-slate-800/70 bg-slate-100 dark:bg-slate-800 shadow-[0_20px_60px_-30px_rgba(15,23,42,0.45)] dark:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.8)]">
             <div className="relative aspect-[4/3] w-full">
               {imageShouldLoad ? (
-                <motion.div
+                <m.div
                   style={{ x: parallaxX, y: parallaxY }}
                   className="absolute inset-0 will-change-transform transform-gpu"
                 >
@@ -99,6 +99,7 @@ export function HeroSlideItem({
                     src={slide.image.src}
                     alt={slide.image.alt}
                     fill
+                    quality={60}
                     loading={index === 0 ? "eager" : "lazy"}
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
@@ -108,7 +109,7 @@ export function HeroSlideItem({
                       // Optional: handle image load state for smoother transition if needed
                     }}
                   />
-                </motion.div>
+                </m.div>
               ) : (
                 <div className="absolute inset-0 overflow-hidden bg-slate-100 dark:bg-slate-800">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)] animate-pulse" />

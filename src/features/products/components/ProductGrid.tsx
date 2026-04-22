@@ -2,7 +2,7 @@
 
 import React, { memo, useId } from "react";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Product from "@/features/products/slide-product/ProductCard";
 import LoadingOfSlideProduct from "@/features/products/slide-product/ProductSkeleton";
 import { Product as ProductType } from "@/services/api/productsApi";
@@ -65,7 +65,7 @@ const ProductGrid = memo(function ProductGrid({ products, isLoading = false }: P
   return (
     <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 md:gap-6 animate-in fade-in duration-700">
       {products.map((product, index) => (
-        <motion.div
+        <m.div
           key={product.id}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const ProductGrid = memo(function ProductGrid({ products, isLoading = false }: P
           className="fill-mode-both"
         >
           <Product item={product} priority={index < 4} />
-        </motion.div>
+        </m.div>
       ))}
     </div>
   );

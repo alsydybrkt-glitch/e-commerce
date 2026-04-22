@@ -15,7 +15,7 @@ import { buildProductSharePayload } from "@/shared/utils/product-helpers";
 import { shareProduct } from "@/shared/utils/product-tools";
 // RootState not needed explicitly here anymore
 import { Interactive } from "@/shared/ui/Interactive";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 
 interface ProductPurchasePanelProps {
@@ -190,7 +190,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
       {/* Sticky Mobile Bar with Premium Animation */}
       <AnimatePresence>
         {mounted && isMobileViewport && showSticky && (
-          <motion.div 
+          <m.div 
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
@@ -213,7 +213,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
                 </button>
               </Interactive>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

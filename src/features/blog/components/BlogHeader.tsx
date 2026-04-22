@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface BlogHeaderProps {
   kicker: string;
@@ -61,19 +61,19 @@ export default function BlogHeader({ kicker, title }: BlogHeaderProps) {
         </svg>
       </div>
 
-      <motion.div
+      <m.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="text-center"
       >
-        <motion.div variants={itemVariants} className="flex justify-center">
+        <m.div variants={itemVariants} className="flex justify-center">
           <span className="inline-flex items-center rounded-full border border-brand-100 bg-brand-50/50 px-6 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-brand-700 shadow-sm backdrop-blur-md dark:border-brand-500/20 dark:bg-brand-900/20 dark:text-brand-400">
             {kicker}
           </span>
-        </motion.div>
+        </m.div>
 
-        <motion.h1
+        <m.h1
           variants={itemVariants}
           className="mt-8 text-balance font-display text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl lg:text-7xl xl:text-8xl"
         >
@@ -86,13 +86,13 @@ export default function BlogHeader({ kicker, title }: BlogHeaderProps) {
               <br className="sm:hidden" />
             </React.Fragment>
           ))}
-        </motion.h1>
+        </m.h1>
 
-        <motion.div
+        <m.div
           variants={itemVariants}
           className="mx-auto mt-8 h-1.5 w-24 rounded-full bg-gradient-to-r from-brand-500 to-blue-500"
         />
-      </motion.div>
+      </m.div>
     </div>
   );
 }

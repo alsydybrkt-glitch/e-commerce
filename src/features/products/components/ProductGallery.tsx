@@ -10,8 +10,6 @@ import { getProductGallery } from "@/shared/utils/product-helpers";
 import { Product } from "@/services/api/productsApi";
 import { Interactive } from "@/shared/ui/Interactive";
 
-import "swiper/css";
-import "swiper/css/pagination";
 
 interface ProductGalleryProps {
   product: Product;
@@ -22,6 +20,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [cssLoaded, setCssLoaded] = useState(false);
 
   const swiperRef = useRef<SwiperType | null>(null);
 
@@ -30,6 +29,10 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   // initialize pagination before the ref element exists in the DOM
   useEffect(() => {
     setIsMounted(true);
+    Promise.all([
+      import("swiper/css"),
+      import("swiper/css/pagination")
+    ]).then(() => setCssLoaded(true));
   }, []);
 
   const handleSlideChange = useCallback((swiper: SwiperType) => {
@@ -59,7 +62,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
             after mount — avoids Swiper crashing on SSR/hydration
         ============================================================ */}
         <div className="relative h-full w-full sm:hidden">
-          {!isMounted ? (
+          {!isMounted || !cssLoaded ? (
             // ✅ SSR-safe static image: no Swiper, no crash, correct LCP
             <div className="relative h-full w-full bg-slate-50 dark:bg-slate-800/40">
               <Image

@@ -1,13 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import GuideCard from "./GuideCard";
 import { GuideData } from "./GuideSlider";
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 interface MobileGuideSwiperProps {
   guides: GuideData[];
@@ -24,6 +21,18 @@ export default function MobileGuideSwiper({
   onSwiper,
   onSlideChange,
 }: MobileGuideSwiperProps) {
+  const [cssLoaded, setCssLoaded] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      import("swiper/css"),
+      import("swiper/css/navigation"),
+      import("swiper/css/pagination")
+    ]).then(() => setCssLoaded(true));
+  }, []);
+
+  if (!cssLoaded) return <div className="h-[250px] w-full animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/50" />;
+
   return (
     <>
       <Swiper

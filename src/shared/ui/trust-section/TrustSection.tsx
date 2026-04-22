@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect, useId } from "react";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import Product from "@/features/products/slide-product/ProductCard";
 import { Product as ProductType } from "@/services/api/productsApi";
 import { useTranslation } from "@/shared/hooks/useTranslation";
@@ -107,9 +107,9 @@ function BestSellers() {
               onClick={() => router.push("/shop")}
             >
               {t("common.viewAllProducts")}
-              <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+              <m.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
                 →
-              </motion.span>
+              </m.span>
             </button>
           </div>
 
@@ -127,7 +127,7 @@ function BestSellers() {
                 onClick={() => setActiveTab(tab.key)}
               >
                 {activeTab === tab.key && (
-                  <motion.div
+                  <m.div
                     layoutId="activeTabGlow"
                     className="absolute inset-0 z-0 bg-slate-900 dark:bg-white rounded-[18px] shadow-lg shadow-slate-900/20 dark:shadow-white/10"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
@@ -141,7 +141,7 @@ function BestSellers() {
           {/* Content Grid */}
           <AnimatePresence mode="wait">
             {isLoading ? (
-              <motion.div 
+              <m.div 
                 key="loading"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -151,7 +151,7 @@ function BestSellers() {
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="h-80 rounded-3xl bg-slate-100/50 dark:bg-slate-800/20 animate-pulse" />
                 ))}
-              </motion.div>
+              </m.div>
             ) : bestSellers.length > 0 ? (
               isMobile ? (
                 <MobileProductSwiper 
@@ -161,7 +161,7 @@ function BestSellers() {
                   onSwiper={() => {}} 
                 />
               ) : (
-                <motion.div 
+                <m.div 
                   key={activeTab}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -174,10 +174,10 @@ function BestSellers() {
                       <Product item={product} />
                     </div>
                   ))}
-                </motion.div>
+                </m.div>
               )
             ) : (
-              <motion.div 
+              <m.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="flex flex-col items-center justify-center py-20 text-center"
@@ -187,7 +187,7 @@ function BestSellers() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">{t("shop.noProducts")}</h3>
                 <p className="text-slate-500 max-w-sm">{t("shop.emptyCopy")}</p>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

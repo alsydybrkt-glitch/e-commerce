@@ -1,11 +1,12 @@
-// DesktopMegaMenu.tsx
 "use client";
 
-import { memo, useMemo, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import { memo, useMemo, useRef, useCallback, useEffect } from "react";
+import { m, Variants } from "framer-motion";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Category } from "@/services/api/productsApi";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface DesktopMegaMenuProps {
   categories: Category[];
@@ -14,41 +15,45 @@ interface DesktopMegaMenuProps {
   featuredLinks: { label: string; href: string }[];
 }
 
+// ─── Constants ───────────────────────────────────────────────────────────────
+
 const ACCENT_COLORS = [
-  { bg: "bg-violet-500", hover: "hover:bg-violet-50 dark:hover:bg-violet-950/30", text: "group-hover:text-violet-600 dark:group-hover:text-violet-400", shadow: "hover:shadow-violet-500/10" },
-  { bg: "bg-sky-500",    hover: "hover:bg-sky-50    dark:hover:bg-sky-950/30",    text: "group-hover:text-sky-600    dark:group-hover:text-sky-400",    shadow: "hover:shadow-sky-500/10"    },
-  { bg: "bg-emerald-500",hover: "hover:bg-emerald-50 dark:hover:bg-emerald-950/30",text:"group-hover:text-emerald-600 dark:group-hover:text-emerald-400",shadow: "hover:shadow-emerald-500/10"},
-  { bg: "bg-amber-500",  hover: "hover:bg-amber-50  dark:hover:bg-amber-950/30",  text: "group-hover:text-amber-600  dark:group-hover:text-amber-400",  shadow: "hover:shadow-amber-500/10"  },
-  { bg: "bg-rose-500",   hover: "hover:bg-rose-50   dark:hover:bg-rose-950/30",   text: "group-hover:text-rose-600   dark:group-hover:text-rose-400",   shadow: "hover:shadow-rose-500/10"   },
-  { bg: "bg-indigo-500", hover: "hover:bg-indigo-50 dark:hover:bg-indigo-950/30", text: "group-hover:text-indigo-600 dark:group-hover:text-indigo-400", shadow: "hover:shadow-indigo-500/10" },
-  { bg: "bg-teal-500",   hover: "hover:bg-teal-50   dark:hover:bg-teal-950/30",   text: "group-hover:text-teal-600   dark:group-hover:text-teal-400",   shadow: "hover:shadow-teal-500/10"   },
-  { bg: "bg-orange-500", hover: "hover:bg-orange-50 dark:hover:bg-orange-950/30", text: "group-hover:text-orange-600 dark:group-hover:text-orange-400", shadow: "hover:shadow-orange-500/10" },
+  { dot: "bg-violet-500", hover: "hover:bg-violet-50 dark:hover:bg-violet-950/30", text: "group-hover:text-violet-600 dark:group-hover:text-violet-400" },
+  { dot: "bg-sky-500",    hover: "hover:bg-sky-50    dark:hover:bg-sky-950/30",    text: "group-hover:text-sky-600    dark:group-hover:text-sky-400"    },
+  { dot: "bg-emerald-500",hover: "hover:bg-emerald-50 dark:hover:bg-emerald-950/30",text:"group-hover:text-emerald-600 dark:group-hover:text-emerald-400"},
+  { dot: "bg-amber-500",  hover: "hover:bg-amber-50  dark:hover:bg-amber-950/30",  text: "group-hover:text-amber-600  dark:group-hover:text-amber-400"  },
+  { dot: "bg-rose-500",   hover: "hover:bg-rose-50   dark:hover:bg-rose-950/30",   text: "group-hover:text-rose-600   dark:group-hover:text-rose-400"   },
+  { dot: "bg-indigo-500", hover: "hover:bg-indigo-50 dark:hover:bg-indigo-950/30", text: "group-hover:text-indigo-600 dark:group-hover:text-indigo-400" },
+  { dot: "bg-teal-500",   hover: "hover:bg-teal-50   dark:hover:bg-teal-950/30",   text: "group-hover:text-teal-600   dark:group-hover:text-teal-400"   },
+  { dot: "bg-orange-500", hover: "hover:bg-orange-50 dark:hover:bg-orange-950/30", text: "group-hover:text-orange-600 dark:group-hover:text-orange-400" },
 ] as const;
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.03,
-      delayChildren: 0.05,
-    },
-  },
-};
+// ─── Animation Variants ───────────────────────────────────────────────────────
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 10, scale: 0.95 },
+const containerVariants: Variants = {
+  hidden:  { opacity: 0, y: -8 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 24,
-    },
+    transition: { type: "spring", stiffness: 320, damping: 28, staggerChildren: 0.025, delayChildren: 0.04 },
   },
 };
+
+const itemVariants: Variants = {
+  hidden:  { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+};
+
+// ─── CategoryItem ─────────────────────────────────────────────────────────────
+
+interface CategoryItemProps {
+  category: Category;
+  label: string;
+  accentIndex: number;
+  onClose: () => void;
+  linkRef: (el: HTMLAnchorElement | null) => void;
+  onFocus: () => void;
+}
 
 const CategoryItem = memo(function CategoryItem({
   category,
@@ -57,73 +62,56 @@ const CategoryItem = memo(function CategoryItem({
   onClose,
   linkRef,
   onFocus,
-}: {
-  category: Category;
-  label: string;
-  accentIndex: number;
-  onClose: () => void;
-  linkRef: (el: HTMLAnchorElement | null) => void;
-  onFocus: () => void;
-}) {
+}: CategoryItemProps) {
   const accent = ACCENT_COLORS[accentIndex % ACCENT_COLORS.length];
 
   return (
-    <motion.div variants={itemVariants} className="h-full">
+    <m.div variants={itemVariants}>
       <Link
         ref={linkRef}
         href={`/category/${category.slug}`}
-        className={`
-          group relative flex h-full items-center gap-3.5 rounded-[1.25rem] px-4 py-3
-          outline-none transition-all duration-300
-          focus-visible:ring-2 focus-visible:ring-brand-500/50 focus-visible:ring-offset-2
-          dark:focus-visible:ring-offset-slate-950
-          ${accent.hover} ${accent.shadow} hover:scale-[1.02] active:scale-[0.98]
-        `}
         onClick={onClose}
         onFocus={onFocus}
+        className={[
+          "group flex items-center gap-3 rounded-2xl px-3.5 py-2.5",
+          "outline-none transition-all duration-200",
+          "focus-visible:ring-2 focus-visible:ring-brand-500/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950",
+          "hover:scale-[1.01] active:scale-[0.99]",
+          accent.hover,
+        ].join(" ")}
       >
-        <div
-          className={`
-            relative flex h-10 w-10 shrink-0 items-center justify-center
-            rounded-2xl text-[13px] font-black text-white
-            shadow-xl shadow-current/10 transition-all duration-300
-            group-hover:rotate-6 group-hover:scale-110
-            ${accent.bg}
-          `}
-          aria-hidden="true"
-        >
-          <span className="relative z-10">{label.slice(0, 1).toUpperCase()}</span>
-          <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
-        </div>
-
-        <div className="flex flex-col overflow-hidden">
-          <span
-            className={`
-              truncate text-[15px] font-bold tracking-tight
-              text-slate-700 dark:text-slate-200
-              transition-colors duration-300
-              ${accent.text}
-            `}
-          >
-            {label}
-          </span>
-          <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500 opacity-80 group-hover:opacity-100 transition-opacity">
-            {category.name.length > 20 ? category.name.slice(0, 20) + "..." : "Explore Collection"}
-          </span>
-        </div>
-
+        {/* Color dot */}
         <span
-          className="ms-auto shrink-0 translate-x-2 text-slate-300 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 dark:text-slate-600"
-          aria-hidden="true"
+          aria-hidden
+          className={`h-2 w-2 shrink-0 rounded-full transition-transform duration-200 group-hover:scale-125 ${accent.dot}`}
+        />
+
+        {/* Text */}
+        <span
+          className={[
+            "truncate text-[14px] font-semibold text-slate-700 dark:text-slate-200",
+            "transition-colors duration-200",
+            accent.text,
+          ].join(" ")}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          {label}
+        </span>
+
+        {/* Arrow */}
+        <span
+          aria-hidden
+          className="ms-auto shrink-0 translate-x-1 text-slate-300 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 dark:text-slate-600"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </span>
       </Link>
-    </motion.div>
+    </m.div>
   );
 });
+
+// ─── DesktopMegaMenu ──────────────────────────────────────────────────────────
 
 export const DesktopMegaMenu = memo(function DesktopMegaMenu({
   categories,
@@ -134,114 +122,79 @@ export const DesktopMegaMenu = memo(function DesktopMegaMenu({
   const { t, tCategoryName } = useTranslation();
 
   const categoryItems = useMemo(
-    () =>
-      categories.map((cat) => ({
-        category: cat,
-        label: tCategoryName(cat.slug || cat.name),
-      })),
-    [categories, tCategoryName]
+    () => categories.map((cat) => ({ category: cat, label: tCategoryName(cat.slug || cat.name) })),
+    [categories, tCategoryName],
   );
 
+  // ── Keyboard Navigation ──
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const focusedIndex = useRef<number>(-1);
+  const focusedIndex = useRef(-1);
 
   const setLinkRef = useCallback(
-    (index: number) => (el: HTMLAnchorElement | null) => {
-      linkRefs.current[index] = el;
-    },
-    []
+    (index: number) => (el: HTMLAnchorElement | null) => { linkRefs.current[index] = el; },
+    [],
   );
 
   useEffect(() => {
     const total = categories.length;
-    if (total === 0) return;
+    if (!total) return;
+
+    const COLS = 2;
+    const dir = isRTL ? -1 : 1;
+
+    const move = (next: number) => {
+      focusedIndex.current = next;
+      linkRefs.current[next]?.focus();
+    };
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      const i = focusedIndex.current;
       switch (e.key) {
-        case "ArrowDown": {
-          e.preventDefault();
-          const next = (focusedIndex.current + 2) % total;
-          focusedIndex.current = next;
-          linkRefs.current[next]?.focus();
-          break;
-        }
-        case "ArrowUp": {
-          e.preventDefault();
-          const prev = focusedIndex.current < 2 ? total - (total % 2 === 0 ? 2 : 1) + (focusedIndex.current % 2) : focusedIndex.current - 2;
-          focusedIndex.current = prev;
-          linkRefs.current[prev]?.focus();
-          break;
-        }
-        case "ArrowRight": {
-          e.preventDefault();
-          const next = (focusedIndex.current + (isRTL ? -1 : 1) + total) % total;
-          focusedIndex.current = next;
-          linkRefs.current[next]?.focus();
-          break;
-        }
-        case "ArrowLeft": {
-          e.preventDefault();
-          const prev = (focusedIndex.current + (isRTL ? 1 : -1) + total) % total;
-          focusedIndex.current = prev;
-          linkRefs.current[prev]?.focus();
-          break;
-        }
-        case "Home":
-          e.preventDefault();
-          focusedIndex.current = 0;
-          linkRefs.current[0]?.focus();
-          break;
-        case "End":
-          e.preventDefault();
-          focusedIndex.current = total - 1;
-          linkRefs.current[total - 1]?.focus();
-          break;
-        case "Escape":
-          onClose();
-          break;
+        case "ArrowDown":  e.preventDefault(); move(Math.min(i + COLS, total - 1)); break;
+        case "ArrowUp":    e.preventDefault(); move(Math.max(i - COLS, 0));         break;
+        case "ArrowRight": e.preventDefault(); move((i + dir + total) % total);     break;
+        case "ArrowLeft":  e.preventDefault(); move((i - dir + total) % total);     break;
+        case "Home":       e.preventDefault(); move(0);                             break;
+        case "End":        e.preventDefault(); move(total - 1);                     break;
+        case "Escape":     onClose();                                                break;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [categories, isRTL, onClose]);
+  }, [categories.length, isRTL, onClose]);
 
   return (
-    <motion.div
+    <m.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className={`
-        absolute top-[calc(100%+12px)] z-50 w-[38rem] overflow-hidden
-        rounded-[2.5rem] border border-slate-200/50
-        bg-white/90 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.02)]
-        backdrop-blur-xl
-        dark:border-slate-800/50 dark:bg-slate-950/90
-        dark:shadow-[0_32px_80px_-16px_rgba(0,0,0,0.4)]
-        ${isRTL ? "right-0" : "left-0"}
-        will-change-transform will-change-opacity
-      `}
+      className={[
+        "absolute top-[calc(100%+10px)] z-50 w-[36rem]",
+        "overflow-hidden rounded-3xl",
+        "border border-slate-200/60 bg-white/95 backdrop-blur-xl",
+        "shadow-xl shadow-slate-900/8",
+        "dark:border-slate-800/50 dark:bg-slate-950/95 dark:shadow-slate-900/40",
+        isRTL ? "right-0" : "left-0",
+      ].join(" ")}
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100/80 px-7 py-5 dark:border-slate-800/50">
-        <div className="flex items-center gap-3">
-          <div className="flex h-6 w-1 bg-brand-500 rounded-full" />
-          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-            {t("common.categories")}
-            <span className="ms-2 rounded-lg bg-slate-100 px-2 py-0.5 font-bold tabular-nums text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-              {categories.length}
-            </span>
+      <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 dark:border-slate-800/60">
+        <span className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+          {t("common.categories")}
+          <span className="ms-2 rounded-md bg-slate-100 px-1.5 py-0.5 font-bold tabular-nums text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+            {categories.length}
           </span>
-        </div>
+        </span>
 
         {featuredLinks.length > 0 && (
-          <nav aria-label="featured" className="flex items-center gap-2">
+          <nav aria-label="featured" className="flex items-center gap-1">
             {featuredLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-xl px-4 py-1.5 text-[12px] font-bold text-brand-600 transition-all hover:bg-brand-50 hover:scale-105 active:scale-95 dark:text-brand-400 dark:hover:bg-brand-950/50"
                 onClick={onClose}
+                className="rounded-xl px-3.5 py-1.5 text-[12px] font-bold text-brand-600 transition-all hover:bg-brand-50 hover:scale-105 active:scale-95 dark:text-brand-400 dark:hover:bg-brand-950/50"
               >
                 {link.label}
               </Link>
@@ -250,8 +203,8 @@ export const DesktopMegaMenu = memo(function DesktopMegaMenu({
         )}
       </div>
 
-      {/* Category Grid */}
-      <div className="grid grid-cols-2 gap-2 p-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+      {/* Grid */}
+      <div className="grid grid-cols-2 gap-1 p-3 max-h-[65vh] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
         {categoryItems.map(({ category, label }, index) => (
           <CategoryItem
             key={category.slug}
@@ -264,9 +217,6 @@ export const DesktopMegaMenu = memo(function DesktopMegaMenu({
           />
         ))}
       </div>
-
-      {/* Footer / Decorative element */}
-      <div className="h-2 bg-gradient-to-r from-transparent via-slate-50 to-transparent dark:via-slate-900/50" />
-    </motion.div>
+    </m.div>
   );
 });

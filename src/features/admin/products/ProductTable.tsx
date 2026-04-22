@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Plus, Search, Edit2, Trash2, MoreHorizontal, Filter } from "lucide-react";
 import { formatCurrency } from "@/features/cart/lib/formatCurrency";
 import { useTranslation } from "@/shared/hooks/useTranslation";
@@ -71,7 +71,7 @@ export function ProductTable() {
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/40">
             {filteredProducts.map((product, i) => (
-              <motion.tr 
+              <m.tr 
                 key={product.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -137,7 +137,7 @@ export function ProductTable() {
                       </button>
                    </div>
                 </td>
-              </motion.tr>
+              </m.tr>
             ))}
           </tbody>
         </table>

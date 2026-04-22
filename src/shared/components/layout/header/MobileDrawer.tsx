@@ -2,7 +2,7 @@
 
 import React, { memo, useEffect, useMemo } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { MdClose } from "react-icons/md";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 
@@ -191,7 +191,7 @@ export const MobileDrawer = memo(function MobileDrawer({
     <AnimatePresence initial={false}>
       {isOpen && (
         <>
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -199,7 +199,7 @@ export const MobileDrawer = memo(function MobileDrawer({
             className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-[2px]"
           />
 
-          <motion.aside
+          <m.aside
             ref={containerRef}
             role="dialog"
             aria-modal="true"
@@ -248,7 +248,7 @@ export const MobileDrawer = memo(function MobileDrawer({
                 Sign Out Account
               </button>
             </div>
-          </motion.aside>
+          </m.aside>
         </>
       )}
     </AnimatePresence>

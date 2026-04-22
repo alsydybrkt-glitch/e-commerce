@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { TiThMenu } from "react-icons/ti";
 import { MdArrowDropDown } from "react-icons/md";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { AnimatePresence, m, type Variants } from "framer-motion";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import type { Category } from "@/services/api/productsApi";
@@ -167,7 +167,7 @@ function BottomHeader({
             {/* ── Animated Wrapper ── */}
             <AnimatePresence>
               {openDesktopCategories && (
-                <motion.div
+                <m.div
                   id="desktop-mega-menu"
                   key="mega-menu"
                   variants={megaMenuVariants}
@@ -186,7 +186,7 @@ function BottomHeader({
                     onClose={closeAll}
                     featuredLinks={featuredMenuLinks}
                   />
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </div>

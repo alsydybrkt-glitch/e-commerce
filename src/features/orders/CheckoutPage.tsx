@@ -7,7 +7,7 @@ import { formatCurrency } from "@/features/cart/lib/formatCurrency";
 import { FaCheckCircle, FaLock } from "react-icons/fa";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Interactive } from "@/shared/ui/Interactive";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 import CheckoutSkeleton from "@/shared/ui/skeletons/CheckoutSkeleton";
 
@@ -60,7 +60,7 @@ export default function CheckoutPage() {
 
   if (isSuccess) {
     return (
-      <motion.div 
+      <m.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="flex min-h-[70vh] flex-col items-center justify-center p-4 text-center"
@@ -80,7 +80,7 @@ export default function CheckoutPage() {
             {t("checkout.returnHome")}
           </button>
         </Interactive>
-      </motion.div>
+      </m.div>
     );
   }
 

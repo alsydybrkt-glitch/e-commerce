@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface SearchQueryClientProps {
@@ -10,16 +10,23 @@ interface SearchQueryClientProps {
 const RECENT_SEARCHES_KEY = "recentSearches";
 const RECENT_SEARCHES_LIMIT = 5;
 
+// ✅ Fix #7: Utility functions بدل تكرار window check
+function getStoredSearches(): string[] {
+  if (typeof window === "undefined") return [];
+  return parseRecentSearches(window.localStorage.getItem(RECENT_SEARCHES_KEY));
+}
+
+function saveStoredSearches(searches: string[]): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(searches));
+}
+
 function parseRecentSearches(value: string | null): string[] {
-  if (!value) {
-    return [];
-  }
+  if (!value) return [];
 
   try {
     const parsed = JSON.parse(value);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
+    if (!Array.isArray(parsed)) return [];
 
     return parsed
       .filter((item) => typeof item === "string")
@@ -35,53 +42,46 @@ export default function SearchQueryClient({ initialQuery }: SearchQueryClientPro
   const router = useRouter();
   const pathname = usePathname();
   const currentSearchParams = useSearchParams();
+
+  // ✅ Fix #5: استخدام ref عشان نتجنب مسح ما يكتبه المستخدم أثناء navigation
+  const isUserTypingRef = useRef(false);
   const [query, setQuery] = useState(initialQuery);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
+  // ✅ Fix #5: بنحدث الـ query بس لو المستخدم مش بيكتب حالياً
   useEffect(() => {
-    setQuery(initialQuery);
+    if (!isUserTypingRef.current) {
+      setQuery(initialQuery);
+    }
   }, [initialQuery]);
 
+  // تحميل الـ recent searches من localStorage مرة واحدة
   useEffect(() => {
-    const stored = parseRecentSearches(
-      typeof window === "undefined"
-        ? null
-        : window.localStorage.getItem(RECENT_SEARCHES_KEY)
-    );
-    setRecentSearches(stored);
+    setRecentSearches(getStoredSearches());
   }, []);
 
   const persistRecentSearch = useCallback((value: string) => {
     const normalized = value.trim();
-    if (!normalized || typeof window === "undefined") {
-      return;
-    }
+    if (!normalized) return;
 
     setRecentSearches((prev) => {
-      const next = [normalized, ...prev.filter((item) => item !== normalized)].slice(
-        0,
-        RECENT_SEARCHES_LIMIT
-      );
+      const next = [
+        normalized,
+        ...prev.filter((item) => item !== normalized),
+      ].slice(0, RECENT_SEARCHES_LIMIT);
 
-      window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+      saveStoredSearches(next);
       return next;
     });
   }, []);
 
-  useEffect(() => {
-    if (initialQuery.trim()) {
-      persistRecentSearch(initialQuery);
-    }
-  }, [initialQuery, persistRecentSearch]);
+  // ✅ Fix #1: إزالة الـ useEffect اللي كان بيحفظ initialQuery تلقائياً
+  // الحفظ بيحصل بس لما المستخدم يعمل submit فعلي
 
   const removeRecentSearch = useCallback((value: string) => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
     setRecentSearches((prev) => {
       const next = prev.filter((item) => item !== value);
-      window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+      saveStoredSearches(next);
       return next;
     });
   }, []);
@@ -89,7 +89,11 @@ export default function SearchQueryClient({ initialQuery }: SearchQueryClientPro
   const applyQuery = useCallback(
     (value: string) => {
       const normalized = value.trim();
-      const next = new URLSearchParams(currentSearchParams.toString());
+
+      // ✅ Fix #2: بنقرأ الـ searchParams في وقت التنفيذ مش من الـ closure
+      const next = new URLSearchParams(
+        typeof window !== "undefined" ? window.location.search : ""
+      );
 
       if (normalized) {
         next.set("query", normalized);
@@ -99,14 +103,19 @@ export default function SearchQueryClient({ initialQuery }: SearchQueryClientPro
 
       next.delete("page");
 
-      const url = next.toString() ? `${pathname}?${next.toString()}` : pathname;
+      const safePathname = pathname || "/";
+      const url = next.toString() ? `${safePathname}?${next.toString()}` : safePathname;
       router.push(url);
 
+      // ✅ Fix #1: الحفظ بيحصل بس لما المستخدم يطبق query فعلي
       if (normalized) {
         persistRecentSearch(normalized);
       }
+
+      // بعد الـ navigation، المستخدم مش بيكتب
+      isUserTypingRef.current = false;
     },
-    [currentSearchParams, pathname, persistRecentSearch, router]
+    [pathname, persistRecentSearch, router]
   );
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -114,19 +123,25 @@ export default function SearchQueryClient({ initialQuery }: SearchQueryClientPro
     applyQuery(query);
   };
 
-  const hasRecentSearches = useMemo(
-    () => recentSearches.length > 0,
-    [recentSearches.length]
-  );
+  // ✅ Fix #3: بسيطة بدون useMemo
+  const hasRecentSearches = recentSearches.length > 0;
 
   return (
     <div className="mb-8 space-y-4">
       <form onSubmit={onSubmit} className="flex flex-col gap-3 sm:flex-row">
+        {/* ✅ Fix #6: إضافة aria-label للـ input */}
         <input
           type="search"
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => {
+            isUserTypingRef.current = true;
+            setQuery(event.target.value);
+          }}
+          onBlur={() => {
+            isUserTypingRef.current = false;
+          }}
           placeholder="Search products"
+          aria-label="Search products"
           className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
         />
 
@@ -153,13 +168,14 @@ export default function SearchQueryClient({ initialQuery }: SearchQueryClientPro
                 {item}
               </button>
 
+              {/* ✅ Fix #4: استخدام × بدل "x" لـ accessibility أحسن */}
               <button
                 type="button"
                 onClick={() => removeRecentSearch(item)}
                 className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                 aria-label={`Remove ${item}`}
               >
-                x
+                ×
               </button>
             </span>
           ))}

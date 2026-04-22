@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { formatCurrency } from "@/features/cart/lib/formatCurrency";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { RecentOrder } from "@/services/api/adminApi";
@@ -20,7 +20,7 @@ export function RecentOrders({ data: apiData }: RecentOrdersProps) {
   const { t } = useTranslation();
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       className="surface-card flex flex-col p-8 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
@@ -57,6 +57,6 @@ export function RecentOrders({ data: apiData }: RecentOrdersProps) {
           </div>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

@@ -10,7 +10,7 @@ import {
   FiGift, 
   FiBell 
 } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function Newsletter() {
@@ -38,7 +38,7 @@ export function Newsletter() {
 
   return (
     <section className="shell relative py-10 lg:py-16">
-      <motion.div 
+      <m.div 
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -63,7 +63,7 @@ export function Newsletter() {
         <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-blue-500/[0.03] dark:bg-blue-500/5 blur-[100px]" />
 
         <div className="relative z-10 mx-auto max-w-4xl">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
@@ -71,7 +71,7 @@ export function Newsletter() {
             <span className="mb-4 inline-flex rounded-full border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400/80 backdrop-blur-md">
               {t("footer.kicker")}
             </span>
-          </motion.div>
+          </m.div>
 
           <h2 className="mb-4 font-display text-3xl font-black leading-tight text-slate-900 dark:text-white sm:text-5xl tracking-tight">
             <span className="bg-gradient-to-b from-slate-900 to-slate-700 dark:from-white dark:to-white/70 bg-clip-text text-transparent">
@@ -85,7 +85,7 @@ export function Newsletter() {
 
           <AnimatePresence mode="wait">
             {!isSubscribed ? (
-              <motion.div 
+              <m.div 
                 key="form"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -118,7 +118,7 @@ export function Newsletter() {
                 {/* Benefits Grid */}
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-6 lg:gap-8">
                   {benefits.map((benefit, i) => (
-                    <motion.div 
+                    <m.div 
                       key={i}
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -129,12 +129,12 @@ export function Newsletter() {
                         {benefit.icon}
                       </span>
                       {benefit.text}
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div 
+              <m.div 
                 key="success"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -159,7 +159,7 @@ export function Newsletter() {
                 >
                   {t("common.back") || "Go Back"}
                 </button>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
@@ -167,7 +167,7 @@ export function Newsletter() {
             By joining, you agree to our <span className="text-slate-500 dark:text-slate-500 cursor-pointer hover:text-emerald-500 transition-colors">Privacy Policy</span> and <span className="text-slate-500 dark:text-slate-500 cursor-pointer hover:text-emerald-400 transition-colors">Terms</span>.
           </p>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { m, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { usePathname } from "next/navigation";
 import { 
@@ -71,7 +71,7 @@ export function BottomHeader() {
 
   return (
     <AnimatePresence>
-      <motion.nav
+      <m.nav
         initial={{ y: 0 }}
         animate={{ 
           y: isVisible ? 0 : "120%", 
@@ -100,7 +100,7 @@ export function BottomHeader() {
                 {/* Active Indicator Line */}
                 <AnimatePresence>
                   {isActive && !item.isAction && (
-                    <motion.div
+                    <m.div
                       layoutId="active-nav-indicator"
                       className="absolute -top-1 h-1 w-6 rounded-full bg-brand-500"
                       initial={{ opacity: 0, scale: 0.5 }}
@@ -158,7 +158,7 @@ export function BottomHeader() {
             );
           })}
         </div>
-      </motion.nav>
+      </m.nav>
     </AnimatePresence>
   );
 }

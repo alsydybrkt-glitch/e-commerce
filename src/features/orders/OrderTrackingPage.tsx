@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FaBoxOpen, FaTruck, FaMapMarkerAlt, FaCheck, FaSearch, FaArrowRight } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Interactive } from "@/shared/ui/Interactive";
 
@@ -47,27 +47,27 @@ export default function OrderTrackingPage() {
   return (
     <div className="shell mx-auto max-w-5xl py-16 xl:py-24">
       <div className="text-center">
-        <motion.h1 
+        <m.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white"
         >
           {t("orderTracking.title")}
-        </motion.h1>
-        <motion.p 
+        </m.h1>
+        <m.p 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mt-4 text-lg text-slate-600 dark:text-slate-400"
         >
           {t("orderTracking.description")}
-        </motion.p>
+        </m.p>
       </div>
 
       <div className="mt-12">
         <AnimatePresence mode="wait">
           {!hasSearched ? (
-            <motion.form 
+            <m.form 
               key="tracking-form"
               variants={containerVariants}
               initial="hidden"
@@ -132,9 +132,9 @@ export default function OrderTrackingPage() {
                   {t("orderTracking.useSampleData")}
                 </button>
               </div>
-            </motion.form>
+            </m.form>
           ) : (
-            <motion.div 
+            <m.div 
               key="tracking-results"
               variants={containerVariants}
               initial="hidden"
@@ -171,7 +171,7 @@ export default function OrderTrackingPage() {
                 {/* Horizontal Desktop Timeline (Above sm) */}
                 <div className="hidden sm:block relative py-12">
                   <div className="absolute top-[68px] left-0 h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <motion.div 
+                    <m.div 
                       initial={{ width: 0 }}
                       animate={{ width: "50%" }}
                       transition={{ duration: 1.5, ease: "circOut", delay: 0.5 }}
@@ -181,7 +181,7 @@ export default function OrderTrackingPage() {
                   
                   <div className="relative flex justify-between z-10">
                     {TIMELINE_STEPS.map((step, index) => (
-                      <motion.div 
+                      <m.div 
                         key={step.id} 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -206,7 +206,7 @@ export default function OrderTrackingPage() {
                             {step.date || t(step.dateKey || "")}
                           </p>
                         </div>
-                      </motion.div>
+                      </m.div>
                     ))}
                   </div>
                 </div>
@@ -214,7 +214,7 @@ export default function OrderTrackingPage() {
                 {/* Vertical Mobile Timeline (Below sm) */}
                 <div className="sm:hidden relative space-y-10 pl-4">
                   <div className="absolute left-10 top-2 bottom-2 w-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <motion.div 
+                    <m.div 
                       initial={{ height: 0 }}
                       animate={{ height: "50%" }}
                       transition={{ duration: 1.5, ease: "circOut", delay: 0.5 }}
@@ -223,7 +223,7 @@ export default function OrderTrackingPage() {
                   </div>
                   
                   {TIMELINE_STEPS.map((step, index) => (
-                    <motion.div 
+                    <m.div 
                       key={step.id} 
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -248,7 +248,7 @@ export default function OrderTrackingPage() {
                           {step.date || t(step.dateKey || "")}
                         </p>
                       </div>
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
               </div>
@@ -266,7 +266,7 @@ export default function OrderTrackingPage() {
                    </button>
                 </Interactive>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

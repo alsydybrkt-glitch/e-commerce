@@ -1,13 +1,10 @@
 "use client";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Product from "./ProductCard";
 import { Product as ProductType } from "@/services/api/productsApi";
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 
 interface MobileProductSwiperProps {
@@ -24,6 +21,15 @@ export default function MobileProductSwiper({
   onSwiper,
 }: MobileProductSwiperProps) {
   const swiperRef = useRef<any>(null);
+  const [cssLoaded, setCssLoaded] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      import("swiper/css"),
+      import("swiper/css/navigation"),
+      import("swiper/css/pagination")
+    ]).then(() => setCssLoaded(true));
+  }, []);
 
   const handleSwiper = useCallback(
     (swiper: any) => {
@@ -34,6 +40,7 @@ export default function MobileProductSwiper({
   );
 
   if (!items || items.length === 0) return null;
+  if (!cssLoaded) return <div className="h-[400px] w-full animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/50" />;
 
   return (
     <div className="mobile-product-swiper-wrapper relative w-full">
@@ -41,7 +48,6 @@ export default function MobileProductSwiper({
         loop={false}
         cssMode={true}
         spaceBetween={16}
-        watchSlidesProgress
         modules={[Navigation, Pagination, A11y]}
         pagination={{
           clickable: true,

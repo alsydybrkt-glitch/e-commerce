@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useTransition } from "react";
+import React, { useCallback, useMemo, useTransition, useState, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,8 +11,6 @@ import { ShopSortKey, SHOP_SORT_KEYS } from "@/constants/shop";
 import { Interactive } from "@/shared/ui/Interactive";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 
-import "swiper/css";
-import "swiper/css/free-mode";
 
 interface ShopFiltersClientProps {
   categories: Category[];
@@ -35,7 +33,14 @@ export default function ShopFiltersClient({
   const searchParams = useSearchParams();
 
   const [isPending, startTransition] = useTransition();
+  const [cssLoaded, setCssLoaded] = useState(false);
 
+  useEffect(() => {
+    Promise.all([
+      import("swiper/css"),
+      import("swiper/css/free-mode")
+    ]).then(() => setCssLoaded(true));
+  }, []);
   /* -----------------------------
      Active Filters Counter
   ------------------------------ */
@@ -175,12 +180,16 @@ export default function ShopFiltersClient({
         {/* Mobile */}
 
         <div className="lg:hidden">
-          <Swiper
+          {!cssLoaded ? (
+            <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-none pointer-events-none opacity-50">
+              {categoryItems}
+            </div>
+          ) : (
+            <Swiper
             modules={[FreeMode]}
             freeMode
             slidesPerView="auto"
             spaceBetween={10}
-            watchSlidesProgress
             className="!py-2"
           >
             {categories.map((category) => {
@@ -205,6 +214,7 @@ export default function ShopFiltersClient({
               );
             })}
           </Swiper>
+          )}
         </div>
       </div>
 

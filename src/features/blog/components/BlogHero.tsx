@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { FiArrowRight, FiArrowUpRight, FiClock, FiLayers } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 
 interface BlogHeroProps {
@@ -41,7 +41,7 @@ export default function BlogHero({ featuredGuide, categoryName }: BlogHeroProps)
       {/* Background Decorative Glow */}
       <div className="absolute -left-10 -top-10 h-64 w-64 rounded-full bg-brand-500/10 blur-[100px] pointer-events-none" />
       
-      <motion.article 
+      <m.article 
         initial="initial"
         whileInView="animate"
         viewport={{ once: true }}
@@ -61,7 +61,7 @@ export default function BlogHero({ featuredGuide, categoryName }: BlogHeroProps)
         </div>
 
         <div className="relative -mt-32 p-8 sm:p-12 lg:-mt-40">
-          <motion.div variants={fadeInUp} className="mb-6 flex flex-wrap items-center gap-4">
+          <m.div variants={fadeInUp} className="mb-6 flex flex-wrap items-center gap-4">
              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
               <FiLayers className="text-xs" />
               {categoryName}
@@ -70,23 +70,23 @@ export default function BlogHero({ featuredGuide, categoryName }: BlogHeroProps)
               <FiClock className="text-xs" />
               {featuredGuide.readTime}
             </span>
-          </motion.div>
+          </m.div>
 
-          <motion.h1 
+          <m.h1 
             variants={fadeInUp}
             className="text-4xl font-extrabold leading-[1.1] text-white sm:text-6xl lg:max-w-4xl"
           >
             {featuredGuide.title}
-          </motion.h1>
+          </m.h1>
 
-          <motion.p 
+          <m.p 
             variants={fadeInUp}
             className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300/90"
           >
             {featuredGuide.description}
-          </motion.p>
+          </m.p>
 
-          <motion.div variants={fadeInUp} className="mt-10 flex flex-wrap gap-4">
+          <m.div variants={fadeInUp} className="mt-10 flex flex-wrap gap-4">
             <Link
               href={`/category/${featuredGuide.categorySlug}`}
               className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-white px-8 text-sm font-bold text-slate-950 transition-all hover:bg-slate-100 hover:ring-4 hover:ring-white/20"
@@ -100,11 +100,11 @@ export default function BlogHero({ featuredGuide, categoryName }: BlogHeroProps)
             >
               {t("common.visitShop")}
             </Link>
-          </motion.div>
+          </m.div>
         </div>
-      </motion.article>
+      </m.article>
 
-      <motion.aside 
+      <m.aside 
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
@@ -127,7 +127,7 @@ export default function BlogHero({ featuredGuide, categoryName }: BlogHeroProps)
 
         <div className="relative mt-12 space-y-4">
           {featuredGuide.searchTerms.map((term: string, idx: number) => (
-            <motion.div
+            <m.div
               key={term}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -142,10 +142,10 @@ export default function BlogHero({ featuredGuide, categoryName }: BlogHeroProps)
                 className="text-slate-400 transition-transform group-hover:translate-x-1 dark:text-slate-500"
                 aria-hidden="true"
               />
-            </motion.div>
+            </m.div>
           ))}
         </div>
-      </motion.aside>
+      </m.aside>
     </section>
   );
 }

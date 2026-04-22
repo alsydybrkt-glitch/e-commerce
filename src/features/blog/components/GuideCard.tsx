@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { FiArrowUpRight, FiClock } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Interactive } from "@/shared/ui/Interactive";
 
@@ -24,7 +24,7 @@ export default function GuideCard({ guide, categoryName }: GuideCardProps) {
   
   return (
     <Interactive variant="scale" className="h-full">
-      <motion.article 
+      <m.article 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -87,7 +87,7 @@ export default function GuideCard({ guide, categoryName }: GuideCardProps) {
           </span>
         </div>
       </div>
-    </motion.article>
+    </m.article>
     </Interactive>
   );
 }

@@ -25,6 +25,7 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   experimental: {
+    optimizeCss: true,
     optimizePackageImports: ["lucide-react", "react-icons", "@mui/material", "@mui/icons-material", "framer-motion", "recharts"],
   },
   eslint: {

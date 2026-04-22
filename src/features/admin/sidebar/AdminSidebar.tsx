@@ -2,7 +2,7 @@
 
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { 
   LayoutDashboard, 
   Package, 
@@ -32,7 +32,7 @@ export function AdminSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <motion.aside
+    <m.aside
       initial={false}
       animate={{ width: isCollapsed ? 80 : 280 }}
       className={cn(
@@ -43,7 +43,7 @@ export function AdminSidebar() {
       {/* Brand Section */}
       <div className="flex h-20 items-center justify-between px-6">
         {!isCollapsed && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3"
@@ -54,7 +54,7 @@ export function AdminSidebar() {
             <span className="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white">
               {t("admin.header.brand")}
             </span>
-          </motion.div>
+          </m.div>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -88,13 +88,13 @@ export function AdminSidebar() {
                 </div>
                 
                 {!isCollapsed && (
-                  <motion.span
+                  <m.span
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
                     className="flex-1 font-semibold"
                   >
                     {t(link.labelKey)}
-                  </motion.span>
+                  </m.span>
                 )}
 
                 {/* Tooltip for collapsed state */}
@@ -107,7 +107,7 @@ export function AdminSidebar() {
                 )}
 
                 {isActive && !isCollapsed && (
-                  <motion.div
+                  <m.div
                     layoutId="active-indicator"
                     className="absolute right-2 h-1.5 w-1.5 rounded-full bg-white"
                   />
@@ -127,6 +127,6 @@ export function AdminSidebar() {
         </div>
       )}
 
-    </motion.aside>
+    </m.aside>
   );
 }

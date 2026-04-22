@@ -3,7 +3,7 @@ import { StarRating } from "@/shared/ui/StarRating";
 import { Product } from "@/services/api/productsApi";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { PriceTag } from "@/shared/ui/PriceTag";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface ProductInfoProps {
   product: Product;
@@ -19,7 +19,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
   return (
     <div className="space-y-3 sm:space-y-6">
-      <motion.div 
+      <m.div 
         variants={fadeIn} 
         initial="initial" 
         animate="animate" 
@@ -35,9 +35,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
             {product.brand || t("product.details.premium")}
           </span>
         </div>
-      </motion.div>
+      </m.div>
 
-      <motion.div 
+      <m.div 
         variants={fadeIn} 
         initial="initial" 
         animate="animate" 
@@ -48,9 +48,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
           discountPercentage={product.discountPercentage} 
           size="lg"
         />
-      </motion.div>
+      </m.div>
 
-      <motion.div 
+      <m.div 
         variants={fadeIn} 
         initial="initial" 
         animate="animate" 
@@ -63,10 +63,10 @@ export function ProductInfo({ product }: ProductInfoProps) {
         <p className="break-words text-base leading-7 text-slate-600 dark:text-slate-400">
           {product.description}
         </p>
-      </motion.div>
+      </m.div>
 
       {/* Stock Status */}
-      <motion.div 
+      <m.div 
         variants={fadeIn} 
         initial="initial" 
         animate="animate" 
@@ -82,7 +82,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         {product.stock < 10 
           ? t("product.details.hurry", { count: product.stock }) 
           : t("product.details.inStock")}
-      </motion.div>
+      </m.div>
     </div>
   );
 }

@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   description: 'Discover the future of shopping with Aura. Premium products, seamless experience, and lightning-fast delivery.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aura.vercel.app'),
   keywords: ['e-commerce', 'premium products', 'modern shop', 'aura'],
+  icons: {
+    icon: '/images/img/aura-logo.png',
+    apple: '/images/img/aura-logo.png',
+  },
 }
 
 const themeScript = `(function() {

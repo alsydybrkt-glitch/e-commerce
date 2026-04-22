@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AnimatePresence,
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -310,7 +310,7 @@ export default function AuraHero() {
           {/* Slides */}
           <div className="relative" aria-live="polite">
             <AnimatePresence mode="wait" initial={false} custom={direction}>
-              <motion.div
+              <m.div
                 key={currentSlide.id}
                 custom={direction}
                 variants={slideVariants}
@@ -327,7 +327,7 @@ export default function AuraHero() {
                   parallaxX={parallaxX}
                   parallaxY={parallaxY}
                 />
-              </motion.div>
+              </m.div>
             </AnimatePresence>
           </div>
 

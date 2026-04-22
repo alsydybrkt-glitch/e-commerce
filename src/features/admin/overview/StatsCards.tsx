@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { TrendingUp, TrendingDown, DollarSign, Package, Users, Activity } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { useTranslation } from "@/shared/hooks/useTranslation";
@@ -16,7 +16,7 @@ interface StatCardProps {
 
 function StatCard({ title, value, change, isPositive, icon: Icon, index }: StatCardProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
@@ -46,7 +46,7 @@ function StatCard({ title, value, change, isPositive, icon: Icon, index }: StatC
         </div>
         <span className="text-xs font-semibold text-slate-400">vs last month</span>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 

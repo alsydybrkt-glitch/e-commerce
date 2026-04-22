@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { StarRating } from "@/shared/ui/StarRating";
 import { Interactive } from "@/shared/ui/Interactive";
@@ -92,7 +92,7 @@ export function ProductReviews({ productId }:  { productId?: string | number }) 
       <div className="mt-10 space-y-6">
         <AnimatePresence mode="popLayout">
           {reviews.map((review, index) => (
-            <motion.article 
+            <m.article 
               key={review.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -116,7 +116,7 @@ export function ProductReviews({ productId }:  { productId?: string | number }) 
               <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
                 {review.content}
               </p>
-            </motion.article>
+            </m.article>
           ))}
         </AnimatePresence>
       </div>

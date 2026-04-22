@@ -5,7 +5,7 @@ import SlideProduct from "@/features/products/slide-product/SlideProduct";
 import RenderWhenVisible from "@/shared/ui/RenderWhenVisible";
 import { getTranslations } from "@/config/i18n/get-translations";
 import { SortDropdown } from "./components/SortDropdown";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const CATEGORY_COLORS: Record<string, { from: string; via: string; to: string; text: string; kicker: string; glow: string }> = {
   electronics: { from: "from-blue-600", via: "via-blue-500", to: "to-blue-700", text: "text-blue-500", kicker: "bg-blue-500/10", glow: "bg-blue-500/20" },
@@ -71,7 +71,7 @@ export default function CategoryPage({
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] dark:opacity-[0.05]" />
 
           <div className="relative z-10">
-            <motion.p 
+            <m.p 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className={`inline-flex rounded-full border px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase
@@ -79,27 +79,27 @@ export default function CategoryPage({
               `}
             >
               {t("category.kicker")}
-            </motion.p>
+            </m.p>
 
-            <motion.h1 
+            <m.h1 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="mt-6 text-4xl font-black tracking-tight sm:text-7xl text-slate-900 dark:text-white"
             >
               {categoryTitle}
-            </motion.h1>
+            </m.h1>
 
-            <motion.p 
+            <m.p 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               className="mt-6 max-w-2xl text-lg font-medium text-slate-500 dark:text-slate-300/80 leading-relaxed"
             >
               {t("category.copy")}
-            </motion.p>
+            </m.p>
 
-            <motion.div 
+            <m.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -117,7 +117,7 @@ export default function CategoryPage({
               <div className="rounded-3xl border border-slate-100 bg-white/50 p-2 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5">
                  <SortDropdown />
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </section>
