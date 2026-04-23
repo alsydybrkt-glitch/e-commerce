@@ -9,7 +9,6 @@ import BlogHero from "@/features/blog/components/BlogHero";
 import BlogHeader from "@/features/blog/components/BlogHeader";
 import GuideSlider from "@/features/blog/components/GuideSlider";
 import { Newsletter } from "@/shared/ui/Newsletter";
-import * as motion from "framer-motion/client";
 import SlideProduct from "@/features/products/slide-product/SlideProduct";
 import { GuideData } from "@/features/blog/components/GuideSlider";
 
@@ -100,11 +99,8 @@ export default async function Page() {
       </section>
 
       <section className="mt-24">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
+        <div 
+          className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between animate-in fade-in slide-in-from-bottom-5 duration-700 fill-mode-both"
         >
           <div>
             <span className="section-kicker">{t("blog.guidesKicker")}</span>
@@ -113,7 +109,7 @@ export default async function Page() {
           <Link href="/shop" className="secondary-btn h-12 w-fit px-8 rounded-xl font-bold">
             {t("common.viewAllProducts")}
           </Link>
-        </motion.div>
+        </div>
 
         <div className="mt-4">
            {/* Guides are now also in a slider for consistency across the site */}

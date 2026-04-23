@@ -28,11 +28,12 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   experimental: {
-    optimizeCss: {
-      preload: 'swap',
-      inlineFonts: true,
-      minify: true,
-    },
+    // Disable experimental optimizeCss to reduce overhead during development and builds
+    // optimizeCss: {
+    //   preload: 'swap',
+    //   inlineFonts: true,
+    //   minify: true,
+    // },
 
     optimizePackageImports: [
       "lucide-react",
@@ -41,8 +42,6 @@ const nextConfig = {
       "@mui/icons-material",
       "framer-motion",
       "recharts",
-      "axios",
-      "lucide-react",
       "clsx"
     ],
   },
