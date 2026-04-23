@@ -14,8 +14,7 @@ const cairo = Cairo({
   subsets: ['arabic'],
   display: 'swap',
   variable: '--font-cairo',
-  weight: ['400', '600', '700'],
-  preload: true, // ✅ مهم
+  preload: false, // Keep Arabic font non-critical for non-Arabic first paint
 })
 
 export const metadata: Metadata = {

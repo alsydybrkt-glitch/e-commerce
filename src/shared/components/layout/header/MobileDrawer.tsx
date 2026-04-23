@@ -1,15 +1,12 @@
 "use client";
 
-import React, { memo, useEffect, useMemo } from "react";
+import { memo, useEffect, useRef, useMemo, useCallback } from "react";
 import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
 import { m, AnimatePresence } from "framer-motion";
 import { MdClose } from "react-icons/md";
+import { FiUser } from "react-icons/fi";
 import { useTranslation } from "@/shared/hooks/useTranslation";
-
 import { NavLink } from "@/types";
-import {
-  FiUser,
-} from "react-icons/fi";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -19,79 +16,6 @@ interface MobileDrawerProps {
   pathname: string;
 }
 
-
-
-const MenuSection = memo(function MenuSection({
-  title,
-  children,
-  className = "",
-}: {
-  title?: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <section className={`mb-8 last:mb-0 ${className}`}>
-      {title && (
-        <div className="mb-4 flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-            {title}
-          </span>
-          <div className="h-px flex-1 ms-4 bg-slate-100 dark:bg-slate-800/50" />
-        </div>
-      )}
-      {children}
-    </section>
-  );
-});
-
-
-
-const PrimaryNavigation = memo(function PrimaryNavigation({
-  navLinks,
-  pathname,
-  onClose,
-}: {
-  navLinks: NavLink[];
-  pathname: string;
-  onClose: () => void;
-}) {
-  return (
-    <MenuSection title="Explore">
-      <nav className="space-y-1">
-        {navLinks.map((link) => {
-          const active = pathname === link.path;
-          return (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={onClose}
-              className={`group flex items-center justify-between rounded-2xl px-5 py-4 transition-all ${
-                active
-                  ? "bg-slate-900 text-white shadow-lg shadow-slate-900/10 dark:bg-brand-600 dark:shadow-brand-500/10"
-                  : "text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-900"
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                <span
-                  className={`text-xl ${active ? "text-white" : "text-slate-400 group-hover:text-brand-500"}`}
-                >
-                  {link.icon}
-                </span>
-                <span className="text-sm font-bold tracking-tight">{link.name}</span>
-              </div>
-              {active && <div className="h-1.5 w-1.5 rounded-full bg-white transition-all" />}
-            </Link>
-          );
-        })}
-      </nav>
-    </MenuSection>
-  );
-});
-
-
-
-
 export const MobileDrawer = memo(function MobileDrawer({
   isOpen,
   onClose,
@@ -100,105 +24,76 @@ export const MobileDrawer = memo(function MobileDrawer({
   pathname,
 }: MobileDrawerProps) {
   const { t } = useTranslation();
-  const initialFocusRef = React.useRef<HTMLButtonElement>(null);
-  const lastFocusedElement = React.useRef<HTMLElement | null>(null);
-  const containerRef = React.useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
 
-
-  // Handle Body Scroll Lock
+  // Lock body scroll
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
-  // Handle Focus Trap & Keyboard Events
+  // Focus trap + keyboard handling
   useEffect(() => {
     if (!isOpen) {
-      // Restore focus when closing
-      if (lastFocusedElement.current) {
-        lastFocusedElement.current.focus();
-      }
+      lastFocusRef.current?.focus();
       return;
     }
 
-    // Capture the element that had focus before opening the drawer
-    lastFocusedElement.current = document.activeElement as HTMLElement;
+    lastFocusRef.current = document.activeElement as HTMLElement;
+    const timer = setTimeout(() => closeButtonRef.current?.focus(), 50);
 
-    // Set initial focus to the close button for accessibility
-    const focusTimeout = setTimeout(() => {
-      initialFocusRef.current?.focus();
-    }, 50);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") return onClose();
+      if (e.key !== "Tab" || !containerRef.current) return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-        return;
-      }
-
-      if (e.key === "Tab" && containerRef.current) {
-        const focusableElements = containerRef.current.querySelectorAll(
+      const focusable = Array.from(
+        containerRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        
-        if (focusableElements.length === 0) return;
+        )
+      );
+      if (!focusable.length) return;
 
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
 
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            lastElement.focus();
-            e.preventDefault();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            firstElement.focus();
-            e.preventDefault();
-          }
-        }
+      if (e.shiftKey && document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      clearTimeout(focusTimeout);
+      document.removeEventListener("keydown", onKeyDown);
+      clearTimeout(timer);
     };
   }, [isOpen, onClose]);
 
-  const drawerVariants = useMemo(
-    () => ({
-      hidden: { x: isRTL ? "100%" : "-100%" },
-      visible: {
-        x: 0,
-        transition: { type: "tween", ease: [0.32, 0.72, 0, 1], duration: 0.28 },
-      },
-      exit: {
-        x: isRTL ? "100%" : "-100%",
-        transition: { type: "tween", ease: [0.32, 0.72, 0, 1], duration: 0.22 },
-      },
-    }),
-    [isRTL]
-  );
+  const drawerVariants = useMemo(() => ({
+    hidden:  { x: isRTL ? "100%" : "-100%" },
+    visible: { x: 0, transition: { type: "tween", ease: [0.32, 0.72, 0, 1], duration: 0.28 } },
+    exit:    { x: isRTL ? "100%" : "-100%", transition: { type: "tween", ease: [0.32, 0.72, 0, 1], duration: 0.22 } },
+  }), [isRTL]);
 
   return (
     <AnimatePresence initial={false}>
       {isOpen && (
         <>
+          {/* Backdrop */}
           <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-[2px]"
           />
 
+          {/* Drawer */}
           <m.aside
             ref={containerRef}
             role="dialog"
@@ -210,42 +105,77 @@ export const MobileDrawer = memo(function MobileDrawer({
             exit="exit"
             dir={isRTL ? "rtl" : "ltr"}
             style={{ willChange: "transform" }}
-            className="fixed top-0 bottom-0 z-[70] flex h-[100dvh] w-[85vw] max-w-[360px] flex-col overflow-hidden bg-white shadow-2xl dark:bg-slate-950"
+            className="fixed inset-y-0 start-0 z-[70] flex h-[100dvh] w-[85vw] max-w-[340px] flex-col bg-white dark:bg-slate-950 shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-slate-50 p-6 dark:border-slate-900">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/60">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
-                  <FiUser size={18} aria-hidden="true" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-500/10 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
+                  <FiUser size={16} aria-hidden="true" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  </span>
-                  <span className="text-sm font-black leading-tight text-slate-900 dark:text-white">
-                    Aura Guest
-                  </span>
-                </div>
+                <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  Aura Guest
+                </span>
               </div>
+
               <button
-                ref={initialFocusRef}
+                ref={closeButtonRef}
                 onClick={onClose}
                 aria-label={t("common.close") || "Close"}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-transform active:scale-90 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-slate-900"
                 type="button"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
               >
-                <MdClose size={22} aria-hidden="true" />
+                <MdClose size={20} aria-hidden="true" />
               </button>
             </div>
 
-            <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-8 scroll-smooth">
-              <PrimaryNavigation navLinks={navLinks} pathname={pathname} onClose={onClose} />
-            </div>
+            {/* Nav */}
+            <nav
+              className="flex-1 overflow-y-auto px-4 py-5 space-y-1"
+              aria-label="Main navigation"
+            >
+              <p className="mb-3 px-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                Explore
+              </p>
 
-            <div className="border-t border-slate-50 bg-slate-50/50 p-6 dark:border-slate-900 dark:bg-slate-950/50">
+              {navLinks.map((link) => {
+                const active = pathname === link.path;
+                return (
+                  <Link
+                    key={link.path}
+                    href={link.path}
+                    onClick={onClose}
+                    className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
+                      active
+                        ? "bg-slate-900 text-white dark:bg-brand-600"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/60 dark:hover:text-slate-100"
+                    }`}
+                  >
+                    <span
+                      className={`text-base ${
+                        active
+                          ? "text-white"
+                          : "text-slate-400 group-hover:text-brand-500"
+                      }`}
+                    >
+                      {link.icon}
+                    </span>
+                    {link.name}
+                    {active && (
+                      <span className="ms-auto h-1.5 w-1.5 rounded-full bg-white/70" />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Footer */}
+            <div className="border-t border-slate-100 dark:border-slate-800/60 px-4 py-4">
               <button
-                className="w-full rounded-2xl py-4 text-xs font-black uppercase tracking-widest text-slate-400 transition-colors hover:text-rose-500"
                 type="button"
+                className="w-full rounded-xl py-3 text-xs font-semibold uppercase tracking-widest text-slate-400 transition-colors hover:text-rose-500 dark:hover:text-rose-400"
               >
-                Sign Out Account
+                Sign out
               </button>
             </div>
           </m.aside>
@@ -254,4 +184,3 @@ export const MobileDrawer = memo(function MobileDrawer({
     </AnimatePresence>
   );
 });
-

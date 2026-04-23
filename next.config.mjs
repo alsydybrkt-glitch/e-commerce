@@ -5,6 +5,9 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
+  // 🔥 تحسين الأداء العام
+  productionBrowserSourceMaps: false,
+
   images: {
     remotePatterns: [
       {
@@ -12,29 +15,24 @@ const nextConfig = {
         hostname: "**.dummyjson.com",
       },
       {
-        protocol: "http",
-        hostname: "**.dummyjson.com",
-      },
-      {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
     ],
-    deviceSizes: [320, 480, 640, 768, 1024, 1280, 1536, 1920],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
+
+    // 🚀 تقليل المقاسات لتقليل الباندل
+    deviceSizes: [640, 768, 1024, 1280, 1536],
+    imageSizes: [16, 32, 48, 64, 96],
   },
+
   typescript: {
     ignoreBuildErrors: false,
   },
-  experimental: {
-    // Disable experimental optimizeCss to reduce overhead during development and builds
-    // optimizeCss: {
-    //   preload: 'swap',
-    //   inlineFonts: true,
-    //   minify: true,
-    // },
 
+  experimental: {
+    optimizeCss: true,
     optimizePackageImports: [
       "lucide-react",
       "react-icons",
@@ -42,17 +40,48 @@ const nextConfig = {
       "@mui/icons-material",
       "framer-motion",
       "recharts",
-      "clsx"
+      "clsx",
     ],
+
+    // ⚡ تحسين الباندل
+    optimizeServerReact: true,
   },
+
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error"] }
+        : false,
   },
+
   eslint: {
     ignoreDuringBuilds: false,
   },
-  transpilePackages: ["swiper"],
-};
 
+  transpilePackages: ["swiper"],
+
+  // 🔥 Headers لتحسين الكاش
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+    ];
+  },
+};
 
 export default nextConfig;

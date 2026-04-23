@@ -57,6 +57,7 @@ function Header() {
   const [isInteracting, setIsInteracting] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);
+  const lastHeaderOffsetRef = useRef<number | null>(null);
   const bottomVisibilityTimerRef = useRef<any>(null);
   const lastBottomVisibilityToggleAtRef = useRef(0);
   const pendingBottomVisibilityActionRef = useRef<"show" | "hide" | null>(null);
@@ -190,42 +191,43 @@ function Header() {
       return;
     }
 
-    let rafId: number;
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    let rafId: number | null = null;
 
     const updateHeaderOffset = (height: number) => {
       const safeOffset = Math.ceil(height) + 8;
+      if (lastHeaderOffsetRef.current === safeOffset) {
+        return;
+      }
+      lastHeaderOffsetRef.current = safeOffset;
       document.documentElement.style.setProperty(
         "--site-header-offset",
         `${safeOffset}px`,
       );
     };
 
-    updateHeaderOffset(headerElement.offsetHeight);
-
-    let resizeObserver: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver((entries) => {
-        if (!entries.length) return;
-        const entry = entries[0];
-        const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height;
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => {
-          updateHeaderOffset(height);
-        });
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!entries.length) return;
+      const entry = entries[0];
+      const borderBoxSize = Array.isArray(entry.borderBoxSize)
+        ? entry.borderBoxSize[0]
+        : entry.borderBoxSize;
+      const height = borderBoxSize?.blockSize ?? entry.contentRect.height;
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        updateHeaderOffset(height);
       });
-      resizeObserver.observe(headerElement);
-    }
+    });
+    resizeObserver.observe(headerElement);
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      resizeObserver?.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
     };
-  }, [
-    isScrolled,
-    isBottomVisible,
-    headerLogic.openDesktopCategories,
-    headerLogic.openMobile,
-  ]);
+  }, []);
 
   return (
     <header
