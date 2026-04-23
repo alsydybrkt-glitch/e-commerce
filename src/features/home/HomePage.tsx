@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 import AuraHero from "@/shared/ui/hero-slider/AuraHero";
 import { getProductImage } from "@/shared/utils/product-helpers";
@@ -78,14 +79,18 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
       <CategoriesGrid categories={categoriesData} />
 
       {/* Featured / Recently Viewed */}
-      <RecentlyViewedSection locale={locale} />
+      <Suspense fallback={<div className="h-96 animate-pulse bg-slate-50 dark:bg-slate-900/10" />}>
+        <RecentlyViewedSection locale={locale} />
+      </Suspense>
 
       {/* Category Sections with Integrated Mid-page Banner */}
-      <CategorySlidesSection 
-        initialCategories={initialCategories} 
-        initialProducts={initialProducts} 
-        locale={locale} 
-      />
+      <Suspense fallback={<div className="h-screen animate-pulse bg-slate-50 dark:bg-slate-900/10" />}>
+        <CategorySlidesSection 
+          initialCategories={initialCategories} 
+          initialProducts={initialProducts} 
+          locale={locale} 
+        />
+      </Suspense>
 
       {/* Benefits Content / Social Trust */}
       <LazySection 

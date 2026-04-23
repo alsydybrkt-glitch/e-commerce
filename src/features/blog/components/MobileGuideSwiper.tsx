@@ -4,6 +4,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import GuideCard from "./GuideCard";
 import { GuideData } from "./GuideSlider";
+import styles from "@/shared/ui/SwiperStyles.module.css";
+
 
 
 interface MobileGuideSwiperProps {
@@ -62,7 +64,8 @@ export default function MobileGuideSwiper({
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="guide-premium-pagination premium-pagination mt-6 lg:hidden" />
+      <div className={`guide-premium-pagination ${styles.premiumPagination} mt-6 lg:hidden`} />
+
     </>
   );
 }

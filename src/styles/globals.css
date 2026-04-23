@@ -1,0 +1,336 @@
+/**
+ * Design Tokens System
+ * Consolidated into globals.css for optimized delivery
+ */
+
+:root {
+  /* ==================== LIGHT MODE TOKENS ==================== */
+  --color-bg-primary: #fcfcfd;
+  --color-bg-secondary: #f9fafb;
+  --color-bg-tertiary: #f2f4f7;
+  --color-bg-overlay: rgba(255, 255, 255, 0.85);
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #fcfcfd;
+  --color-surface-tertiary: #f9fafb;
+  --color-surface-interactive: #f2f4f7;
+  --color-surface-image: #f9fafb;
+  --color-text-primary: #101828;
+  --color-text-secondary: #475467;
+  --color-text-tertiary: #667085;
+  --color-text-disabled: #98a2b3;
+  --color-text-inverse: #ffffff;
+  --color-border: #eaecf0;
+  --color-border-light: #f2f4f7;
+  --color-border-medium: #eaecf0;
+  --color-border-dark: #98a2b3;
+  --color-border-focus: #111827;
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #0ea5e9;
+  --color-button-primary-bg: #111827;
+  --color-button-primary-fg: #ffffff;
+  --color-button-primary-bg-hover: #1f2937;
+  --color-button-secondary-bg: #ffffff;
+  --color-button-secondary-fg: #111827;
+  --color-button-secondary-border: #e2e8f0;
+  --color-focus-ring: rgba(17, 24, 39, 0.1);
+  --color-active-bg: #f1f5f9;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  --shadow-xl: 0 32px 64px -16px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.01);
+  --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.12);
+
+  /* Typography */
+  --font-family-base: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-display: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  --letter-spacing-tighter: -0.02em;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 220ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Z-Index */
+  --z-dropdown: 1000;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}
+
+/* ==================== DARK MODE TOKENS ==================== */
+body.theme-dark, .dark {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #121212;
+  --color-bg-tertiary: #1a1a1a;
+  --color-bg-overlay: rgba(10, 10, 10, 0.9);
+  --color-surface-primary: #121212;
+  --color-surface-secondary: #1a1a1a;
+  --color-surface-tertiary: #262626;
+  --color-surface-interactive: #2a2a2a;
+  --color-surface-image: #171717;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
+  --color-text-disabled: #52525b;
+  --color-text-inverse: #0a0a0a;
+  --color-border-light: #262626;
+  --color-border-medium: #404040;
+  --color-border-dark: #52525b;
+  --color-border-focus: #fafafa;
+  --color-brand-50: #064e3b;
+  --color-brand-100: #065f46;
+  --color-brand-500: #34d399;
+  --color-brand-600: #6ee7b7;
+  --color-brand-700: #a7f3d0;
+  --color-success: #34d399;
+  --color-error: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #38bdf8;
+  --color-button-primary-bg: #fafafa;
+  --color-button-primary-fg: #0a0a0a;
+  --color-button-primary-bg-hover: #f5f5f5;
+  --color-button-secondary-bg: #1a1a1a;
+  --color-button-secondary-fg: #fafafa;
+  --color-button-secondary-border: #404040;
+  --color-focus-ring: rgba(250, 250, 250, 0.1);
+  --color-active-bg: #262626;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.8);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(52, 211, 153, 0.05);
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, ::before, ::after {
+    @apply box-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light dark;
+    scroll-padding-top: var(--site-header-offset, 130px);
+  }
+
+  :where([id]) {
+    scroll-margin-top: var(--site-header-offset, 130px);
+  }
+
+  html.font-arabic, .font-arabic {
+    font-family: var(--font-cairo), sans-serif !important;
+  }
+
+  html[dir="rtl"] {
+    --line-height-tight: 1.4;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.8;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-100);
+    color: var(--color-brand-700);
+  }
+
+  body {
+    @apply min-h-screen font-sans antialiased flex flex-col;
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-tight);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-base), color var(--transition-base);
+    background-image: 
+      radial-gradient(circle at 12% 0%, rgba(16, 185, 129, 0.05), transparent 34%),
+      linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 52%, var(--color-bg-tertiary) 100%);
+  }
+
+  body.theme-dark {
+    background-image: 
+      radial-gradient(circle at 14% 0%, rgba(52, 211, 153, 0.12), transparent 40%),
+      linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 55%, var(--color-bg-tertiary) 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tighter);
+    margin-bottom: 0.8rem;
+  }
+
+  h1 { @apply text-4xl sm:text-5xl lg:text-6xl; }
+  h2 { @apply text-3xl sm:text-4xl; }
+  h3 { @apply text-2xl; }
+
+  p {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: 1rem;
+  }
+
+  a {
+    @apply transition-all duration-200;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover {
+    @apply opacity-70;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-medium);
+    border-radius: 10px;
+    border: 2px solid var(--color-bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-tertiary);
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-gap {
+    @apply py-14 sm:py-16 lg:py-20;
+  }
+
+  .surface-card {
+    @apply rounded-[24px] border shadow-card transition-all duration-300;
+    background-color: var(--color-surface-primary);
+    border-color: var(--color-border-light);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200;
+    border: 1px solid transparent;
+  }
+
+  .btn-primary {
+    background-color: var(--color-button-primary-bg);
+    color: var(--color-button-primary-fg);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-button-primary-bg-hover);
+    @apply shadow-md;
+  }
+
+  .btn-secondary {
+    @apply border shadow-sm;
+    background-color: var(--color-button-secondary-bg);
+    color: var(--color-button-secondary-fg);
+    border-color: var(--color-button-secondary-border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-surface-interactive);
+    border-color: var(--color-border-dark);
+  }
+
+  .site-header {
+    @apply sticky top-0 z-[1000] w-full border-b;
+    transition-property: transform, background-color, border-color, box-shadow, opacity;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    background-color: var(--color-bg-overlay);
+    border-color: var(--color-border-light);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-header.header-condensed {
+    @apply shadow-2xl shadow-black/10;
+  }
+
+  .section-kicker {
+    @apply mb-3 inline-flex items-center rounded-full border px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em];
+    border-color: var(--color-brand-100);
+    background-color: var(--color-brand-50);
+    color: var(--color-brand-700);
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300;
+  }
+
+  .hover-glow:hover {
+    @apply ring-4 ring-brand-500/10 shadow-glow;
+  }
+
+  .glass {
+    @apply backdrop-blur-xl bg-white/75 dark:bg-slate-900/60 border-b border-white/20 dark:border-slate-800/30 shadow-sm;
+    transition-property: background-color, border-color, box-shadow;
+    transition-duration: 220ms;
+    transition-timing-function: ease-out;
+  }
+
+  .glass-darker {
+    @apply backdrop-blur-xl bg-white/85 dark:bg-slate-950/80 border-b border-black/5 dark:border-white/5 shadow-xl;
+    transition-property: background-color, border-color, box-shadow;
+    transition-duration: 220ms;
+    transition-timing-function: ease-out;
+  }
+
+
+}
+
+@layer utilities {
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+  }
+}

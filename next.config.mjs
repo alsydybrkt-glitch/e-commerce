@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  poweredByHeader: false,
+  compress: true,
+
   images: {
     remotePatterns: [
       {
@@ -25,13 +28,32 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ["lucide-react", "react-icons", "@mui/material", "@mui/icons-material", "framer-motion", "recharts"],
+    optimizeCss: {
+      preload: 'swap',
+      inlineFonts: true,
+      minify: true,
+    },
+
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons",
+      "@mui/material",
+      "@mui/icons-material",
+      "framer-motion",
+      "recharts",
+      "axios",
+      "lucide-react",
+      "clsx"
+    ],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
   eslint: {
     ignoreDuringBuilds: false,
   },
   transpilePackages: ["swiper"],
 };
+
 
 export default nextConfig;

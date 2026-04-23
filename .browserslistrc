@@ -1,9 +1,0 @@
-# Target modern browsers to avoid unnecessary polyfills (ES2022+)
-# This removes legacy JS overhead for features like Array.prototype.at, flat, etc.
-Chrome >= 92
-Firefox >= 90
-Safari >= 15.4
-Edge >= 92
-iOS >= 15.4
-not dead
-not IE 11

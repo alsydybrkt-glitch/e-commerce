@@ -9,6 +9,8 @@ import { ImageLightbox } from "@/shared/ui/ImageLightbox";
 import { getProductGallery } from "@/shared/utils/product-helpers";
 import { Product } from "@/services/api/productsApi";
 import { Interactive } from "@/shared/ui/Interactive";
+import styles from "@/shared/ui/SwiperStyles.module.css";
+
 
 
 interface ProductGalleryProps {
@@ -116,7 +118,8 @@ export function ProductGallery({ product }: ProductGalleryProps) {
             <div className="rounded-full bg-slate-900/60 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md">
               {currentIndex + 1} / {images.length}
             </div>
-            <div className="swiper-gallery-pagination premium-pagination pointer-events-auto" />
+            <div className={`${styles.premiumPagination} ${styles.galleryPagination} swiper-gallery-pagination pointer-events-auto`} />
+
           </div>
         </div>
 

@@ -4,6 +4,8 @@ import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Product from "./ProductCard";
 import { Product as ProductType } from "@/services/api/productsApi";
+import styles from "@/shared/ui/SwiperStyles.module.css";
+
 
 
 
@@ -85,9 +87,10 @@ breakpoints={{
 
       {/* Pagination dots – visible only below lg */}
       <div
-        className={`${paginationClass} premium-pagination mt-5 flex justify-center lg:hidden`}
+        className={`${paginationClass} ${styles.premiumPagination} mt-5 flex justify-center lg:hidden`}
         aria-label="تصفح المنتجات"
       />
+
 
       {/* Edge fade masks for visual depth */}
       <div

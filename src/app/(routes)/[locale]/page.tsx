@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Home from "@/features/home/HomePage";
 import { fetchAllProductCategories, fetchCategoryProducts } from "@/services/api/productsApi";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: 'Home | Aura - Modern Shopping Redefined',
@@ -8,44 +9,29 @@ export const metadata: Metadata = {
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  // Fetch all categories (highly cached)
-  const allCategories = await fetchAllProductCategories();
-  
-  // We want to fetch products for the main curated categories specifically
+  // 1. Initiate fetches in parallel
+  const allCategoriesPromise = fetchAllProductCategories();
   const curatedSlugs = ["smartphones", "laptops", "mobile-accessories"];
+  const curatedPromises = curatedSlugs.map(slug => fetchCategoryProducts(slug, { limit: 1 }));
+
+  // 2. Await only essential data for the first fold
+  const [allCategories, ...curatedResults] = await Promise.all([
+    allCategoriesPromise,
+    ...curatedPromises
+  ]);
+
   const initialProducts: Record<string, any[]> = {};
-  
-  try {
-    // Fetch products for curated categories in parallel
-    const results = await Promise.all(
-      curatedSlugs.map(slug => fetchCategoryProducts(slug, { limit: 1 }))
-    );
-    
-    curatedSlugs.forEach((slug, index) => {
-      initialProducts[slug] = results[index];
-    });
-
-    // Also fetch the first few categories from ALL categories for the sliders if needed
-    const sliderCategories = allCategories.slice(0, 5);
-    const sliderResults = await Promise.all(
-      sliderCategories.map(cat => fetchCategoryProducts(cat.slug, { limit: 12 }))
-    );
-
-    sliderCategories.forEach((cat, index) => {
-      if (!initialProducts[cat.slug]) {
-        initialProducts[cat.slug] = sliderResults[index];
-      }
-    });
-
-  } catch (error) {
-    console.error("Failed to fetch initial page products:", error);
-  }
+  curatedSlugs.forEach((slug, index) => {
+    initialProducts[slug] = curatedResults[index];
+  });
 
   return (
-    <Home 
-      initialCategories={allCategories.slice(0, 10)} 
-      initialProducts={initialProducts} 
-      locale={locale} 
-    />
+    <Suspense fallback={<div className="h-screen animate-pulse bg-slate-50 dark:bg-slate-900/10" />}>
+      <Home 
+        initialCategories={allCategories.slice(0, 10)} 
+        initialProducts={initialProducts} 
+        locale={locale} 
+      />
+    </Suspense>
   );
 }
