@@ -28,62 +28,12 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
-  const [showSticky, setShowSticky] = useState(false);
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const purchaseActionsRef = useRef<HTMLDivElement | null>(null);
 
   // Lifecycle state for client-only features
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const totalPrice = (product.price * selectedQuantity).toFixed(2);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 1023px)");
-    const handleViewportChange = () => {
-      setIsMobileViewport(mediaQuery.matches);
-    };
-
-    handleViewportChange();
-
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", handleViewportChange);
-    } else {
-      mediaQuery.addListener(handleViewportChange);
-    }
-
-    return () => {
-      if (typeof mediaQuery.removeEventListener === "function") {
-        mediaQuery.removeEventListener("change", handleViewportChange);
-      } else {
-        mediaQuery.removeListener(handleViewportChange);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!mounted || !isMobileViewport) {
-      setShowSticky(false);
-      return;
-    }
-
-    const target = purchaseActionsRef.current;
-    if (!target || typeof IntersectionObserver === "undefined") {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowSticky(!entry.isIntersecting);
-      },
-      { threshold: 0.05 }
-    );
-
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [mounted, isMobileViewport]);
 
   const handleAddToCart = useCallback(() => {
     setIsAdding(true);
@@ -135,9 +85,8 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   }, [product, t]);
 
   return (
-    <div className="mt-4 space-y-4 pb-24 sm:mt-8 sm:space-y-6 lg:pb-0">
+    <div className="mt-4 space-y-4 sm:mt-8 sm:space-y-6">
       <div
-        ref={purchaseActionsRef}
         id="main-purchase-actions"
         className="flex flex-col gap-3 sm:gap-4"
       >
@@ -186,36 +135,6 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
       </div>
 
       <InCartStatus productId={product.id} />
-
-      {/* Sticky Mobile Bar with Premium Animation */}
-      <AnimatePresence>
-        {mounted && isMobileViewport && showSticky && (
-          <m.div 
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-100/50 bg-white/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.1)] lg:hidden dark:border-slate-800/50 dark:bg-slate-950/90"
-          >
-            <div className="shell flex items-center justify-between gap-4">
-              <div className="min-w-0 flex flex-col">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t("common.total")}</span>
-                <span className="truncate text-lg font-bold text-slate-900 dark:text-white">${totalPrice}</span>
-              </div>
-              
-              <Interactive className="flex-1">
-                <button 
-                  type="button"
-                  onClick={handleAddToCart}
-                  className="h-10 w-full rounded-2xl bg-brand-600 px-3 text-sm font-bold text-white shadow-lg transition sm:h-12"
-                >
-                  {t("product.addToCart")}
-                </button>
-              </Interactive>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
