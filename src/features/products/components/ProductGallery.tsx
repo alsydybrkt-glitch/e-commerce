@@ -4,14 +4,12 @@ import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import 'swiper/css/pagination';
 import type { Swiper as SwiperType } from "swiper";
 import { ImageLightbox } from "@/shared/ui/ImageLightbox";
 import { getProductGallery } from "@/shared/utils/product-helpers";
 import { Product } from "@/services/api/productsApi";
 import { Interactive } from "@/shared/ui/Interactive";
-import styles from "@/shared/ui/SwiperStyles.module.css";
-
-
 
 interface ProductGalleryProps {
   product: Product;
@@ -22,19 +20,11 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [cssLoaded, setCssLoaded] = useState(false);
 
   const swiperRef = useRef<SwiperType | null>(null);
 
-  // ✅ Fix: Wait for DOM to be ready before rendering Swiper
-  // This prevents the white page crash caused by Swiper trying to
-  // initialize pagination before the ref element exists in the DOM
   useEffect(() => {
     setIsMounted(true);
-    Promise.all([
-      import("swiper/css"),
-      import("swiper/css/pagination")
-    ]).then(() => setCssLoaded(true));
   }, []);
 
   const handleSlideChange = useCallback((swiper: SwiperType) => {
@@ -58,14 +48,9 @@ export function ProductGallery({ product }: ProductGalleryProps) {
       {/* Main Image Viewport */}
       <div className="relative w-full overflow-hidden bg-slate-50 min-h-[200px] max-h-[300px] aspect-[4/3] dark:bg-slate-800/20 sm:rounded-[32px] sm:aspect-square sm:min-h-0 sm:max-h-none">
 
-        {/* ============================================================
-            MOBILE VIEW (sm:hidden)
-            ✅ Key Fix: render a simple <img> on server, swap to Swiper
-            after mount — avoids Swiper crashing on SSR/hydration
-        ============================================================ */}
+        {/* MOBILE VIEW (sm:hidden) */}
         <div className="relative h-full w-full sm:hidden">
-          {!isMounted || !cssLoaded ? (
-            // ✅ SSR-safe static image: no Swiper, no crash, correct LCP
+          {!isMounted ? (
             <div className="relative h-full w-full bg-slate-50 dark:bg-slate-800/40">
               <Image
                 src={images[0]}
@@ -77,7 +62,6 @@ export function ProductGallery({ product }: ProductGalleryProps) {
               />
             </div>
           ) : (
-            // ✅ Client-only Swiper: safe to render after DOM is ready
             <Swiper
               modules={[Pagination]}
               pagination={{
@@ -113,20 +97,16 @@ export function ProductGallery({ product }: ProductGalleryProps) {
             </Swiper>
           )}
 
-          {/* ✅ Pagination + Counter — always in DOM so Swiper finds the el */}
+          {/* Pagination + Counter */}
           <div className="pointer-events-none absolute bottom-3 left-0 right-0 z-10 flex flex-col items-center gap-2">
             <div className="rounded-full bg-slate-900/60 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md">
               {currentIndex + 1} / {images.length}
             </div>
-            <div className={`${styles.premiumPagination} ${styles.galleryPagination} swiper-gallery-pagination pointer-events-auto`} />
-
+            <div className="swiper-premium-pagination gallery-pagination swiper-gallery-pagination pointer-events-auto" />
           </div>
         </div>
 
-        {/* ============================================================
-            DESKTOP VIEW (hidden on mobile)
-            No changes needed here — desktop never had the white page issue
-        ============================================================ */}
+        {/* DESKTOP VIEW */}
         <div className="hidden h-full w-full sm:block">
           <Interactive className="h-full w-full">
             <button
@@ -140,7 +120,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
                 alt={product.title}
                 fill
                 priority
-                sizes="(max-width: 640px) 0px, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 640px) 0px, (max-width: 1280px) 50vw, 40vw"
                 className="object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </button>
@@ -170,7 +150,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
                   src={image}
                   alt={`${product.title} thumbnail ${index + 1}`}
                   fill
-                  sizes="100px"
+                  sizes="(max-width: 1280px) 80px, 100px"
                   className="object-contain"
                 />
               </div>

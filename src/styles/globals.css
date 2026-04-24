@@ -277,20 +277,7 @@ body.theme-dark, .dark {
     border-color: var(--color-border-dark);
   }
 
-  .site-header {
-    @apply sticky top-0 z-[1000] w-full border-b;
-    transition-property: transform, background-color, border-color, box-shadow, opacity;
-    transition-duration: 220ms;
-    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-    background-color: var(--color-bg-overlay);
-    border-color: var(--color-border-light);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
 
-  .site-header.header-condensed {
-    @apply shadow-2xl shadow-black/10;
-  }
 
   .section-kicker {
     @apply mb-3 inline-flex items-center rounded-full border px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em];

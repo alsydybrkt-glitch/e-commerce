@@ -33,14 +33,6 @@ export default function ShopFiltersClient({
   const searchParams = useSearchParams();
 
   const [isPending, startTransition] = useTransition();
-  const [cssLoaded, setCssLoaded] = useState(false);
-
-  useEffect(() => {
-    Promise.all([
-      import("swiper/css"),
-      import("swiper/css/free-mode")
-    ]).then(() => setCssLoaded(true));
-  }, []);
   /* -----------------------------
      Active Filters Counter
   ------------------------------ */
@@ -180,12 +172,7 @@ export default function ShopFiltersClient({
         {/* Mobile */}
 
         <div className="lg:hidden">
-          {!cssLoaded ? (
-            <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-none pointer-events-none opacity-50">
-              {categoryItems}
-            </div>
-          ) : (
-            <Swiper
+          <Swiper
             modules={[FreeMode]}
             freeMode
             slidesPerView="auto"
@@ -214,7 +201,6 @@ export default function ShopFiltersClient({
               );
             })}
           </Swiper>
-          )}
         </div>
       </div>
 

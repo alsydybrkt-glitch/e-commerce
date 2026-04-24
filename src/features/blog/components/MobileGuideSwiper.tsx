@@ -4,7 +4,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import GuideCard from "./GuideCard";
 import { GuideData } from "./GuideSlider";
-import styles from "@/shared/ui/SwiperStyles.module.css";
+
+// Import Swiper styles here to defer loading until component is used
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 
 
@@ -23,18 +26,6 @@ export default function MobileGuideSwiper({
   onSwiper,
   onSlideChange,
 }: MobileGuideSwiperProps) {
-  const [cssLoaded, setCssLoaded] = useState(false);
-
-  useEffect(() => {
-    Promise.all([
-      import("swiper/css"),
-      import("swiper/css/navigation"),
-      import("swiper/css/pagination")
-    ]).then(() => setCssLoaded(true));
-  }, []);
-
-  if (!cssLoaded) return <div className="h-[250px] w-full animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/50" />;
-
   return (
     <>
       <Swiper
@@ -64,7 +55,7 @@ export default function MobileGuideSwiper({
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className={`guide-premium-pagination ${styles.premiumPagination} mt-6 lg:hidden`} />
+      <div className={`guide-premium-pagination swiper-premium-pagination mt-6 lg:hidden`} />
 
     </>
   );

@@ -1,0 +1,28 @@
+.siteHeader {
+  @apply sticky top-0 z-[1000] w-full border-b;
+  transition-property: transform, background-color, border-color, box-shadow, opacity;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  background-color: var(--color-bg-overlay);
+  border-color: var(--color-border-light);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.headerCondensed {
+  @apply shadow-2xl shadow-black/10;
+}
+
+.glass {
+  @apply backdrop-blur-xl bg-white/75 dark:bg-slate-900/60 border-b border-white/20 dark:border-slate-800/30 shadow-sm;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease-out;
+}
+
+.glassDarker {
+  @apply backdrop-blur-xl bg-white/85 dark:bg-slate-950/80 border-b border-black/5 dark:border-white/5 shadow-xl;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease-out;
+}

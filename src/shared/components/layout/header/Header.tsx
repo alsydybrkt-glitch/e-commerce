@@ -20,6 +20,7 @@ import BottomHeader from "./BtmHeader";
 import useHeaderLogic from "./useHeaderLogic";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { useScrollDirection } from "@/shared/hooks/useScrollDirection";
+import styles from "./Header.module.css";
 
 const MobileDrawer = dynamic(
   () => import("./MobileDrawer").then((mod) => mod.MobileDrawer),
@@ -236,9 +237,9 @@ function Header() {
       onMouseLeave={handleMouseLeave}
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
-      className={`site-header !sticky !top-0 !z-[1000] border-b-white/10 dark:border-b-slate-800/20 shadow-lg shadow-black/5 ${
-        isAtTop ? "glass" : "glass-darker"
-      } ${isScrolled ? "header-condensed" : "header-full"}`}
+      className={`${styles.siteHeader} !sticky !top-0 !z-[1000] border-b-white/10 dark:border-b-slate-800/20 shadow-lg shadow-black/5 ${
+        isAtTop ? styles.glass : styles.glassDarker
+      } ${isScrolled ? styles.headerCondensed : "header-full"}`}
     >
       <TopHeader headerLogic={headerLogic} isScrolled={isScrolled && !isAtTop} />
       <BottomHeader
