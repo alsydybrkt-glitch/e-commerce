@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import { cookies } from "next/headers";
 import dynamic from "next/dynamic";
 import AuraHero from "@/shared/ui/hero-slider/AuraHero";
 import { getProductImage } from "@/shared/utils/product-helpers";
@@ -69,6 +70,9 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
     };
   });
 
+  const cookieStore = cookies();
+  const hasRecentlyViewed = cookieStore.has("hasRecentlyViewed");
+
   return (
     <div className="flex flex-col overflow-x-hidden">
       <AuraHero />
@@ -76,11 +80,8 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
       {/* Strategic Trust Bar */}
       <TrustBar />
 
-      <CategoriesGrid categories={categoriesData} />
-
-      {/* Featured / Recently Viewed */}
-      <Suspense fallback={<div className="h-96 animate-pulse bg-slate-50 dark:bg-slate-900/10" />}>
-        <RecentlyViewedSection locale={locale} />
+      <Suspense fallback={<div className="shell py-10 lg:py-16"><div className="h-[600px] animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/10" /></div>}>
+        <CategoriesGrid categories={categoriesData} />
       </Suspense>
 
       {/* Category Sections with Integrated Mid-page Banner */}
@@ -94,8 +95,8 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
 
       {/* Benefits Content / Social Trust */}
       <LazySection 
-        minHeightDesktop={1550} 
-        minHeightMobile={800}
+        minHeightDesktop={1100} 
+        minHeightMobile={750}
         id="performance-picks"
       >
         <TrustSection />
@@ -103,6 +104,11 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
 
       {/* Retention Layer */}
       <Newsletter />
+
+      {/* Featured / Recently Viewed - At the very bottom to prevent pushing content down */}
+      <Suspense fallback={null}>
+        <RecentlyViewedSection locale={locale} initialHasItems={hasRecentlyViewed} />
+      </Suspense>
     </div>
   );
 }

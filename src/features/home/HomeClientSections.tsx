@@ -10,49 +10,39 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import LazySection from "@/shared/ui/LazySection";
 import { getTranslations } from "@/config/i18n/get-translations";
 
-const SlideProduct = dynamic(
-  () => import("@/features/products/slide-product/SlideProduct"),
-  {
-    loading: () => (
-      <section className="shell py-20">
-        <div className="mb-8 h-16 animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800/50" />
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {[...Array(4)].map((_, index) => (
-            <div
-              key={index}
-              className="h-[420px] animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/50"
-            />
-          ))}
-        </div>
-      </section>
-    ),
-  }
-);
+import SlideProduct from "@/features/products/slide-product/SlideProduct";
 
 // Removed local LazySection - now using shared LazySection
 
-export function RecentlyViewedSection({ locale }: { locale: string }) {
+export function RecentlyViewedSection({ locale, initialHasItems }: { locale: string, initialHasItems?: boolean }) {
   const [recentlyViewed, setRecentlyViewed] = useState<ProductType[]>([]);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const { t } = getTranslations(locale as any);
 
   useEffect(() => {
-    setRecentlyViewed(getRecentlyViewed());
+    const items = getRecentlyViewed();
+    setRecentlyViewed(items);
+    setHasHydrated(true);
   }, []);
 
-  if (recentlyViewed.length === 0) return null;
+  // During SSR and first client render, we use initialHasItems to decide if we show the skeleton.
+  // After hydration, we use the actual length.
+  const showSection = hasHydrated ? recentlyViewed.length > 0 : !!initialHasItems;
+
+  if (!showSection) return null;
 
   return (
     <LazySection 
       className="deferred-section" 
-      minHeightDesktop={900} 
-      minHeightMobile={850}
+      minHeightDesktop={400} 
+      minHeightMobile={350}
       id="recently-viewed"
     >
       <SlideProduct
         kicker={t("home.recentlyViewedKicker")}
         category={t("home.recentlyViewedTitle")}
         description={t("home.recentlyViewedCopy")}
-        products={recentlyViewed}
+        products={recentlyViewed.length > 0 ? recentlyViewed : []}
       />
     </LazySection>
   );
@@ -90,9 +80,10 @@ export function CategorySlidesSection({ initialCategories, initialProducts, loca
         <div key={category.slug}>
           <LazySection
             className="deferred-section"
-            minHeightDesktop={950}
-            minHeightMobile={900}
+            minHeightDesktop={750}
+            minHeightMobile={700}
             id={`category-${category.slug}`}
+            eager={index === 0}
             onVisible={() =>
               setVisibleCategories((prev) =>
                 prev.includes(category.slug) ? prev : [...prev, category.slug],

@@ -4,6 +4,8 @@ import { Product } from "@/services/api/productsApi";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { PriceTag } from "@/shared/ui/PriceTag";
 import { m } from "framer-motion";
+import { useEffect } from "react";
+import { saveRecentlyViewed } from "@/shared/utils/product-tools";
 
 interface ProductInfoProps {
   product: Product;
@@ -16,6 +18,12 @@ const fadeIn = {
 
 export function ProductInfo({ product }: ProductInfoProps) {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (product) {
+      saveRecentlyViewed(product);
+    }
+  }, [product]);
 
   return (
     <div className="space-y-3 sm:space-y-6">

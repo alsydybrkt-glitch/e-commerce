@@ -23,11 +23,20 @@ const LazySection = ({
   rootMargin = "400px",
   onVisible,
   id,
-}: LazySectionProps) => {
+  eager = false,
+}: LazySectionProps & { eager?: boolean }) => {
   const isMobile = useIsMobile(1024);
   const finalMinHeight = isMobile 
     ? (minHeightMobile ?? minHeight ?? 600) 
     : (minHeightDesktop ?? minHeight ?? 800);
+
+  if (eager) {
+    return (
+      <div className={className} style={{ minHeight: `${finalMinHeight}px` }}>
+        <div id={id}>{children}</div>
+      </div>
+    );
+  }
 
   return (
     <RenderWhenVisible

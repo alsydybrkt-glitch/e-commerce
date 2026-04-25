@@ -10,6 +10,11 @@ export function saveRecentlyViewed(product: Partial<Product>) {
   );
 
   localStorage.setItem("recentlyViewedProducts", JSON.stringify(next));
+  
+  // Set a small cookie hint for the server to avoid CLS on home page
+  if (typeof document !== "undefined") {
+    document.cookie = `hasRecentlyViewed=1; path=/; max-age=31536000; SameSite=Lax`;
+  }
 }
 
 export function getRecentlyViewed() {

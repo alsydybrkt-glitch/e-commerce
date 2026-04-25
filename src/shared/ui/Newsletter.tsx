@@ -39,8 +39,8 @@ export function Newsletter() {
   return (
     <section className="shell relative py-10 lg:py-16">
       <m.div 
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className="relative overflow-hidden rounded-[1rem] lg:rounded-[1.5rem] bg-white dark:bg-slate-950 px-6 py-10 text-center lg:px-20 lg:py-14 shadow-xl border border-slate-100 dark:border-white/5"

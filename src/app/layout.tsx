@@ -59,13 +59,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-        {/* ✅ LCP Image Preload */}
-        <link 
-          rel="preload" 
-          as="image" 
-          href="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1600&q=80"
-          fetchPriority="high"
-        />
 
         {/* ✅ Strategic Critical CSS (Prevent Layout Shift) */}
         <style dangerouslySetInnerHTML={{ __html: `
