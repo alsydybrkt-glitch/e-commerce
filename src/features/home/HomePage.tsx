@@ -8,25 +8,25 @@ import { getTranslations } from "@/config/i18n/get-translations";
 
 // UI Components
 const TrustBar = dynamic(() => import("@/shared/ui/TrustBar").then(mod => mod.TrustBar), {
-  loading: () => <div className="h-20 animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
+  loading: () => <div className="h-[196px] animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
 });
 const Newsletter = dynamic(() => import("@/shared/ui/Newsletter").then(mod => mod.Newsletter), {
-  loading: () => <div className="h-64 animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
+  loading: () => <div className="h-[680px] animate-pulse bg-slate-50 dark:bg-slate-900/50" />,
   ssr: false
 });
 import { RecentlyViewedSection, CategorySlidesSection } from "./HomeClientSections";
 import LazySection from "@/shared/ui/LazySection";
 
 const TopBrandsSection = dynamic(() => import("./TopBrandsSection"), {
-  loading: () => <div className="h-40 animate-pulse bg-slate-50 dark:bg-slate-900/50 my-10" />
+  loading: () => <div className="h-[356px] animate-pulse bg-slate-50 dark:bg-slate-900/50" />
 });
 
 const FlashSaleSection = dynamic(() => import("./FlashSaleSection"), {
-  loading: () => <div className="h-96 animate-pulse bg-slate-50 dark:bg-slate-900/50 my-10" />
+  loading: () => <div className="h-[834px] animate-pulse bg-slate-50 dark:bg-slate-900/50" />
 });
 
 const PromoBannersGrid = dynamic(() => import("./PromoBannersGrid"), {
-  loading: () => <div className="h-64 animate-pulse bg-slate-50 dark:bg-slate-900/50 my-10" />
+  loading: () => <div className="h-[540px] animate-pulse bg-slate-50 dark:bg-slate-900/50" />
 });
 
 // Lazy load non-critical sections
@@ -50,7 +50,7 @@ const CategoriesGrid = dynamic(
 );
 
 const TrustSection = dynamic(() => import("@/shared/ui/trust-section/TrustSection"), {
-  loading: () => <div className="h-96 animate-pulse bg-slate-100 dark:bg-slate-800/50" />,
+  loading: () => <div className="h-[1400px] animate-pulse bg-slate-100 dark:bg-slate-800/50" />,
 });
 
 const categoryInf = [
@@ -105,7 +105,7 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
         />
       </Suspense>
 
-      <Suspense fallback={<div className="shell py-10 lg:py-16"><div className="h-[600px] animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/10" /></div>}>
+      <Suspense fallback={<div className="shell py-10 lg:py-16"><div className="h-[658px] animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/10" /></div>}>
         <CategoriesGrid categories={categoriesData} />
       </Suspense>
 
@@ -115,7 +115,7 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
       </Suspense>
 
       {/* Category Sections with Integrated Mid-page Banner */}
-      <Suspense fallback={<div className="h-screen animate-pulse bg-slate-50 dark:bg-slate-900/10" />}>
+      <Suspense fallback={<div className="h-[824px] animate-pulse bg-slate-50 dark:bg-slate-900/10" />}>
         <CategorySlidesSection 
           initialCategories={initialCategories} 
           initialProducts={initialProducts} 
@@ -125,8 +125,8 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
 
       {/* Benefits Content / Social Trust */}
       <LazySection 
-        minHeightDesktop={1100} 
-        minHeightMobile={750}
+        minHeightDesktop={1400} 
+        minHeightMobile={1000}
         id="performance-picks"
       >
         <TrustSection />
@@ -136,7 +136,7 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
       <Newsletter />
 
       {/* Featured / Recently Viewed - At the very bottom to prevent pushing content down */}
-      <Suspense fallback={null}>
+      <Suspense fallback={hasRecentlyViewed ? <div className="h-[450px] animate-pulse bg-slate-50 dark:bg-slate-900/10" /> : null}>
         <RecentlyViewedSection locale={locale} initialHasItems={hasRecentlyViewed} />
       </Suspense>
     </div>

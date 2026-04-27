@@ -41,7 +41,7 @@ function RenderWhenVisible({
   }, [isVisible, onVisible, rootMargin]);
 
   return (
-    <div ref={hostRef} className={className}>
+    <div ref={hostRef} className={className} style={{ minHeight: isVisible ? undefined : `${minHeight}px` }}>
       {isVisible ? (
         children
       ) : (

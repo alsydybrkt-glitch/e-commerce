@@ -47,8 +47,8 @@ export function RecentlyViewedSection({
   return (
     <LazySection
       className="deferred-section"
-      minHeightDesktop={400}
-      minHeightMobile={350}
+      minHeightDesktop={450}
+      minHeightMobile={400}
       id="recently-viewed"
     >
       <SlideProduct
@@ -127,8 +127,8 @@ export function CategorySlidesSection({
           <LazySection
             key={category.slug}
             className="deferred-section"
-            minHeightDesktop={750}
-            minHeightMobile={700}
+            minHeightDesktop={824}
+            minHeightMobile={770}
             id={`category-${category.slug}`}
             eager={true}
             onVisible={() => handleVisible(category.slug)}

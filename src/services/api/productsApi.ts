@@ -1,4 +1,4 @@
-const BASE_URL = "https://dummyjson.com/products";
+import { apiClient, RequestOptions } from "./apiClient";
 
 // ================= CACHE CONSTANTS =================
 
@@ -9,6 +9,8 @@ const CACHE = {
 } as const;
 
 // ================= TYPES =================
+// ... (omitting types as they remain the same)
+// I'll keep the types from the original file
 
 export interface Product {
   id: number;
@@ -46,18 +48,6 @@ export interface PaginatedResponse<T> {
 
 // ================= HELPERS =================
 
-function buildQuery(paramsObj: Record<string, any>): string {
-  const params = new URLSearchParams();
-
-  Object.entries(paramsObj).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      params.set(key, String(value));
-    }
-  });
-
-  return params.toString();
-}
-
 function normalizePaginatedData<T>(
   data: any,
   options: ProductQueryOptions
@@ -85,26 +75,14 @@ function normalizePaginatedData<T>(
   };
 }
 
-async function safeFetch(url: string, options?: RequestInit): Promise<any> {
-  const res = await fetch(url, options);
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    console.error("API Error:", res.status, errorText);
-    throw new Error(`Request failed: ${res.status}`);
-  }
-
-  return res.json();
-}
-
 // ================= PRODUCTS =================
 
 export async function fetchProductById(
   productId: string | number
 ): Promise<Product> {
-  return safeFetch(`${BASE_URL}/${productId}`, {
+  return apiClient<Product>(`/products/${productId}`, {
     next: { revalidate: CACHE.PRODUCT },
-  } as RequestInit);
+  } as RequestOptions);
 }
 
 // ================= CATEGORY =================
@@ -113,14 +91,10 @@ export async function fetchCategoryProductsPage(
   categorySlug: string,
   options: ProductQueryOptions = {}
 ): Promise<PaginatedResponse<Product>> {
-  const query = buildQuery(options);
-
-  const data = await safeFetch(
-    `${BASE_URL}/category/${categorySlug}${query ? `?${query}` : ""}`,
-    {
-      next: { revalidate: CACHE.CATEGORY },
-    } as RequestInit
-  );
+  const data = await apiClient<any>(`/products/category/${categorySlug}`, {
+    params: options as any,
+    next: { revalidate: CACHE.CATEGORY },
+  } as RequestOptions);
 
   return normalizePaginatedData<Product>(data, options);
 }
@@ -169,9 +143,9 @@ export async function fetchAllCategoryProducts(
 
 // ✅ Fixed: API returns objects not strings
 export async function fetchAllProductCategories(): Promise<Category[]> {
-  const data = await safeFetch(`${BASE_URL}/categories`, {
+  const data = await apiClient<any>("/products/categories", {
     next: { revalidate: CACHE.CATEGORIES },
-  } as RequestInit);
+  } as RequestOptions);
 
   return data.map((cat: any) => ({
     slug: cat.slug,
@@ -186,7 +160,6 @@ export async function searchProductsPage(
   query: string,
   options: ProductQueryOptions = {}
 ): Promise<PaginatedResponse<Product>> {
-  // ✅ Early return للـ empty query — بيوفر request غير ضروري
   if (!query.trim()) {
     return {
       products: [],
@@ -196,17 +169,10 @@ export async function searchProductsPage(
     };
   }
 
-  const queryString = buildQuery({
-    q: query,
-    ...options,
+  const data = await apiClient<any>("/products/search", {
+    params: { q: query, ...options } as any,
+    cache: "no-store",
   });
-
-  const data = await safeFetch(
-    `${BASE_URL}/search?${queryString}`,
-    {
-      cache: "no-store", // real-time search — لا cache
-    }
-  );
 
   return normalizePaginatedData<Product>(data, options);
 }

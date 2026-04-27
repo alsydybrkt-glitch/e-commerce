@@ -29,12 +29,10 @@
   --color-text-secondary: #475467;
   --color-text-tertiary: #667085;
   --color-text-disabled: #98a2b3;
-  --color-text-inverse: #ffffff;
   --color-border: #eaecf0;
   --color-border-light: #f2f4f7;
   --color-border-medium: #eaecf0;
   --color-border-dark: #98a2b3;
-  --color-border-focus: #111827;
   --color-brand-50: #f0fdf4;
   --color-brand-100: #dcfce7;
   --color-brand-500: #10b981;
@@ -50,13 +48,18 @@
   --color-button-secondary-bg: #ffffff;
   --color-button-secondary-fg: #111827;
   --color-button-secondary-border: #e2e8f0;
-  --color-focus-ring: rgba(17, 24, 39, 0.15);
   --color-focus-ring-solid: #111827;
-  --color-active-bg: #f1f5f9;
   --color-glass-bg: rgba(255, 255, 255, 0.75);
   --color-glass-border: rgba(255, 255, 255, 0.2);
   --color-glass-darker-bg: rgba(255, 255, 255, 0.85);
   --color-glass-darker-border: rgba(0, 0, 0, 0.05);
+  
+  /* Interaction States */
+  --color-interactive-hover: rgba(0, 0, 0, 0.04);
+  --color-interactive-active: rgba(0, 0, 0, 0.08);
+  --color-interactive-disabled: #f2f4f7;
+  --color-focus-ring: #10b981;
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02);
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
@@ -131,12 +134,10 @@ html.dark {
   --color-text-secondary: #94a3b8;
   --color-text-tertiary: #64748b;
   --color-text-disabled: #475569;
-  --color-text-inverse: #09090b;
   --color-border: #1f1f23;
   --color-border-light: #18181b;
   --color-border-medium: #27272a;
   --color-border-dark: #3f3f46;
-  --color-border-focus: #fafafa;
   --color-brand-50: #064e3b;
   --color-brand-100: #065f46;
   --color-brand-500: #34d399;
@@ -152,14 +153,18 @@ html.dark {
   --color-button-secondary-bg: #1a1a1a;
   --color-button-secondary-fg: #fafafa;
   --color-button-secondary-border: #404040;
-  /* FIX: focus ring visible on dark backgrounds */
-  --color-focus-ring: rgba(250, 250, 250, 0.2);
   --color-focus-ring-solid: #fafafa;
-  --color-active-bg: #262626;
   --color-glass-bg: rgba(9, 9, 11, 0.8);
   --color-glass-border: rgba(255, 255, 255, 0.08);
   --color-glass-darker-bg: rgba(9, 9, 11, 0.95);
   --color-glass-darker-border: rgba(255, 255, 255, 0.12);
+
+  /* Interaction States */
+  --color-interactive-hover: rgba(255, 255, 255, 0.06);
+  --color-interactive-active: rgba(255, 255, 255, 0.1);
+  --color-interactive-disabled: #16161a;
+  --color-focus-ring: #34d399;
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
   --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.6);
@@ -409,20 +414,6 @@ html.dark {
   }
 
   /*
-   * FIX: Explicit focus-visible utility class for components that
-   * need to apply the ring programmatically (e.g. custom dropdowns,
-   * comboboxes, or elements that manage focus manually).
-   *
-   * Usage: add .focus-visible-ring to any interactive element that
-   * can't rely on the global :focus-visible rule above.
-   */
-  .focus-visible-ring:focus-visible {
-    outline: 2px solid var(--color-focus-ring-solid);
-    outline-offset: 2px;
-    border-radius: var(--radius-md);
-  }
-
-  /*
    * RTL IMPROVEMENT: Logical-property variants for common layout patterns.
    * These replace margin-left/right and padding-left/right so components
    * automatically mirror in RTL without extra [dir="rtl"] overrides.
@@ -433,17 +424,6 @@ html.dark {
    * These extend Tailwind's default logical-property utilities (available
    * since Tailwind v3.3) — listed here for documentation clarity.
    */
-
-  /* Inline-start border accent (replaces border-left in LTR, border-right in RTL) */
-  .border-accent-inline {
-    border-inline-start: 3px solid var(--color-brand-500);
-    padding-inline-start: var(--space-md);
-    border-radius: 0;
-  }
-
-  /* Text alignment helpers that respect direction */
-  .text-start { text-align: start; }
-  .text-end   { text-align: end; }
 }
 
 @layer utilities {

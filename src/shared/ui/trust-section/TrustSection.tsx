@@ -13,7 +13,7 @@ import Image from "next/image";
 
 const MobileProductSwiper = dynamic(() => import("@/features/products/slide-product/MobileProductSwiper"), {
   ssr: false,
-  loading: () => <div className="h-48 animate-pulse bg-surface-interactive rounded-xl" />
+  loading: () => <div className="h-[450px] animate-pulse bg-surface-interactive rounded-xl" />
 });
 
 export default function FeaturedCollection() {
@@ -74,7 +74,7 @@ export default function FeaturedCollection() {
           </div>
 
           {isLoading ? (
-            <div className="h-80 rounded-xl bg-surface-interactive animate-pulse" />
+            <div className="h-[1060px] rounded-xl bg-surface-interactive animate-pulse" />
           ) : (
             <div className="flex flex-col gap-6">
               

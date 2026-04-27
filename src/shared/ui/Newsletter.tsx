@@ -11,6 +11,8 @@ import {
   FiBell 
 } from "react-icons/fi";
 import { m, AnimatePresence } from "framer-motion";
+import { Button } from "@/shared/ui/Button";
+import { Input } from "@/shared/ui/Input";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 
 export function Newsletter() {
@@ -96,23 +98,23 @@ export function Newsletter() {
                   onSubmit={handleSubmit} 
                   className="flex flex-col gap-3 sm:flex-row p-1.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg group transition-all duration-500 focus-within:ring-2 focus-within:ring-brand-500/10 dark:focus-within:ring-brand-500/20"
                 >
-                  <input
+                  <Input
                     type="email"
                     placeholder={t("footer.emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-11 flex-1 rounded-md bg-transparent px-5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
+                    className="h-11 flex-1 border-none bg-transparent focus:ring-0"
                     required
                   />
-                  <button
+                  <Button
                     type="submit"
-                    className="group relative h-11 min-w-[130px] px-6 rounded-md bg-emerald-600 text-white font-bold transition-all duration-300 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] overflow-hidden active:scale-95"
+                    className="h-11 min-w-[130px] bg-emerald-600 hover:bg-emerald-500"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2 text-xs">
                       {t("footer.subscribe")}
                       <FiSend className="text-[10px] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </span>
-                  </button>
+                  </Button>
                 </form>
 
                 {/* Benefits Grid */}

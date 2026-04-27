@@ -68,6 +68,18 @@ export default {
             medium: "var(--color-border-medium)",
             dark: "var(--color-border-dark)",
           },
+
+          success: "var(--color-success)",
+          error: "var(--color-error)",
+          warning: "var(--color-warning)",
+          info: "var(--color-info)",
+
+          interactive: {
+            hover: "var(--color-interactive-hover)",
+            active: "var(--color-interactive-active)",
+            disabled: "var(--color-interactive-disabled)",
+          },
+          "focus-ring": "var(--color-focus-ring)",
         },
 
       /* ========== Spacing ========== */
