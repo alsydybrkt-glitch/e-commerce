@@ -10,6 +10,7 @@ type QuantitySelectorProps = {
   onIncrement?: () => void;
   onDecrement?: () => void;
   className?: string;
+  buttonClassName?: string;
   ariaLabel?: string;
 };
 
@@ -20,6 +21,7 @@ function QuantitySelectorComponent({
   onIncrement,
   onDecrement,
   className = "flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-800/80",
+  buttonClassName = "h-8 w-8 p-0 text-text-secondary",
   ariaLabel = "Quantity selector",
 }: QuantitySelectorProps) {
   const handleDecrement = () => {
@@ -38,7 +40,7 @@ function QuantitySelectorComponent({
         size="sm"
         onClick={handleDecrement}
         disabled={quantity <= 1}
-        className="h-8 w-8 p-0 text-text-secondary"
+        className={buttonClassName}
         aria-label="Decrease quantity"
       >
         <FaMinus aria-hidden="true" />
@@ -56,7 +58,7 @@ function QuantitySelectorComponent({
         variant="ghost"
         size="sm"
         onClick={handleIncrement}
-        className="h-8 w-8 p-0 text-text-secondary"
+        className={buttonClassName}
         aria-label="Increase quantity"
       >
         <FaPlus aria-hidden="true" />

@@ -109,7 +109,7 @@ export function CategorySlidesSection({
         dispatch(fetchProductsByCategory(categoryName));
       }
     });
-  }, [dispatch, visibleCategories]); // Fix #3 — أزلنا products من deps
+  }, [dispatch, visibleCategories, products]);
 
   const handleVisible = (slug: string) => {
     setVisibleCategories((prev) =>

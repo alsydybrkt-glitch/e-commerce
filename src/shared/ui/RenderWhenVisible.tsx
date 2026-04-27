@@ -32,7 +32,7 @@ function RenderWhenVisible({
         onVisible?.();
         observer.disconnect();
       },
-      { rootMargin }
+      { rootMargin },
     );
 
     observer.observe(node);
@@ -41,9 +41,13 @@ function RenderWhenVisible({
   }, [isVisible, onVisible, rootMargin]);
 
   return (
-    <div ref={hostRef} className={className} style={{ minHeight: isVisible ? undefined : `${minHeight}px` }}>
+    <div
+      ref={hostRef}
+      className={className}
+      style={{ minHeight: `${minHeight}px` }}
+    >
       {isVisible ? (
-        children
+        <div style={{ minHeight: `${minHeight}px` }}>{children}</div>
       ) : (
         <div
           aria-hidden="true"
@@ -52,7 +56,9 @@ function RenderWhenVisible({
         >
           <div className="flex flex-col items-center gap-4">
             <div className="h-12 w-12 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
-            <span className="text-xs font-medium text-slate-400">Loading section...</span>
+            <span className="text-xs font-medium text-slate-400">
+              Loading section...
+            </span>
           </div>
         </div>
       )}

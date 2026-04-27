@@ -20,10 +20,12 @@ export function PromoBanner({
   return (
     <div className={`relative h-[320px] sm:h-[350px] lg:h-[380px] w-full overflow-hidden rounded-2xl border border-border-light shadow-lg group ${className || ""}`}>
       {/* Background Image with optimized loading */}
-      <img
+      <Image
         src={imageSrc}
         alt={title}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+        fill
+        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
       
       {/* Refined Overlays */}

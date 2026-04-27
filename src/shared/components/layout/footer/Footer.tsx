@@ -34,18 +34,34 @@ function Footer() {
       { label: t("nav.blog"), href: NAV_HREFS[2] },
       { label: t("nav.contact"), href: NAV_HREFS[3] },
     ],
-    [t]
+    [t],
   );
 
   // ✅ Fix #2 + #3: serviceLinks دلوقتي objects بـ href وـ unique key
   const serviceLinks = useMemo(
     () => [
-      { key: "returnPolicy", label: t("footer.links.returnPolicy"), href: SERVICE_HREFS.returnPolicy },
-      { key: "privacyPolicy", label: t("footer.links.privacyPolicy"), href: SERVICE_HREFS.privacyPolicy },
-      { key: "terms", label: t("footer.links.terms"), href: SERVICE_HREFS.terms },
-      { key: "support", label: t("footer.links.support"), href: SERVICE_HREFS.support },
+      {
+        key: "returnPolicy",
+        label: t("footer.links.returnPolicy"),
+        href: SERVICE_HREFS.returnPolicy,
+      },
+      {
+        key: "privacyPolicy",
+        label: t("footer.links.privacyPolicy"),
+        href: SERVICE_HREFS.privacyPolicy,
+      },
+      {
+        key: "terms",
+        label: t("footer.links.terms"),
+        href: SERVICE_HREFS.terms,
+      },
+      {
+        key: "support",
+        label: t("footer.links.support"),
+        href: SERVICE_HREFS.support,
+      },
     ],
-    [t]
+    [t],
   );
 
   const handleSubscribe = (event: React.FormEvent) => {
@@ -67,9 +83,8 @@ function Footer() {
   };
 
   return (
-    <footer className="site-footer mt-16 border-t border-border-light bg-bg-secondary text-text-secondary">
+    <footer className="site-footer border-t border-border-light bg-bg-secondary text-text-secondary">
       <div className="shell py-16">
-
         {/* ✅ Design: CTA Banner — أوضح contrast وألوان متناسقة */}
         <div className="mb-12 overflow-hidden rounded-3xl border border-brand-200 bg-gradient-to-br from-brand-50 via-white to-brand-100/40 p-10 shadow-sm dark:border-slate-700 dark:from-slate-800 dark:via-slate-800 dark:to-slate-700/60">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -93,7 +108,6 @@ function Footer() {
 
         {/* Main Grid */}
         <div className="grid gap-10 lg:grid-cols-[1.4fr_0.7fr_0.8fr_1.1fr]">
-
           {/* Brand Column */}
           <div className="space-y-4">
             <span className="section-kicker">{t("footer.storefront")}</span>

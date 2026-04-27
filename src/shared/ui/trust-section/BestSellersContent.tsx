@@ -78,7 +78,7 @@ export function BestSellersContent({
           <div className="h-20 w-20 rounded-full bg-surface-secondary flex items-center justify-center text-3xl mb-4">
             🔍
           </div>
-          <h3 className="text-xl font-bold mb-2 text-text-primary">{t("shop.noProducts")}</h3>
+          <h3 className="text-xl font-bold mb-2 text-text-primary">{t("home.noProducts")}</h3>
           <p className="text-text-secondary max-w-sm">{t("shop.emptyCopy")}</p>
         </m.div>
       )}

@@ -25,7 +25,7 @@ const SLIDE_CONFIGS: Omit<HeroSlide, "eyebrow" | "title" | "description">[] = [
   {
     id: "hero-gaming",
     image: {
-      src: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1600&q=80",
+      src: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=70",
       alt: "Gaming setup with keyboard, console, and headset",
     },
     primaryAction: { label: "", href: "/shop", ariaLabel: "" },
@@ -34,7 +34,7 @@ const SLIDE_CONFIGS: Omit<HeroSlide, "eyebrow" | "title" | "description">[] = [
   {
     id: "hero-workspace",
     image: {
-      src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80",
+      src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=70",
       alt: "Premium tech products arranged on a modern desk",
     },
     primaryAction: { label: "", href: "/shop", ariaLabel: "" },
@@ -43,7 +43,7 @@ const SLIDE_CONFIGS: Omit<HeroSlide, "eyebrow" | "title" | "description">[] = [
   {
     id: "hero-audio",
     image: {
-      src: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1600&q=80",
+      src: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1200&q=70",
       alt: "Wireless audio products and accessories",
     },
     primaryAction: { label: "", href: "/shop", ariaLabel: "" },
@@ -104,8 +104,16 @@ export default function AuraHero() {
 
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
-  const parallaxX = useSpring(pointerX, { stiffness: 140, damping: 24, mass: 0.35 });
-  const parallaxY = useSpring(pointerY, { stiffness: 140, damping: 24, mass: 0.35 });
+  const parallaxX = useSpring(pointerX, {
+    stiffness: 140,
+    damping: 24,
+    mass: 0.35,
+  });
+  const parallaxY = useSpring(pointerY, {
+    stiffness: 140,
+    damping: 24,
+    mass: 0.35,
+  });
 
   // FIX 1 & 3: Slides built from stable config + t() called per key only
   const slides = useMemo<HeroSlide[]>(() => {
@@ -233,15 +241,21 @@ export default function AuraHero() {
   );
 
   // FIX 5: Touch handlers wrapped in useCallback for consistency
-  const handleTouchStart = useCallback((event: React.TouchEvent<HTMLElement>) => {
-    touchStartXRef.current = event.touches[0]?.clientX ?? null;
-    touchCurrentXRef.current = event.touches[0]?.clientX ?? null;
-    if (isMountedRef.current) setIsPaused(true);
-  }, []);
+  const handleTouchStart = useCallback(
+    (event: React.TouchEvent<HTMLElement>) => {
+      touchStartXRef.current = event.touches[0]?.clientX ?? null;
+      touchCurrentXRef.current = event.touches[0]?.clientX ?? null;
+      if (isMountedRef.current) setIsPaused(true);
+    },
+    [],
+  );
 
-  const handleTouchMove = useCallback((event: React.TouchEvent<HTMLElement>) => {
-    touchCurrentXRef.current = event.touches[0]?.clientX ?? null;
-  }, []);
+  const handleTouchMove = useCallback(
+    (event: React.TouchEvent<HTMLElement>) => {
+      touchCurrentXRef.current = event.touches[0]?.clientX ?? null;
+    },
+    [],
+  );
 
   // FIX 2: Guard setState with isMountedRef
   const handleTouchEnd = useCallback(() => {
@@ -306,7 +320,6 @@ export default function AuraHero() {
 
       <div className="mx-auto w-full max-w-7xl">
         <div className="relative overflow-hidden rounded-[0.5rem] border border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 shadow-[0_28px_90px_-40px_rgba(15,23,42,0.5)] dark:shadow-[0_28px_90px_-40px_rgba(0,0,0,0.8)] backdrop-blur-sm">
-
           {/* Slides */}
           <div className="relative" aria-live="polite">
             <AnimatePresence mode="wait" initial={false} custom={direction}>
@@ -333,9 +346,12 @@ export default function AuraHero() {
 
           {/* Controls */}
           <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 px-4 pb-4 sm:px-6 sm:pb-6">
-
             {/* Dot indicators */}
-            <div className="flex items-center gap-2" role="tablist" aria-label="Slides">
+            <div
+              className="flex items-center gap-2"
+              role="tablist"
+              aria-label="Slides"
+            >
               {slides.map((slide, index) => {
                 const isCurrent = index === activeIndex;
                 return (
@@ -352,7 +368,7 @@ export default function AuraHero() {
                     aria-label={`Go to slide ${index + 1}`}
                     // FIX 1: aria-current must be a string or undefined, not boolean
                     aria-current={isCurrent ? "true" : undefined}
-                    aria-selected={isCurrent}
+                    aria-selected={isCurrent ? "true" : "false"}
                     className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 dark:focus-visible:ring-slate-100 ${
                       isCurrent
                         ? "w-8 bg-slate-900 dark:bg-slate-100"

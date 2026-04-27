@@ -34,7 +34,9 @@ export function HeroSlideItem({
         <div className="order-1 flex flex-col gap-5 md:gap-6 max-w-xl">
           {slide.eyebrow ? (
             <m.p
-              initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              initial={
+                index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }
+              }
               animate={{ opacity: 1, y: 0 }}
               className="text-xs sm:text-sm uppercase tracking-[0.18em] font-semibold text-slate-700 dark:text-slate-300"
             >
@@ -45,7 +47,11 @@ export function HeroSlideItem({
           <m.h1
             initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: index === 0 ? 0 : 0.05 }}
+            transition={{
+              duration: 0.45,
+              ease: "easeOut",
+              delay: index === 0 ? 0 : 0.05,
+            }}
             className="text-3xl sm:text-4xl xl:text-5xl font-semibold leading-tight text-slate-900 dark:text-white"
           >
             {slide.title}
@@ -54,7 +60,11 @@ export function HeroSlideItem({
           <m.p
             initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: index === 0 ? 0 : 0.1 }}
+            transition={{
+              duration: 0.45,
+              ease: "easeOut",
+              delay: index === 0 ? 0 : 0.1,
+            }}
             className="text-sm sm:text-base xl:text-lg text-slate-600 dark:text-slate-300 leading-relaxed"
           >
             {slide.description}
@@ -63,12 +73,18 @@ export function HeroSlideItem({
           <m.div
             initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: index === 0 ? 0 : 0.15 }}
+            transition={{
+              duration: 0.45,
+              ease: "easeOut",
+              delay: index === 0 ? 0 : 0.15,
+            }}
             className="flex flex-wrap items-center gap-3 pt-2"
           >
             <LocalizedLink
               href={slide.primaryAction.href}
-              aria-label={slide.primaryAction.ariaLabel ?? slide.primaryAction.label}
+              aria-label={
+                slide.primaryAction.ariaLabel ?? slide.primaryAction.label
+              }
               className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 dark:bg-white px-5 py-3 text-sm font-semibold text-white dark:text-slate-900 transition-transform duration-300 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 dark:focus-visible:ring-slate-100"
             >
               <span>{slide.primaryAction.label}</span>
@@ -78,7 +94,9 @@ export function HeroSlideItem({
             {slide.secondaryAction ? (
               <LocalizedLink
                 href={slide.secondaryAction.href}
-                aria-label={slide.secondaryAction.ariaLabel ?? slide.secondaryAction.label}
+                aria-label={
+                  slide.secondaryAction.ariaLabel ?? slide.secondaryAction.label
+                }
                 className="inline-flex items-center justify-center rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 dark:focus-visible:ring-slate-100"
               >
                 {slide.secondaryAction.label}
@@ -95,10 +113,16 @@ export function HeroSlideItem({
                   style={{ x: parallaxX, y: parallaxY }}
                   className="absolute inset-0 will-change-transform transform-gpu"
                 >
-                  <img
+                  <Image
                     src={slide.image.src}
                     alt={slide.image.alt}
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
+                    priority={index === 0}
+                    quality={70}
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNlMGUwZTAiIC8+PC9zdmc+"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                   />
                 </m.div>
               ) : (

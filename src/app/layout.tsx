@@ -1,30 +1,31 @@
-import type { Metadata } from 'next'
-import { Outfit, Cairo } from 'next/font/google'
-import '@/styles/globals.css'
-
+import type { Metadata } from "next";
+import { Outfit, Cairo } from "next/font/google";
+import "@/styles/globals.css";
 
 const outfit = Outfit({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-outfit',
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
   preload: true, // ✅ مهم
-})
+});
 
 const cairo = Cairo({
-  subsets: ['arabic'],
-  display: 'swap',
-  variable: '--font-cairo',
+  subsets: ["arabic"],
+  display: "swap",
+  variable: "--font-cairo",
   preload: false, // Keep Arabic font non-critical for non-Arabic first paint
-})
+});
 
 export const metadata: Metadata = {
   title: {
-    default: 'Aura | Premium E-Commerce Experience',
-    template: '%s | Aura'
+    default: "Aura | Premium E-Commerce Experience",
+    template: "%s | Aura",
   },
-  description: 'Discover the future of shopping with Aura.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aura.vercel.app'),
-}
+  description: "Discover the future of shopping with Aura.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://aura.vercel.app",
+  ),
+};
 
 const themeScript = `(function(){try{var t='theme',l='locale',h=document.documentElement;
 var gC=function(n){var v=document.cookie.match('(^|;) ?'+n+'=([^;]*)(;|$)');
@@ -38,30 +39,44 @@ var th=gC(t)||gS(t);
 if(!th)th=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
 var d=th==='dark';h.dataset.theme=th;h.classList.toggle('dark',d);
 h.style.colorScheme=d?'dark':'light';if(!gC(t))sC(t,th);
-}catch(e){}})();`
+}catch(e){}})();`;
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html 
-      lang="en" 
+    <html
+      lang="en"
       suppressHydrationWarning
       className={`${outfit.variable} ${cairo.variable}`}
     >
       <head>
-
         {/* ✅ Resource Hints */}
-        <link rel="preconnect" href="https://dummyjson.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://dummyjson.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://dummyjson.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://images.unsplash.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
-
+        <link
+          rel="preload"
+          as="image"
+          href="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=70"
+          crossOrigin="anonymous"
+        />
 
         {/* ✅ Strategic Critical CSS (Prevent Layout Shift) */}
-        <style dangerouslySetInnerHTML={{ __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
           :root {
             --color-bg-primary: #fcfcfd;
             --color-text-primary: #101828;
@@ -149,19 +164,17 @@ export default function RootLayout({
 
           /* Inlined Swiper Core CSS (1.48 KiB win) */
           :root{--swiper-theme-color:#007aff}:host{display:block;margin-left:auto;margin-right:auto;position:relative;z-index:1}.swiper{display:block;list-style:none;margin-left:auto;margin-right:auto;overflow:hidden;padding:0;position:relative;z-index:1}.swiper-vertical>.swiper-wrapper{flex-direction:column}.swiper-wrapper{box-sizing:initial;display:flex;height:100%;position:relative;transition-property:transform;transition-timing-function:var(--swiper-wrapper-transition-timing-function,initial);width:100%;z-index:1}.swiper-android .swiper-slide,.swiper-ios .swiper-slide,.swiper-wrapper{transform:translateZ(0)}.swiper-horizontal{touch-action:pan-y}.swiper-vertical{touch-action:pan-x}.swiper-slide{display:block;flex-shrink:0;height:100%;position:relative;transition-property:transform;width:100%}.swiper-slide-invisible-blank{visibility:hidden}.swiper-autoheight,.swiper-autoheight .swiper-slide{height:auto}.swiper-autoheight .swiper-wrapper{align-items:flex-start;transition-property:transform,height}.swiper-backface-hidden .swiper-slide{backface-visibility:hidden;transform:translateZ(0)}.swiper-3d.swiper-css-mode .swiper-wrapper{perspective:1200px}.swiper-3d .swiper-wrapper{transform-style:preserve-3d}.swiper-3d{perspective:1200px;.swiper-cube-shadow,.swiper-slide{transform-style:preserve-3d}}.swiper-css-mode{>.swiper-wrapper{overflow:auto;scrollbar-width:none;-ms-overflow-style:none;&::-webkit-scrollbar{display:none}}>.swiper-wrapper>.swiper-slide{scroll-snap-align:start start}&.swiper-horizontal{>.swiper-wrapper{scroll-snap-type:x mandatory}}&.swiper-vertical{>.swiper-wrapper{scroll-snap-type:y mandatory}}&.swiper-free-mode{>.swiper-wrapper{scroll-snap-type:none}>.swiper-wrapper>.swiper-slide{scroll-snap-align:none}}&.swiper-centered{>.swiper-wrapper:before{content:"";flex-shrink:0;order:9999}>.swiper-wrapper>.swiper-slide{scroll-snap-align:center center;scroll-snap-stop:always}}&.swiper-centered.swiper-horizontal{>.swiper-wrapper>.swiper-slide:first-child{margin-inline-start:var(--swiper-centered-offset-before)}>.swiper-wrapper:before{height:100%;min-height:1px;width:var(--swiper-centered-offset-after)}}&.swiper-centered.swiper-vertical{>.swiper-wrapper>.swiper-slide:first-child{margin-block-start:var(--swiper-centered-offset-before)}>.swiper-wrapper:before{height:var(--swiper-centered-offset-after);min-width:1px;width:100%}}}.swiper-3d{.swiper-slide-shadow,.swiper-slide-shadow-bottom,.swiper-slide-shadow-left,.swiper-slide-shadow-right,.swiper-slide-shadow-top{height:100%;left:0;pointer-events:none;position:absolute;top:0;width:100%;z-index:10}.swiper-slide-shadow{background:#00000026}.swiper-slide-shadow-left{background-image:linear-gradient(270deg,#00000080,#0000)}.swiper-slide-shadow-right{background-image:linear-gradient(90deg,#00000080,#0000)}.swiper-slide-shadow-top{background-image:linear-gradient(0deg,#00000080,#0000)}.swiper-slide-shadow-bottom{background-image:linear-gradient(180deg,#00000080,#0000)}}.swiper-lazy-preloader{border:4px solid var(--swiper-preloader-color,var(--swiper-theme-color));border-radius:50%;border-top:4px solid #0000;box-sizing:border-box;height:42px;left:50%;margin-left:-21px;margin-top:-21px;position:absolute;top:50%;transform-origin:50%;width:42px;z-index:10}.swiper-watch-progress .swiper-slide-visible,.swiper:not(.swiper-watch-progress){.swiper-lazy-preloader{animation:swiper-preloader-spin 1s linear infinite}}.swiper-lazy-preloader-white{--swiper-preloader-color:#fff}.swiper-lazy-preloader-black{--swiper-preloader-color:#000}@keyframes swiper-preloader-spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
-        `}} />
-
-        {/* ✅ Theme Initialization (Blocking but minimal) */}
-        <script 
-          dangerouslySetInnerHTML={{ __html: themeScript }}
+        `,
+          }}
         />
 
-
+        {/* ✅ Theme Initialization (Blocking but minimal) */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
 
       <body className="flex flex-col min-h-screen font-sans antialiased">
         {children}
       </body>
     </html>
-  )
+  );
 }
