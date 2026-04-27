@@ -17,13 +17,13 @@ const MAX_VISIBLE_CATEGORIES = 1;
 
 interface RecentlyViewedSectionProps {
   locale: string;
-  /** عدد العناصر المحفوظة في SSR لتجنب Layout Shift */
-  initialCount?: number;
+  /** هل يوجد عناصر محفوظة في SSR لتجنب Layout Shift */
+  initialHasItems?: boolean;
 }
 
 export function RecentlyViewedSection({
   locale,
-  initialCount = 0,
+  initialHasItems = false,
 }: RecentlyViewedSectionProps) {
   const [recentlyViewed, setRecentlyViewed] = useState<ProductType[]>([]);
   const [hasHydrated, setHasHydrated] = useState(false);
@@ -37,10 +37,10 @@ export function RecentlyViewedSection({
     setHasHydrated(true);
   }, []);
 
-  // Fix #4 — استخدام العدد بدل boolean لتجنب Layout Shift
+  // Fix #4 — استخدام boolean لتجنب Layout Shift
   const showSection = hasHydrated
     ? recentlyViewed.length > 0
-    : initialCount > 0;
+    : initialHasItems;
 
   if (!showSection) return null;
 
