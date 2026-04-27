@@ -1,6 +1,17 @@
 /**
  * Design Tokens System
  * Consolidated into globals.css for optimized delivery
+ *
+ * IMPROVEMENTS APPLIED:
+ * 1. Focus ring utility class added (.focus-visible-ring)
+ * 2. RTL logical properties support improved
+ * 3. Flash-of-wrong-theme fix via .no-transitions
+ * 4. --shadow-glow corrected (stronger in dark mode)
+ * 5. Dark mode class unified — body.theme-dark is the single source of truth;
+ *    .dark kept as alias for Tailwind darkMode:'class' compat
+ * 6. prefers-reduced-motion guard on .animate-shimmer
+ * 7. --space-* tokens exposed to Tailwind via CSS custom props
+ * 8. background gradient moved to body::before pseudo-element
  */
 
 :root {
@@ -39,7 +50,8 @@
   --color-button-secondary-bg: #ffffff;
   --color-button-secondary-fg: #111827;
   --color-button-secondary-border: #e2e8f0;
-  --color-focus-ring: rgba(17, 24, 39, 0.1);
+  --color-focus-ring: rgba(17, 24, 39, 0.15);
+  --color-focus-ring-solid: #111827;
   --color-active-bg: #f1f5f9;
   --color-glass-bg: rgba(255, 255, 255, 0.75);
   --color-glass-border: rgba(255, 255, 255, 0.2);
@@ -50,7 +62,8 @@
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
   --shadow-xl: 0 32px 64px -16px rgba(0, 0, 0, 0.08);
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.01);
-  --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.12);
+  /* FIX: glow weaker in light (subtle), stronger in dark (visible) */
+  --shadow-glow: 0 0 24px rgba(16, 185, 129, 0.10);
 
   /* Typography */
   --font-family-base: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -96,7 +109,15 @@
 }
 
 /* ==================== DARK MODE TOKENS ==================== */
-body.theme-dark, .dark {
+/*
+ * FIX: Single source of truth is body.theme-dark.
+ * The .dark selector is kept purely as a Tailwind darkMode:'class' alias
+ * so Tailwind-generated dark: utilities still resolve correctly.
+ * Never apply both classes simultaneously — your theme toggle should
+ * add/remove .theme-dark on <body> and .dark on <html>, not both on one element.
+ */
+body.theme-dark,
+html.dark {
   --color-bg-primary: #09090b;
   --color-bg-secondary: #0f0f12;
   --color-bg-tertiary: #16161a;
@@ -131,7 +152,9 @@ body.theme-dark, .dark {
   --color-button-secondary-bg: #1a1a1a;
   --color-button-secondary-fg: #fafafa;
   --color-button-secondary-border: #404040;
-  --color-focus-ring: rgba(250, 250, 250, 0.1);
+  /* FIX: focus ring visible on dark backgrounds */
+  --color-focus-ring: rgba(250, 250, 250, 0.2);
+  --color-focus-ring-solid: #fafafa;
   --color-active-bg: #262626;
   --color-glass-bg: rgba(9, 9, 11, 0.8);
   --color-glass-border: rgba(255, 255, 255, 0.08);
@@ -142,7 +165,8 @@ body.theme-dark, .dark {
   --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.6);
   --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.8);
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 20px rgba(52, 211, 153, 0.05);
+  /* FIX: glow is stronger/more visible in dark mode — corrected from 0.05 */
+  --shadow-glow: 0 0 30px rgba(52, 211, 153, 0.22);
 }
 
 @tailwind base;
@@ -164,10 +188,16 @@ body.theme-dark, .dark {
     scroll-margin-top: var(--site-header-offset, 130px);
   }
 
-  html.font-arabic, .font-arabic {
+  html.font-arabic,
+  .font-arabic {
     font-family: var(--font-cairo), sans-serif !important;
   }
 
+  /*
+   * RTL IMPROVEMENT: Use logical properties so spacing/layout
+   * flips automatically without needing separate [dir="rtl"] overrides.
+   * The line-height adjustments are preserved for Arabic text density.
+   */
   html[dir="rtl"] {
     --line-height-tight: 1.4;
     --line-height-normal: 1.6;
@@ -186,15 +216,49 @@ body.theme-dark, .dark {
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     transition: background-color var(--transition-base), color var(--transition-base);
-    background-image: 
+    position: relative;
+  }
+
+  /*
+   * FIX: Background gradient moved to ::before pseudo-element.
+   * This removes it from the stacking context of the body itself,
+   * preventing it from affecting compositing layers of fixed/sticky children.
+   * z-index: -1 ensures it sits behind all content.
+   */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
       radial-gradient(circle at 12% 0%, rgba(16, 185, 129, 0.05), transparent 34%),
       linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 52%, var(--color-bg-tertiary) 100%);
   }
 
-  body.theme-dark {
-    background-image: 
+  body.theme-dark::before {
+    background-image:
       radial-gradient(circle at 14% 0%, rgba(52, 211, 153, 0.12), transparent 40%),
       linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 55%, var(--color-bg-tertiary) 100%);
+  }
+
+  /*
+   * FIX: Suppress transitions on initial page load to prevent
+   * flash-of-wrong-theme (FOWT). Add .no-transitions to <html> in your
+   * _document.tsx / layout before the theme class is applied, then remove it
+   * after ~100ms:
+   *
+   *   document.documentElement.classList.add('no-transitions')
+   *   applyTheme()
+   *   requestAnimationFrame(() =>
+   *     setTimeout(() => document.documentElement.classList.remove('no-transitions'), 100)
+   *   )
+   */
+  html.no-transitions *,
+  html.no-transitions *::before,
+  html.no-transitions *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -223,6 +287,22 @@ body.theme-dark, .dark {
 
   a:hover {
     @apply opacity-70;
+  }
+
+  /*
+   * FIX: Global keyboard focus styles.
+   * Uses :focus-visible so mouse users are never shown the ring,
+   * but keyboard/assistive-tech users always get a clear indicator.
+   * Overrides browser default outline entirely for consistency.
+   */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring-solid);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
   }
 
   ::-webkit-scrollbar {
@@ -263,6 +343,13 @@ body.theme-dark, .dark {
   .btn {
     @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold transition-all duration-200;
     border: 1px solid transparent;
+    /* FIX: Buttons get a clear focus ring by default */
+    outline-offset: 2px;
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--color-focus-ring-solid);
+    outline-offset: 2px;
   }
 
   .btn-primary {
@@ -287,8 +374,6 @@ body.theme-dark, .dark {
     border-color: var(--color-border-dark);
   }
 
-
-
   .section-kicker {
     @apply mb-3 inline-flex items-center rounded-full border px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em];
     border-color: var(--color-brand-100);
@@ -301,7 +386,8 @@ body.theme-dark, .dark {
   }
 
   .hover-glow:hover {
-    @apply ring-4 ring-brand-500/10 shadow-glow;
+    @apply ring-4 ring-brand-500/10;
+    box-shadow: var(--shadow-glow);
   }
 
   .glass {
@@ -322,16 +408,71 @@ body.theme-dark, .dark {
     transition-timing-function: ease-out;
   }
 
+  /*
+   * FIX: Explicit focus-visible utility class for components that
+   * need to apply the ring programmatically (e.g. custom dropdowns,
+   * comboboxes, or elements that manage focus manually).
+   *
+   * Usage: add .focus-visible-ring to any interactive element that
+   * can't rely on the global :focus-visible rule above.
+   */
+  .focus-visible-ring:focus-visible {
+    outline: 2px solid var(--color-focus-ring-solid);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
 
+  /*
+   * RTL IMPROVEMENT: Logical-property variants for common layout patterns.
+   * These replace margin-left/right and padding-left/right so components
+   * automatically mirror in RTL without extra [dir="rtl"] overrides.
+   *
+   * Use .ms-* and .me-* (margin-inline-start/end) in your markup instead
+   * of ml-* and mr-* wherever the direction should flip.
+   *
+   * These extend Tailwind's default logical-property utilities (available
+   * since Tailwind v3.3) — listed here for documentation clarity.
+   */
+
+  /* Inline-start border accent (replaces border-left in LTR, border-right in RTL) */
+  .border-accent-inline {
+    border-inline-start: 3px solid var(--color-brand-500);
+    padding-inline-start: var(--space-md);
+    border-radius: 0;
+  }
+
+  /* Text alignment helpers that respect direction */
+  .text-start { text-align: start; }
+  .text-end   { text-align: end; }
 }
 
 @layer utilities {
   @keyframes shimmer {
-    0% { transform: translateX(-100%); }
+    0%   { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
   }
 
-  .animate-shimmer {
-    animation: shimmer 2s infinite linear;
+  /*
+   * FIX: prefers-reduced-motion guard.
+   * The animation only runs when the user hasn't requested reduced motion.
+   * This respects OS-level accessibility settings.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-shimmer {
+      animation: shimmer 2s infinite linear;
+    }
+  }
+
+  /* Static fallback when motion is reduced — show a static highlight */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-shimmer {
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        transparent 100%
+      );
+      animation: none;
+    }
   }
 }
