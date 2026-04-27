@@ -49,7 +49,7 @@ export function SearchBox() {
           onSubmit={handleSubmit}
           className="surface-card flex items-center gap-3 rounded-full px-4 py-3"
         >
-          <FaSearch className="shrink-0 text-slate-400 dark:text-slate-500" />
+          <FaSearch className="shrink-0 text-text-muted" />
 
           <input
             type="text"
@@ -65,7 +65,7 @@ export function SearchBox() {
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setFocused(true)}
             onKeyDown={handleKeyDown}
-            className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 dark:text-slate-200 dark:placeholder:text-slate-500"
+            className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
           />
 
           <button
@@ -88,7 +88,7 @@ export function SearchBox() {
           )}
 
           {!loading && suggestions.length === 0 && (
-            <p className="p-4 text-sm text-slate-500">
+            <p className="p-4 text-sm text-text-secondary">
               {t("common.noProductsFound")}
             </p>
           )}

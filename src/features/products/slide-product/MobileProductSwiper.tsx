@@ -2,7 +2,7 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Product from "./ProductCard";
+import Product from "./Product";
 import { Product as ProductType } from "@/services/api/productsApi";
 
 // Import Swiper styles here to defer loading until component is used

@@ -43,7 +43,7 @@ export function Newsletter() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden rounded-[1rem] lg:rounded-[1.5rem] bg-white dark:bg-slate-950 px-6 py-10 text-center lg:px-20 lg:py-14 shadow-xl border border-slate-100 dark:border-white/5"
+        className="relative overflow-hidden rounded-xl lg:rounded-2xl bg-white dark:bg-slate-950 px-6 py-10 text-center lg:px-20 lg:py-14 shadow-xl border border-slate-100 dark:border-white/5"
       >
         {/* Modern Background with Image & Layers */}
         <div className="absolute inset-0 z-0">
@@ -94,19 +94,19 @@ export function Newsletter() {
               >
                 <form 
                   onSubmit={handleSubmit} 
-                  className="flex flex-col gap-3 sm:flex-row p-1.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl group transition-all duration-500 focus-within:ring-2 focus-within:ring-brand-500/10 dark:focus-within:ring-brand-500/20"
+                  className="flex flex-col gap-3 sm:flex-row p-1.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg group transition-all duration-500 focus-within:ring-2 focus-within:ring-brand-500/10 dark:focus-within:ring-brand-500/20"
                 >
                   <input
                     type="email"
                     placeholder={t("footer.emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-11 flex-1 rounded-lg bg-transparent px-5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
+                    className="h-11 flex-1 rounded-md bg-transparent px-5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
                     required
                   />
                   <button
                     type="submit"
-                    className="group relative h-11 min-w-[130px] px-6 rounded-lg bg-emerald-600 text-white font-bold transition-all duration-300 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] overflow-hidden active:scale-95"
+                    className="group relative h-11 min-w-[130px] px-6 rounded-md bg-emerald-600 text-white font-bold transition-all duration-300 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] overflow-hidden active:scale-95"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2 text-xs">
                       {t("footer.subscribe")}
@@ -125,7 +125,7 @@ export function Newsletter() {
                       transition={{ delay: 0.3 + (i * 0.1) }}
                       className="flex items-center gap-2.5 text-[9px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-500/80"
                     >
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5">
                         {benefit.icon}
                       </span>
                       {benefit.text}

@@ -67,7 +67,7 @@ function Footer() {
   };
 
   return (
-    <footer className="site-footer mt-16 border-t border-border-light bg-bg-secondary text-text-secondary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+    <footer className="site-footer mt-16 border-t border-border-light bg-bg-secondary text-text-secondary">
       <div className="shell py-16">
 
         {/* ✅ Design: CTA Banner — أوضح contrast وألوان متناسقة */}
@@ -78,7 +78,7 @@ function Footer() {
                 {t("footer.kicker")}
               </p>
               {/* ✅ Fix #6: h2 → p عشان ما يتكررش مع الـ h2 التاني */}
-              <p className="font-display text-3xl font-bold leading-tight text-text-primary dark:text-slate-100 sm:text-4xl">
+              <p className="font-display text-3xl font-bold leading-tight text-text-primary sm:text-4xl">
                 {t("footer.title")}
               </p>
             </div>
@@ -98,17 +98,17 @@ function Footer() {
           <div className="space-y-4">
             <span className="section-kicker">{t("footer.storefront")}</span>
             {/* ✅ Fix #6: الـ h2 الوحيد المتبقي بعد تحويل الأول لـ <p> */}
-            <h2 className="font-display text-4xl font-bold leading-tight text-text-primary dark:text-slate-100">
+            <h2 className="font-display text-4xl font-bold leading-tight text-text-primary">
               {t("footer.storefrontTitle")}
             </h2>
-            <p className="max-w-sm text-sm leading-7 text-text-secondary dark:text-slate-400">
+            <p className="max-w-sm text-sm leading-7 text-text-secondary">
               {t("footer.storefrontCopy")}
             </p>
           </div>
 
           {/* Explore Links */}
           <div>
-            <h3 className="mb-5 text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-slate-500">
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-widest text-text-muted">
               {t("footer.explore")}
             </h3>
             <nav aria-label={t("footer.explore")} className="space-y-3 text-sm">
@@ -116,7 +116,7 @@ function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex items-center gap-2 text-text-secondary transition-colors duration-150 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400"
+                  className="flex items-center gap-2 text-text-secondary transition-colors duration-150 hover:text-brand-600 dark:hover:text-brand-400"
                 >
                   <FiArrowUpRight className="shrink-0 text-brand-500" />
                   {link.label}
@@ -127,7 +127,7 @@ function Footer() {
 
           {/* ✅ Fix #2 + #3: Service Links صارت روابط حقيقية بـ unique keys */}
           <div>
-            <h3 className="mb-5 text-xs font-bold uppercase tracking-widest text-text-secondary dark:text-slate-500">
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-widest text-text-muted">
               {t("footer.service")}
             </h3>
             <nav aria-label={t("footer.service")} className="space-y-3 text-sm">
@@ -145,11 +145,11 @@ function Footer() {
           </div>
 
           {/* Newsletter Box */}
-          <div className="rounded-3xl border border-border-light bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800/60">
-            <h3 className="mb-2 font-display text-2xl font-bold text-text-primary dark:text-slate-100">
+          <div className="rounded-3xl border border-border-light bg-surface-primary p-6 shadow-sm">
+            <h3 className="mb-2 font-display text-2xl font-bold text-text-primary">
               {t("footer.newsletterTitle")}
             </h3>
-            <p className="mb-5 text-sm leading-6 text-text-secondary dark:text-slate-400">
+            <p className="mb-5 text-sm leading-6 text-text-secondary">
               {t("footer.newsletterCopy")}
             </p>
 
@@ -166,7 +166,7 @@ function Footer() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 aria-label={t("footer.emailPlaceholder")}
-                className="w-full rounded-2xl border border-border-light bg-bg-secondary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 dark:border-slate-600 dark:bg-slate-700/40 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-brand-500 dark:focus:ring-brand-900/40"
+                className="w-full rounded-2xl border border-border-medium bg-surface-secondary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-900/40"
               />
               <button
                 type="submit"
@@ -179,7 +179,7 @@ function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col gap-3 border-t border-border-light pt-6 text-xs text-text-muted dark:border-slate-700 dark:text-slate-500 md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-border-light pt-6 text-xs text-text-muted md:flex-row md:items-center md:justify-between">
           <p>{t("footer.rights")}</p>
           <p>{t("footer.payment")}</p>
         </div>

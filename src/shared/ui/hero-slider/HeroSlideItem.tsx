@@ -88,26 +88,17 @@ export function HeroSlideItem({
         </div>
 
         <div className="order-2">
-          <div className="relative isolate overflow-hidden rounded-[1.75rem] border border-slate-200/70 dark:border-slate-800/70 bg-slate-100 dark:bg-slate-800 shadow-[0_20px_60px_-30px_rgba(15,23,42,0.45)] dark:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.8)]">
+          <div className="relative isolate overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-800/70 bg-slate-100 dark:bg-slate-800 shadow-[0_20px_60px_-30px_rgba(15,23,42,0.45)] dark:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.8)]">
             <div className="relative aspect-[4/3] w-full">
               {imageShouldLoad ? (
                 <m.div
                   style={{ x: parallaxX, y: parallaxY }}
                   className="absolute inset-0 will-change-transform transform-gpu"
                 >
-                  <Image
+                  <img
                     src={slide.image.src}
                     alt={slide.image.alt}
-                    fill
-                    quality={60}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 620px"
                     className="h-full w-full object-cover"
-                    onLoadingComplete={(img) => {
-                      // Optional: handle image load state for smoother transition if needed
-                    }}
                   />
                 </m.div>
               ) : (

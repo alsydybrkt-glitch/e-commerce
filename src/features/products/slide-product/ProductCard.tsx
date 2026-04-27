@@ -1,258 +1,123 @@
 "use client";
-import { memo, useMemo, useState, useEffect, useCallback } from "react";
-import Image from "next/image";
-import { FaHeart, FaShare, FaStar } from "react-icons/fa";
-import { IoHeartOutline } from "react-icons/io5";
-import { MdOutlineAddShoppingCart, MdOutlineDone } from "react-icons/md";
-import { LocalizedLink as Link } from "@/shared/ui/LocalizedLink";
-import { useAppDispatch, useAppSelector } from "@/store";
-import toast from "react-hot-toast";
-import { Interactive } from "@/shared/ui/Interactive";
-import { add } from "@/features/cart/store/cartSlice";
-import {
-  addFavorite,
-  removeFavorite,
-} from "@/features/favorites/store/favoriteSlice";
-import { shareProduct } from "@/shared/utils/product-tools";
-import {
-  buildProductSharePayload,
-  getProductImage,
-} from "@/shared/utils/product-helpers";
-import { useTranslation } from "@/shared/hooks/useTranslation";
+
+import React, { memo } from "react";
 import { Product as ProductType } from "@/services/api/productsApi";
-import SkeletonProduct from "./ProductSkeleton";
+import { Interactive } from "@/shared/ui/Interactive";
+import { useProductState } from "@/features/products/hooks/useProductState";
 
-function Product({
-  item,
-  priority = false,
-}: {
+// Components
+import ProductCardBadge from "./components/ProductCardBadge";
+import ProductCardImage from "./components/ProductCardImage";
+import ProductCardInfo from "./components/ProductCardInfo";
+import ProductCardActions from "./components/ProductCardActions";
+
+interface ProductCardProps {
   item: ProductType;
+  image: string;
   priority?: boolean;
-}) {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  actions?: {
+    addToCart?: (e: React.MouseEvent) => void;
+    toggleFavorite?: (isFav: boolean) => void;
+    share?: (e: React.MouseEvent) => void;
+  };
+}
 
-  // Purely static derived values
-  const image = useMemo(() => getProductImage(item), [item]);
+/**
+ * ProductCard component - Refactored for modularity and reusability.
+ * Uses sub-components to handle different parts of the card.
+ */
+function ProductCard({
+  item,
+  image,
+  priority = false,
+  actions,
+}: ProductCardProps) {
+  const { isInCart, quantity, isFavorite } = useProductState(item);
 
-  const handleAddToCart = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dispatch(add({ ...item, quantity: 1 }));
-      toast.success(
-        <div className="flex items-center gap-3">
-          <div className="space-y-1">
-            <p className="font-semibold text-text-primary">{item.title}</p>
-            <p className="text-xs text-text-secondary">
-              {t("notifications.addedToCart")}
-            </p>
-            <Link
-              href="/carts"
-              className="btn btn-primary !py-1 !px-3 !text-[10px] uppercase tracking-wider"
-              onClick={() => toast.dismiss()}
-            >
-              {t("product.viewCart")}
-            </Link>
-          </div>
-        </div>,
-        { duration: 3000 }
-      );
-    },
-    [dispatch, item, t]
-  );
-
-  const handleToggleFavorite = useCallback(
-    (isFavorite: boolean) => {
-      if (isFavorite) {
-        dispatch(removeFavorite(item.id));
-      } else {
-        dispatch(addFavorite(item));
-        toast.success(t("notifications.addedToFavorites"));
-      }
-    },
-    [dispatch, item, t]
-  );
-
-  const handleShare = useCallback(
-    async (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      try {
-        const result = await shareProduct(
-          buildProductSharePayload(
-            item,
-            `${window.location.origin}/product/${item.id}`
-          )
-        );
-        toast.success(
-          result === "shared"
-            ? t("notifications.shareSuccess")
-            : t("notifications.linkCopied")
-        );
-      } catch {
-        toast.error(t("notifications.error"));
-      }
-    },
-    [item, t]
-  );
+  // Fallback handlers if not provided by parent
+  const onToggleFavorite = actions?.toggleFavorite ?? (() => {});
+  const onShare = actions?.share ?? (() => {});
+  const onAddToCart = actions?.addToCart ?? (() => {});
 
   return (
     <Interactive
       variant="scale"
-      className="product-card group relative flex h-full flex-col rounded-[2.5rem] border border-slate-100 bg-white p-3.5 sm:p-4 transition-all duration-500 hover:border-brand-500/20 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] dark:bg-slate-900/40 dark:border-slate-800/50 dark:hover:border-brand-400/30 dark:hover:bg-slate-900/80 hover:-translate-y-2"
+      className="product-card group relative flex h-full flex-col rounded-lg border border-border bg-surface-primary p-3 sm:p-4 transition-all duration-500 hover:border-brand-500/30 hover:shadow-xl dark:hover:shadow-brand-500/10 hover:-translate-y-1.5"
     >
+      {/* Top Header Section (Badge & Quick Actions) */}
       <div className="mb-4 flex items-center justify-between">
-        <InCartBadge item={item} />
+        <div className="flex flex-col gap-1.5">
+          <ProductCardBadge 
+            item={item} 
+            quantity={quantity} 
+            isInCart={isInCart} 
+          />
+        </div>
 
+        {/* Favorite & Share Buttons (Moved logic to Actions if needed, but keeping layout consistent) */}
         <div className="flex gap-1.5 opacity-100 lg:opacity-0 transition-all duration-300 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 translate-x-1 lg:translate-x-4">
-          <FavoriteButton item={item} onToggle={handleToggleFavorite} />
-          <button
-            type="button"
-            onClick={handleShare}
-            suppressHydrationWarning
-            aria-label={t("product.share")}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface-primary text-text-secondary shadow-sm transition-all duration-300 hover:bg-bg-secondary hover:text-text-primary dark:border-slate-800 dark:bg-slate-900 active:scale-90"
-          >
-            <FaShare className="text-xs" />
-          </button>
+           {/* These are part of Actions but placed here for layout. 
+               We could also keep them as separate sub-components for even more flexibility. */}
+           <ProductCardActionsLayout 
+             type="top-actions"
+             isFavorite={isFavorite}
+             onToggleFavorite={onToggleFavorite}
+             onShare={onShare}
+           />
         </div>
       </div>
 
-      <Link href={`/product/${item.id}`} className="block flex-1 group/image">
-        <div className="relative mb-3 aspect-square overflow-hidden rounded-[20px] bg-slate-50 dark:bg-slate-950/40 shadow-inner">
-          <Image
-            key={item.id}
-            src={image}
-            alt={item.title}
-            fill
-            sizes="(max-width: 640px) 95vw, (max-width: 1024px) 30vw, 300px"
-            priority={priority}
-            className="object-contain p-4 transition-all duration-700 group-hover/image:scale-110 group-hover/image:rotate-2"
-          />
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white/10 to-transparent dark:from-black/10" />
-        </div>
+      {/* Product Image Section */}
+      <ProductCardImage 
+        item={item} 
+        image={image} 
+        priority={priority} 
+      />
 
-        <div className="space-y-2">
-          <h3 className="line-clamp-2 text-sm font-semibold tracking-tight leading-snug text-slate-900 dark:text-white min-h-[2.5rem]">
-            {item.title}
-          </h3>
-
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-1.5">
-              <div className="flex items-center gap-0.5 text-[10px] text-amber-500">
-                <FaStar />
-                <span className="ms-1 font-bold text-slate-900 dark:text-white">
-                  {item.rating || 4.8}
-                </span>
-              </div>
-              <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-              <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
-                120 {t("product.details.rating")}
-              </span>
-            </div>
-            <p className="text-lg font-bold text-slate-900 dark:text-white">
-              ${item.price}
-            </p>
-          </div>
-        </div>
-      </Link>
-
-      <AddToCartAction item={item} onAdd={handleAddToCart} />
+      {/* Product Information Section */}
+      <div className="mt-3 flex-1 flex flex-col justify-between">
+        <ProductCardInfo item={item} />
+        
+        {/* Main Action (Add to Cart) */}
+        <ProductCardActionsLayout 
+          type="bottom-actions"
+          isInCart={isInCart}
+          onAddToCart={onAddToCart}
+        />
+      </div>
     </Interactive>
   );
 }
 
-
-// --- Specialized Sub-components for Localized Hydration ---
-
-const InCartBadge = memo(({ item }: { item: ProductType }) => {
-  const { t, tCategoryName } = useTranslation();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  const cartQuantity = useAppSelector(
-    (state) => state.cart.quantityById?.[item.id] ?? 0
-  );
-  const isInCart = mounted ? cartQuantity > 0 : false;
-
-  if (isInCart) {
+// Internal helper for layout positioning of actions
+const ProductCardActionsLayout = ({ 
+  type, 
+  isFavorite, 
+  isInCart, 
+  onToggleFavorite, 
+  onShare, 
+  onAddToCart 
+}: any) => {
+  if (type === "top-actions") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-md bg-brand-50 px-2 py-1 text-[10px] font-bold text-brand-700 dark:bg-brand-900/20 dark:text-brand-400">
-        <MdOutlineDone className="text-xs" />
-        {t("product.inCart", { count: cartQuantity })}
-      </span>
+       <ProductCardActions 
+         variant="minimal" 
+         isFavorite={isFavorite} 
+         onToggleFavorite={onToggleFavorite} 
+         onShare={onShare} 
+       />
     );
   }
-
+  
   return (
-    <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
-      {tCategoryName(item.category)}
-    </span>
+    <div className="mt-4">
+      <ProductCardActions 
+        variant="full" 
+        isInCart={isInCart} 
+        onAddToCart={onAddToCart} 
+      />
+    </div>
   );
-});
-InCartBadge.displayName = "InCartBadge";
+};
 
-const FavoriteButton = memo(
-  ({ item, onToggle }: { item: ProductType; onToggle: (isFav: boolean) => void }) => {
-    const { t } = useTranslation();
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
-
-    const isFavoriteRedux = useAppSelector((state) =>
-      Boolean(state.favorites.ids?.[item.id])
-    );
-    const isFavorite = mounted ? isFavoriteRedux : false;
-
-    return (
-      <button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onToggle(isFavorite);
-        }}
-        aria-label={
-          isFavorite ? t("product.removeFromFavorites") : t("product.addToFavorites")
-        }
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface-primary text-text-secondary shadow-sm transition-all duration-300 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-rose-950/20 active:scale-90"
-      >
-        {isFavorite ? (
-          <FaHeart className="text-rose-500" />
-        ) : (
-          <IoHeartOutline className="text-lg" />
-        )}
-      </button>
-    );
-  }
-);
-FavoriteButton.displayName = "FavoriteButton";
-
-const AddToCartAction = memo(
-  ({ item, onAdd }: { item: ProductType; onAdd: (e: React.MouseEvent) => void }) => {
-    const { t } = useTranslation();
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
-
-    const isInCartRedux = useAppSelector(
-      (state) => (state.cart.quantityById?.[item.id] ?? 0) > 0
-    );
-    const isInCart = mounted ? isInCartRedux : false;
-
-    return (
-      <button
-        type="button"
-        onClick={onAdd}
-        className={`mt-4 btn w-full h-11 rounded-xl transition-all active:scale-[0.96] flex items-center justify-center gap-2 ${
-          isInCart ? "btn-secondary" : "btn-primary shadow-sm"
-        }`}
-      >
-        <MdOutlineAddShoppingCart className="text-lg" />
-        {isInCart ? t("product.addOneMore") : t("product.addToCart")}
-      </button>
-    );
-  }
-);
-AddToCartAction.displayName = "AddToCartAction";
-
-export default memo(Product);
+export default memo(ProductCard);

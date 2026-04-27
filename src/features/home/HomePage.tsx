@@ -17,6 +17,18 @@ const Newsletter = dynamic(() => import("@/shared/ui/Newsletter").then(mod => mo
 import { RecentlyViewedSection, CategorySlidesSection } from "./HomeClientSections";
 import LazySection from "@/shared/ui/LazySection";
 
+const TopBrandsSection = dynamic(() => import("./TopBrandsSection"), {
+  loading: () => <div className="h-40 animate-pulse bg-slate-50 dark:bg-slate-900/50 my-10" />
+});
+
+const FlashSaleSection = dynamic(() => import("./FlashSaleSection"), {
+  loading: () => <div className="h-96 animate-pulse bg-slate-50 dark:bg-slate-900/50 my-10" />
+});
+
+const PromoBannersGrid = dynamic(() => import("./PromoBannersGrid"), {
+  loading: () => <div className="h-64 animate-pulse bg-slate-50 dark:bg-slate-900/50 my-10" />
+});
+
 // Lazy load non-critical sections
 const CategoriesGrid = dynamic(
   () => import("@/features/products/categories-grid/CategoriesGrid"),
@@ -80,8 +92,26 @@ export default function HomePage({ initialCategories, initialProducts, locale }:
       {/* Strategic Trust Bar */}
       <TrustBar />
 
+      {/* Top Brands Layer */}
+      <Suspense fallback={null}>
+        <TopBrandsSection locale={locale} />
+      </Suspense>
+
+      {/* Flash Sale / Daily Deals */}
+      <Suspense fallback={null}>
+        <FlashSaleSection 
+          products={Object.values(initialProducts).flat().slice(0, 4)} 
+          locale={locale} 
+        />
+      </Suspense>
+
       <Suspense fallback={<div className="shell py-10 lg:py-16"><div className="h-[600px] animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/10" /></div>}>
         <CategoriesGrid categories={categoriesData} />
+      </Suspense>
+
+      {/* Mid-page Promotional Banners */}
+      <Suspense fallback={null}>
+        <PromoBannersGrid locale={locale} />
       </Suspense>
 
       {/* Category Sections with Integrated Mid-page Banner */}

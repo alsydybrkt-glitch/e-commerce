@@ -1,199 +1,152 @@
 "use client";
 
-import { useMemo, useState, useEffect, useId } from "react";
-import { useAppSelector, useAppDispatch } from "@/store";
+import { useEffect, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
+import { useTranslation } from "@/shared/hooks/useTranslation";
+import { m } from "framer-motion";
+import Product from "@/features/products/slide-product/Product";
+import { FiArrowRight, FiShoppingBag } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { m, AnimatePresence } from "framer-motion";
-import Product from "@/features/products/slide-product/ProductCard";
-import { Product as ProductType } from "@/services/api/productsApi";
-import { useTranslation } from "@/shared/hooks/useTranslation";
-import { fetchProductsByCategory } from "@/features/products/store/productsSlice";
-// AppDispatch removed from import as we use hooks directly
-import { useIsMobile } from "@/shared/hooks/useIsMobile";
+import Image from "next/image";
 
 const MobileProductSwiper = dynamic(() => import("@/features/products/slide-product/MobileProductSwiper"), {
-  loading: () => (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:hidden">
-      {[...Array(2)].map((_, index) => (
-        <div key={index} className="h-[400px] rounded-3xl bg-slate-100/50 dark:bg-slate-800/20 animate-pulse" />
-      ))}
-    </div>
-  ),
   ssr: false,
+  loading: () => <div className="h-48 animate-pulse bg-surface-interactive rounded-xl" />
 });
 
-function BestSellers() {
+export default function FeaturedCollection() {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { items = {}, homeStatus } = useAppSelector((state) => state.products);
-  const [activeTab, setActiveTab ] = useState("all");
-  const isMobile = useIsMobile(1024);
-  const uniqueId = useId().replace(/:/g, "");
-  const paginationClass = `pagination-best-${uniqueId}`;
 
-  // Ensure data availability on mount
   useEffect(() => {
-    const hasData = Object.keys(items).length > 0;
-    if (!hasData && homeStatus !== "loading") {
-      // Fetch a mix of categories to populate the "Best Sellers" pool
+    if (!items["smartphones"]?.length) {
       dispatch(fetchProductsByCategory("smartphones"));
-      dispatch(fetchProductsByCategory("laptops"));
     }
-  }, [dispatch, items, homeStatus]);
+  }, [dispatch, items]);
 
-  const tabs = useMemo(
-    () => [
-      { key: "all", label: t("home.tabs.all") },
-      { key: "best", label: t("home.tabs.best") },
-      { key: "discount", label: t("home.tabs.discount") },
-      { key: "top", label: t("home.tabs.top") },
-      { key: "new", label: t("home.tabs.new") },
-    ],
-    [t]
-  );
+  const smartphoneProducts = useMemo(() => {
+    const all = items["smartphones"] || [];
+    return Array.from(new Map(all.map(p => [p.id, p])).values());
+  }, [items]);
 
-  const bestSellers = useMemo(() => {
-    const allProducts = Object.values(items).filter(Array.isArray).flat();
-    if (!allProducts.length) return [];
+  const spotlightProduct = smartphoneProducts[0];
+  const gridProducts = smartphoneProducts.slice(1, 9);
 
-    let filtered = [];
+  const isLoading = homeStatus === "loading" && smartphoneProducts.length === 0;
 
-    switch (activeTab) {
-      case "best":
-        filtered = allProducts.filter((product) => product.rating >= 4.5);
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case "discount":
-        filtered = allProducts.filter((product) => (product.discountPercentage || 0) >= 10);
-        filtered.sort((a, b) => (b.discountPercentage || 0) - (a.discountPercentage || 0));
-        break;
-      case "top":
-        filtered = [...allProducts].sort((a, b) => b.rating - a.rating);
-        break;
-      case "new":
-        filtered = [...allProducts].slice().reverse();
-        break;
-      default:
-        filtered = allProducts;
-    }
-
-    // Remove duplicates by ID and slice
-    const unique = Array.from(new Map(filtered.map(p => [p.id, p])).values());
-    return unique.slice(0, 6);
-  }, [items, activeTab]);
-
-  const isLoading = homeStatus === "loading" && bestSellers.length === 0;
+  if (!isLoading && smartphoneProducts.length === 0) return null;
 
   return (
     <section className="shell section-gap">
-      <div className="glass overflow-hidden p-5 sm:p-8 lg:p-10 shadow-2xl relative rounded-[40px] dark:bg-slate-900/10 dark:border-white/5 border-white/40">
-        {/* Subtle background decorative element */}
-        <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-brand-500/5 blur-3xl pointer-events-none" />
+      {/* Main Container - Reduced padding and more balanced shadow */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-2xl bg-surface-secondary border border-border-light p-5 sm:p-8 lg:p-10 ">
         
+        {/* Subtle Accents */}
+        <div className="absolute -left-10 -top-10 h-64 w-64 rounded-full bg-brand-500/5 blur-[80px] pointer-events-none" />
+
         <div className="relative z-10">
-          <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-xl">
-              <span className="section-kicker !bg-brand-500/10 !text-brand-600 dark:!text-brand-400 !border-brand-500/20">
-                {t("home.performancePicks")}
-              </span>
-              <h2 className="section-title mt-4 text-3xl sm:text-4xl font-black tracking-tight">
-                {t("home.performanceTitle")}
+          {/* Compact Header */}
+          <div className="mb-8 flex items-end justify-between gap-4 px-1">
+            <div>
+              <m.span 
+                initial={{ opacity: 0, x: -5 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="mb-2 inline-block rounded-full bg-brand-500/10 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400"
+              >
+                {t("home.featuredEdit")}
+              </m.span>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-text-primary">
+                Elite Collection
               </h2>
             </div>
+            
             <button 
-              className="btn btn-secondary group flex items-center gap-2 rounded-2xl px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900" 
-              onClick={() => router.push("/shop")}
+              onClick={() => router.push("/shop?category=smartphones")}
+              className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-600 transition-all hover:text-brand-500"
             >
               {t("common.viewAllProducts")}
-              <m.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                →
-              </m.span>
+              <FiArrowRight className="text-base" />
             </button>
           </div>
 
-          {/* Premium Animated Tabs */}
-          <div className="mb-12 flex flex-wrap gap-2 sm:gap-3 p-1 rounded-[22px] bg-slate-100/50 dark:bg-slate-950/20 w-fit">
-            {tabs.map((tab) => (
-              <button
-                key={tab.key}
-                type="button"
-                className={`relative px-6 py-3 text-xs font-black uppercase tracking-wider transition-all duration-300 rounded-[18px] ${
-                  activeTab === tab.key
-                    ? "text-white dark:text-slate-900"
-                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-                }`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                {activeTab === tab.key && (
-                  <m.div
-                    layoutId="activeTabGlow"
-                    className="absolute inset-0 z-0 bg-slate-900 dark:bg-white rounded-[18px] shadow-lg shadow-slate-900/20 dark:shadow-white/10"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Content Grid */}
-          <AnimatePresence mode="wait">
-            {isLoading ? (
+          {isLoading ? (
+            <div className="h-80 rounded-xl bg-surface-interactive animate-pulse" />
+          ) : (
+            <div className="flex flex-col gap-6">
+              
+              {/* Spotlight Hero Card - More compact height and better alignment */}
               <m.div 
-                key="loading"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"
+                initial={{ opacity: 0, scale: 0.98 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="group relative flex flex-col lg:flex-row overflow-hidden rounded-xl sm:rounded-2xl bg-surface-primary border border-border-light shadow-md transition-all duration-500 hover:border-brand-500/20"
               >
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-80 rounded-3xl bg-slate-100/50 dark:bg-slate-800/20 animate-pulse" />
-                ))}
-              </m.div>
-            ) : bestSellers.length > 0 ? (
-              isMobile ? (
-                <MobileProductSwiper 
-                  items={bestSellers}
-                  canLoop={bestSellers.length > 3}
-                  paginationClass={paginationClass}
-                  onSwiper={() => {}} 
-                />
-              ) : (
-                <m.div 
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-                  className="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-4"
-                >
-                  {bestSellers.map((product: ProductType) => (
-                    <div key={product.id} className="group">
-                      <Product item={product} />
+                {/* Text Content - Focused and tightly packed */}
+                <div className="relative z-20 p-6 sm:p-10 lg:p-12 flex flex-col justify-center flex-1 lg:max-w-[45%]">
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-text-primary mb-3 leading-tight">
+                      {spotlightProduct?.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-text-secondary mb-6 leading-relaxed max-w-sm line-clamp-2">
+                      {spotlightProduct?.description}
+                    </p>
+                    
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="text-3xl font-black text-text-primary">
+                        ${spotlightProduct?.price}
+                      </div>
+                      {spotlightProduct?.discountPercentage > 0 && (
+                        <div className="rounded-md bg-green-500/10 px-2 py-0.5 text-[10px] font-bold text-green-500">
+                          -{Math.round(spotlightProduct.discountPercentage)}%
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </m.div>
-              )
-            ) : (
-              <m.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center py-20 text-center"
-              >
-                <div className="h-20 w-20 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-3xl mb-4">
-                  🔍
+                  </div>
+
+                  <button 
+                    onClick={() => router.push(`/product/${spotlightProduct?.id}`)}
+                    className="btn btn-primary flex w-full sm:w-fit items-center justify-center gap-2 rounded-lg px-8 py-3 text-[11px] font-bold shadow-md shadow-brand-500/10 active:scale-95"
+                  >
+                    <FiShoppingBag className="text-base" />
+                    Discover Model
+                  </button>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{t("shop.noProducts")}</h3>
-                <p className="text-slate-500 max-w-sm">{t("shop.emptyCopy")}</p>
+
+                <div className="relative h-48 sm:h-64 lg:h-auto lg:flex-1 bg-gradient-to-tr from-brand-500/5 to-transparent flex items-center justify-center p-6 lg:p-10">
+                  <div className="relative h-full w-full">
+                    <img 
+                      src={spotlightProduct?.thumbnail || ""} 
+                      alt={spotlightProduct?.title || ""}
+                      className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-105 group-hover:-rotate-2 drop-shadow-[0_15px_30px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+                    />
+                  </div>
+                </div>
               </m.div>
-            )}
-          </AnimatePresence>
+
+              {/* Compact Slider for other products */}
+              <div className="mt-2">
+                <div className="mb-4 flex items-center justify-between px-1">
+                  <h4 className="text-sm font-bold text-text-primary uppercase tracking-wider opacity-80">More Models</h4>
+                </div>
+                
+                <div className="relative">
+                  <MobileProductSwiper 
+                    items={gridProducts}
+                    canLoop={true}
+                    paginationClass="pagination-elite"
+                    onSwiper={() => {}}
+                  />
+                </div>
+              </div>
+
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
 }
-
-export default BestSellers;

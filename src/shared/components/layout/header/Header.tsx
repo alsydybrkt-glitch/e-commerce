@@ -237,11 +237,11 @@ function Header() {
       onMouseLeave={handleMouseLeave}
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
-      className={`${styles.siteHeader} !sticky !top-0 !z-[1000] border-b-white/10 dark:border-b-slate-800/20 shadow-lg shadow-black/5 ${
-        isAtTop ? styles.glass : styles.glassDarker
-      } ${isScrolled ? styles.headerCondensed : "header-full"}`}
+      className={`${styles.siteHeader} !sticky !top-0 !z-[1000] ${
+        isScrolled ? styles.glassDarker + " " + styles.headerCondensed : styles.glass
+      }`}
     >
-      <TopHeader headerLogic={headerLogic} isScrolled={isScrolled && !isAtTop} />
+      <TopHeader headerLogic={headerLogic} isScrolled={isScrolled} />
       <BottomHeader
         headerLogic={headerLogic}
         navLinks={navLinks}

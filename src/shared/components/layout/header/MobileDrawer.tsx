@@ -105,15 +105,15 @@ export const MobileDrawer = memo(function MobileDrawer({
             exit="exit"
             dir={isRTL ? "rtl" : "ltr"}
             style={{ willChange: "transform" }}
-            className="fixed inset-y-0 start-0 z-[70] flex h-[100dvh] w-[85vw] max-w-[340px] flex-col bg-white dark:bg-slate-950 shadow-2xl"
+            className="fixed inset-y-0 start-0 z-[70] flex h-[100dvh] w-[85vw] max-w-[340px] flex-col bg-surface-primary shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/60">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-light">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-500/10 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                   <FiUser size={16} aria-hidden="true" />
                 </div>
-                <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                <span className="text-sm font-semibold text-text-primary">
                   Aura Guest
                 </span>
               </div>
@@ -123,7 +123,7 @@ export const MobileDrawer = memo(function MobileDrawer({
                 onClick={onClose}
                 aria-label={t("common.close") || "Close"}
                 type="button"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-text-muted hover:bg-surface-secondary hover:text-text-primary active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
               >
                 <MdClose size={20} aria-hidden="true" />
               </button>
@@ -134,7 +134,7 @@ export const MobileDrawer = memo(function MobileDrawer({
               className="flex-1 overflow-y-auto px-4 py-5 space-y-1"
               aria-label="Main navigation"
             >
-              <p className="mb-3 px-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+              <p className="mb-3 px-2 text-[10px] font-bold uppercase tracking-[0.18em] text-text-muted">
                 Explore
               </p>
 
@@ -147,8 +147,8 @@ export const MobileDrawer = memo(function MobileDrawer({
                     onClick={onClose}
                     className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                       active
-                        ? "bg-slate-900 text-white dark:bg-brand-600"
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/60 dark:hover:text-slate-100"
+                        ? "bg-text-primary text-bg-primary"
+                        : "text-text-secondary hover:bg-surface-secondary hover:text-text-primary"
                     }`}
                   >
                     <span
@@ -162,7 +162,7 @@ export const MobileDrawer = memo(function MobileDrawer({
                     </span>
                     {link.name}
                     {active && (
-                      <span className="ms-auto h-1.5 w-1.5 rounded-full bg-white/70" />
+                      <span className="ms-auto h-1.5 w-1.5 rounded-full bg-bg-primary/70" />
                     )}
                   </Link>
                 );
@@ -170,10 +170,10 @@ export const MobileDrawer = memo(function MobileDrawer({
             </nav>
 
             {/* Footer */}
-            <div className="border-t border-slate-100 dark:border-slate-800/60 px-4 py-4">
+            <div className="border-t border-border-light px-4 py-4">
               <button
                 type="button"
-                className="w-full rounded-xl py-3 text-xs font-semibold uppercase tracking-widest text-slate-400 transition-colors hover:text-rose-500 dark:hover:text-rose-400"
+                className="w-full rounded-xl py-3 text-xs font-semibold uppercase tracking-widest text-text-muted transition-colors hover:text-rose-500"
               >
                 Sign out
               </button>

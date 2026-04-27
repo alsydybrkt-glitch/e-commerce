@@ -115,6 +115,11 @@ export const translations = {
         new: "New Arrivals",
       },
       noProducts: "No products currently available",
+      brandsTitle: "Top Brands",
+      brandsCopy: "Our most popular brands.",
+      flashSaleTitle: "Flash Sale",
+      flashSaleEndsIn: "Ends in",
+      shopNow: "Shop Now",
       slides: [
         {
           eyebrow: "New season / console setups",
@@ -674,6 +679,11 @@ export const translations = {
         new: "أحدث الإصدارات",
       },
       noProducts: "لا توجد منتجات متاحة حالياً",
+      brandsTitle: "أفضل العلامات التجارية",
+      brandsCopy: "أشهر العلامات التجارية لدينا.",
+      flashSaleTitle: "عروض فلاش",
+      flashSaleEndsIn: "ينتهي في",
+      shopNow: "تسوق الآن",
       slides: [
         {
           eyebrow: "موسم جديد / تجهيزات الألعاب",

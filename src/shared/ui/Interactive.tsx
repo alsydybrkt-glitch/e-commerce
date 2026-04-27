@@ -1,22 +1,32 @@
+"use client";
+import React from "react";
 import { m, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/shared/utils/utils";
 
-interface InteractiveProps extends HTMLMotionProps<"div"> {
+type InteractiveVariant = "scale" | "press" | "none";
+
+interface InteractiveProps<T extends React.ElementType = "div"> {
+  as?: T;
   children: React.ReactNode;
   className?: string;
-  variant?: "scale" | "press" | "none";
+  variant?: InteractiveVariant;
 }
 
 /**
  * Interactive wrapper providing premium, instant visual feedback for touch and click actions.
  * Perfect for cards, buttons, and navigation elements.
+ * 
+ * Now Polymorphic: supports 'as' prop to render as div, button, section, etc.
  */
-export const Interactive = ({
+export const Interactive = <T extends React.ElementType = "div">({
+  as,
   children,
   className,
   variant = "scale",
   ...props
-}: InteractiveProps) => {
+}: InteractiveProps<T> & Omit<HTMLMotionProps<any>, keyof InteractiveProps<T>>) => {
+  const Component = (as ? (m as any)[as as string] : m.div) || m.div;
+
   const variants = {
     scale: {
       whileHover: { scale: 1.01 },
@@ -30,8 +40,8 @@ export const Interactive = ({
   };
 
   return (
-    <m.div
-      className={cn("cursor-pointer", className)}
+    <Component
+      className={cn("cursor-pointer outline-none", className)}
       {...variants[variant]}
       transition={{
         type: "spring",
@@ -42,6 +52,6 @@ export const Interactive = ({
       {...props}
     >
       {children}
-    </m.div>
+    </Component>
   );
 };

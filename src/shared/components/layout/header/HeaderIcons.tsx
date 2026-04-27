@@ -9,7 +9,7 @@ import { useTranslation } from "@/shared/hooks/useTranslation";
 import { Interactive } from "@/shared/ui/Interactive";
 
 const iconBase =
-  "relative flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl sm:rounded-2xl border border-slate-200 bg-white text-base sm:text-lg text-slate-700 transition hover:border-brand-200 hover:text-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300";
+  "relative flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl sm:rounded-2xl border border-border bg-surface-primary text-base sm:text-lg text-text-primary transition hover:border-brand-500/30 hover:text-brand-600";
 
 function HeaderIcons() {
   return (
@@ -53,7 +53,7 @@ const CartBadge = memo(() => {
     <Interactive variant="scale">
       <Link href="/carts" className={iconBase} aria-label={t("header.cartAria")}>
         <MdOutlineShoppingCart />
-        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-900 px-1 text-[10px] font-bold text-white dark:bg-brand-500">
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold text-white shadow-sm">
           {mounted ? cartCount : 0}
         </span>
       </Link>

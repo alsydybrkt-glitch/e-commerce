@@ -41,6 +41,10 @@
   --color-button-secondary-border: #e2e8f0;
   --color-focus-ring: rgba(17, 24, 39, 0.1);
   --color-active-bg: #f1f5f9;
+  --color-glass-bg: rgba(255, 255, 255, 0.75);
+  --color-glass-border: rgba(255, 255, 255, 0.2);
+  --color-glass-darker-bg: rgba(255, 255, 255, 0.85);
+  --color-glass-darker-border: rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02);
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
@@ -71,11 +75,12 @@
   --space-3xl: 4rem;
 
   /* Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
   --radius-lg: 8px;
-  --radius-xl: 10px;
-  --radius-2xl: 12px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
   --radius-full: 9999px;
 
   /* Transitions */
@@ -92,23 +97,24 @@
 
 /* ==================== DARK MODE TOKENS ==================== */
 body.theme-dark, .dark {
-  --color-bg-primary: #0a0a0a;
-  --color-bg-secondary: #121212;
-  --color-bg-tertiary: #1a1a1a;
-  --color-bg-overlay: rgba(10, 10, 10, 0.9);
-  --color-surface-primary: #121212;
-  --color-surface-secondary: #1a1a1a;
-  --color-surface-tertiary: #262626;
-  --color-surface-interactive: #2a2a2a;
-  --color-surface-image: #171717;
+  --color-bg-primary: #09090b;
+  --color-bg-secondary: #0f0f12;
+  --color-bg-tertiary: #16161a;
+  --color-bg-overlay: rgba(9, 9, 11, 0.9);
+  --color-surface-primary: #131316;
+  --color-surface-secondary: #1a1a1f;
+  --color-surface-tertiary: #222229;
+  --color-surface-interactive: #2a2a33;
+  --color-surface-image: #0c0c0e;
   --color-text-primary: #fafafa;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #71717a;
-  --color-text-disabled: #52525b;
-  --color-text-inverse: #0a0a0a;
-  --color-border-light: #262626;
-  --color-border-medium: #404040;
-  --color-border-dark: #52525b;
+  --color-text-secondary: #94a3b8;
+  --color-text-tertiary: #64748b;
+  --color-text-disabled: #475569;
+  --color-text-inverse: #09090b;
+  --color-border: #1f1f23;
+  --color-border-light: #18181b;
+  --color-border-medium: #27272a;
+  --color-border-dark: #3f3f46;
   --color-border-focus: #fafafa;
   --color-brand-50: #064e3b;
   --color-brand-100: #065f46;
@@ -127,6 +133,10 @@ body.theme-dark, .dark {
   --color-button-secondary-border: #404040;
   --color-focus-ring: rgba(250, 250, 250, 0.1);
   --color-active-bg: #262626;
+  --color-glass-bg: rgba(9, 9, 11, 0.8);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-darker-bg: rgba(9, 9, 11, 0.95);
+  --color-glass-darker-border: rgba(255, 255, 255, 0.12);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
   --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.6);
@@ -245,13 +255,13 @@ body.theme-dark, .dark {
   }
 
   .surface-card {
-    @apply rounded-[24px] border shadow-card transition-all duration-300;
+    @apply rounded-2xl border shadow-card transition-all duration-300;
     background-color: var(--color-surface-primary);
     border-color: var(--color-border-light);
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200;
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold transition-all duration-200;
     border: 1px solid transparent;
   }
 
@@ -295,14 +305,18 @@ body.theme-dark, .dark {
   }
 
   .glass {
-    @apply backdrop-blur-xl bg-white/75 dark:bg-slate-900/60 border-b border-white/20 dark:border-slate-800/30 shadow-sm;
+    @apply backdrop-blur-xl shadow-sm;
+    background-color: var(--color-glass-bg);
+    border-bottom: 1px solid var(--color-glass-border);
     transition-property: background-color, border-color, box-shadow;
     transition-duration: 220ms;
     transition-timing-function: ease-out;
   }
 
   .glass-darker {
-    @apply backdrop-blur-xl bg-white/85 dark:bg-slate-950/80 border-b border-black/5 dark:border-white/5 shadow-xl;
+    @apply backdrop-blur-xl shadow-xl;
+    background-color: var(--color-glass-darker-bg);
+    border-bottom: 1px solid var(--color-glass-darker-border);
     transition-property: background-color, border-color, box-shadow;
     transition-duration: 220ms;
     transition-timing-function: ease-out;

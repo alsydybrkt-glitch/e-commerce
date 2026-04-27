@@ -145,7 +145,7 @@ function BottomHeader({
                 ${
                   openDesktopCategories
                     ? "bg-brand-600 text-white shadow-lg shadow-brand-500/25"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                    : "bg-surface-secondary text-text-secondary hover:bg-surface-interactive hover:text-text-primary"
                 }
               `}
               onClick={handleToggle}
@@ -200,7 +200,7 @@ function BottomHeader({
               <Link
                 key={link.path}
                 href={link.path}
-                className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-text-secondary transition-all duration-300 hover:bg-slate-50 hover:text-text-primary dark:hover:bg-slate-800/40"
+                className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-text-secondary transition-all duration-300 hover:bg-surface-secondary hover:text-text-primary"
                 onClick={closeAll}
               >
                 {link.icon && (

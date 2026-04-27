@@ -14,6 +14,13 @@ export default {
 
   theme: {
     extend: {
+        keyframes: {
+    shimmer: {
+      "0%": { transform: "translateX(-100%)" },
+      "100%": { transform: "translateX(100%)" },
+    },
+  },
+
       /* ========== Fonts ========== */
 
       fontFamily: {
@@ -45,6 +52,7 @@ export default {
             secondary: "var(--color-surface-secondary)",
             tertiary: "var(--color-surface-tertiary)",
             interactive: "var(--color-surface-interactive)",
+            image: "var(--color-surface-image)",
           },
 
           text: {
@@ -82,6 +90,7 @@ export default {
         lg: "var(--radius-lg)",
         xl: "var(--radius-xl)",
         "2xl": "var(--radius-2xl)",
+        "3xl": "var(--radius-3xl)",
         full: "var(--radius-full)",
       },
 

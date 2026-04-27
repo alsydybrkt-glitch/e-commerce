@@ -50,7 +50,7 @@ export function SkeletonCard() {
           <SkeletonCircle size="h-9 w-9" />
         </div>
       </div>
-      <Skeleton className="relative mb-4 aspect-square rounded-[24px]" />
+      <Skeleton className="relative mb-4 aspect-square rounded-2xl" />
       <div className="space-y-3">
         <SkeletonText lines={2} />
         <div className="flex gap-1">
@@ -58,9 +58,9 @@ export function SkeletonCard() {
             <SkeletonCircle key={i} size="h-4 w-4" />
           ))}
         </div>
-        <Skeleton className="h-7 w-1/4 rounded-lg" />
+        <Skeleton className="h-7 w-1/4 rounded-md" />
       </div>
-      <Skeleton className="mt-4 h-12 w-full rounded-2xl" />
+      <Skeleton className="mt-4 h-12 w-full rounded-xl" />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { Product as ProductType } from "@/services/api/productsApi";
 import { clearFavorites } from "@/features/favorites/store/favoriteSlice";
 import { useTranslation } from "@/shared/hooks/useTranslation";
 import { m, AnimatePresence } from "framer-motion";
-import Product from "@/features/products/slide-product/ProductCard";
+import Product from "@/features/products/slide-product/Product";
 import { Interactive } from "@/shared/ui/Interactive";
 import { useRouter } from "next/navigation";
 

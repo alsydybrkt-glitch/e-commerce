@@ -3,7 +3,7 @@
 import React, { memo, useId } from "react";
 import dynamic from "next/dynamic";
 import { m } from "framer-motion";
-import Product from "@/features/products/slide-product/ProductCard";
+import Product from "@/features/products/slide-product/Product";
 import LoadingOfSlideProduct from "@/features/products/slide-product/ProductSkeleton";
 import { Product as ProductType } from "@/services/api/productsApi";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
